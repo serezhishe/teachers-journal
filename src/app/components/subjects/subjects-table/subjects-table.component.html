@@ -1,0 +1,42 @@
+<mat-toolbar>{{title | titlecase}}</mat-toolbar>
+<div class="container">
+<table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event)" class="mat-elevation-z8">
+  
+    <ng-container matColumnDef="name">
+      <th mat-header-cell mat-sort-header="name" *matHeaderCellDef sticky> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.student.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell mat-sort-header="lastName" *matHeaderCellDef sticky> Last Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.student.lastName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="averageMark">
+      <th mat-header-cell mat-sort-header="averageMark" *matHeaderCellDef sticky> Average Mark </th>
+      <td mat-cell *matCellDef="let element"> {{element.averageMark? element.averageMark:undefined}} </td>
+    </ng-container>
+
+
+    <ng-container *ngFor="let dateHeader of datesHeaders; index as i" [matColumnDef]="dateHeader.column">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-form-field>
+          <mat-label>Date</mat-label>
+          <input matInput [matDatepicker]="dp" [formControl]="dateHeader.control" (dateChange)="log($event)">
+          <mat-datepicker-toggle matSuffix [for]="dp" (blur)="log($event)"></mat-datepicker-toggle>
+          <mat-datepicker #dp (blur)="log($event)"></mat-datepicker>
+        </mat-form-field>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <input type="number" [value]="element.marks[i]? element.marks[i]: ''">
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+</div>
+<mat-toolbar>Teacher: 
+    <input value="{{teacher | titlecase}}" placeholder="Enter teacher's name">
+</mat-toolbar>
+<button mat-stroked-button type="submit" (click)="onClick($event)">Save</button>

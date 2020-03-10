@@ -1,0 +1,18 @@
+table {
+    width: 100%;
+  }
+
+.container {
+  overflow: auto;
+}
+
+input {
+  background: inherit;
+  font: inherit;
+  border: none;
+  margin-left: 10px;
+}
+
+input:focus {
+  outline: none;
+}

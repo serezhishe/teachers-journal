@@ -1,0 +1,8 @@
+div {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 30px 10vw;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}

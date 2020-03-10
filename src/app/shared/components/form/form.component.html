@@ -1,0 +1,19 @@
+<form [formGroup]="addingForm" (ngSubmit)="onSubmit(addingForm.value)">
+    <ng-container *ngFor="let config of configs">
+        <div [ngSwitch]="config.type">
+            <mat-form-field appearance="fill" *ngSwitchCase="'text'">
+                <mat-label>{{config.label | titlecase}}</mat-label>
+                <input matInput [required]="config.required" [formControlName]="config.label">
+            </mat-form-field>
+            <mat-form-field appearance="fill" *ngSwitchCase="'textarea'">
+                <mat-label>{{config.label | titlecase}}</mat-label>
+                <textarea matInput [required]="config.required" [formControlName]="config.label"></textarea>
+            </mat-form-field>
+            <mat-form-field appearance="fill" *ngSwitchCase="'number'">
+                <mat-label>{{config.label | titlecase}}</mat-label>
+                <input type="number" matInput [required]="config.required" [formControlName]="config.label">
+            </mat-form-field>
+        </div>
+    </ng-container>
+    <button type="submit" mat-raised-button>Add</button>
+</form>
