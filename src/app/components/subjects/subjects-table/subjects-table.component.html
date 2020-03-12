@@ -1,7 +1,6 @@
 <mat-toolbar>{{title | titlecase}}</mat-toolbar>
-<div class="container">
-<table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event)" class="mat-elevation-z8">
-  
+<form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="container">
+  <table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event)" class="mat-elevation-z8">
     <ng-container matColumnDef="name">
       <th mat-header-cell mat-sort-header="name" *matHeaderCellDef sticky> Name </th>
       <td mat-cell *matCellDef="let element"> {{element.student.name}} </td>
@@ -22,9 +21,9 @@
       <th mat-header-cell *matHeaderCellDef>
         <mat-form-field>
           <mat-label>Date</mat-label>
-          <input matInput [matDatepicker]="dp" [formControl]="dateHeader.control" (dateChange)="log($event)">
-          <mat-datepicker-toggle matSuffix [for]="dp" (blur)="log($event)"></mat-datepicker-toggle>
-          <mat-datepicker #dp (blur)="log($event)"></mat-datepicker>
+          <input matInput [matDatepicker]="dp" disabled [formControl]="dateHeader.control">
+          <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+          <mat-datepicker #dp disabled="false"></mat-datepicker>
         </mat-form-field>
       </th>
       <td mat-cell *matCellDef="let element">
@@ -33,10 +32,10 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
-</div>
-<mat-toolbar>Teacher: 
-    <input value="{{teacher | titlecase}}" placeholder="Enter teacher's name">
-</mat-toolbar>
-<button mat-stroked-button type="submit" (click)="onClick($event)">Save</button>
+    <tr mat-row appHighlight [mark]="row.averageMark" *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-toolbar>Teacher: 
+      <input value="{{teacher | titlecase}}" placeholder="Enter teacher's name" formControlName="teacher">
+  </mat-toolbar>
+  <button mat-stroked-button type="submit">Save</button>
+</form>
