@@ -7,7 +7,8 @@ import { Sort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 
-import { DATE_FORMATS, marksList, students, subjectsEnum } from './../../../common/constants/';
+import { DATE_FORMATS } from './../../../common/constants/';
+import { SubjectsService } from './../../../common/services/subjects.service';
 import { TableSortService } from './../../../common/services/table-sort.service';
 import { IStudent } from './../../../shared/models/student.model';
 
@@ -26,47 +27,29 @@ import { IStudent } from './../../../shared/models/student.model';
 })
 export class SubjectsTableComponent implements OnInit {
   public displayedColumns: string[];
+  public subject: string;
   public dataSource: Array<{marks: number[]; averageMark: number; student: IStudent}>;
   public datesHeaders: Array<{column: string; control: FormControl}>;
-  public title: string;
   public teacher: string;
-  public dateGroup = {};
+  public dateGroup;
   public form;
 
   constructor(private readonly route: ActivatedRoute, private readonly tableSortService: TableSortService,
-              private readonly formBuilder: FormBuilder) {}
+              private readonly formBuilder: FormBuilder, private readonly subjectsService: SubjectsService) {}
 
   public ngOnInit(): void {
-    const subject = this.route.snapshot.params.subject;
-    this.title = subject;
-    const subjectIndex = subjectsEnum[subject];
-    this.teacher = marksList[subjectIndex].teacher;
-    this.dataSource = marksList[subjectIndex].marks.map((elem, i) => {
-        let tmp = elem.filter((value) => value !== undefined);
-        if (tmp.length === 0) {
-          tmp = [0];
-        }
+    this.dateGroup = {};
+    this.subject = this.route.snapshot.params.subject;
+    this.teacher = this.subjectsService.getTeacher(this.subject);
+    this.dataSource = this.subjectsService.getDataSource(this.subject);
 
-        return {
-          marks: elem,
-          averageMark: +(tmp.reduce((prev: number, curr: number) => prev + curr, 0) / tmp.length).toFixed(1),
-          student: students[i],
-        };
-      });
     this.displayedColumns = ['name', 'lastName', 'averageMark'];
-    this.datesHeaders = marksList[subjectsEnum[subject]].dates.map((elem) => {
-        this.displayedColumns.push((new Date(elem)).toDateString());
-
-        return {
-          column: (new Date(elem)).toDateString(),
-          control: new FormControl(moment(elem))
-        };
-      });
+    this.datesHeaders = this.subjectsService.getDataHeaders(this.subject);
     this.datesHeaders.forEach((elem, i) => {
-        this.dateGroup[`date${i}`] = elem.control;
+        this.displayedColumns.push(elem.column);
+        this.dateGroup[`${i}`] = elem.control;
       });
-    // tslint:disable-next-line: no-string-literal
-    this.dateGroup['teacher'] = this.teacher;
+    this.dateGroup.teacher = this.teacher;
     this.form = this.formBuilder.group(this.dateGroup);
   }
 
@@ -75,13 +58,8 @@ export class SubjectsTableComponent implements OnInit {
   }
 
   public onSubmit(event): void {
-    const tmp = [];
-    for (const key in event) {
-      if (event.hasOwnProperty(key) && key !== 'teacher') {
-        tmp.push(event[key]);
-      }
-    }
-    console.log(tmp.map((el) => Date.parse(el)).sort((a, b) => a - b));
+    this.subjectsService.updateTeacher(this.subject, event.teacher);
+    this.subjectsService.updateDates(this.subject, event);
   }
 
   public log(e): void {

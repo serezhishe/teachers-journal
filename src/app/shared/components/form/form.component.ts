@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -12,6 +12,8 @@ import { IFormConfig } from '../../models/form-config.model';
 export class FormComponent implements OnInit {
   @Input()
   public configs: IFormConfig[];
+  @Output()
+  public add = new EventEmitter();
   public controlGroup;
   public addingForm: FormGroup;
 
@@ -27,6 +29,7 @@ export class FormComponent implements OnInit {
 
   public onSubmit(value): void {
     console.log(value);
+    this.add.emit(value);
     this.router.navigate(['../'], {relativeTo: this.route});
   }
 }

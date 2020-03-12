@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IFormConfig } from 'src/app/shared/models/form-config.model';
 
+import { SubjectsService } from './../../../common/services/subjects.service';
+
 @Component({
   selector: 'app-subject-form',
   templateUrl: './subject-form.component.html',
@@ -8,7 +10,9 @@ import { IFormConfig } from 'src/app/shared/models/form-config.model';
 })
 export class SubjectFormComponent implements OnInit {
   public formConfigs: IFormConfig[];
-  constructor() {
+  constructor(private readonly subjectsService: SubjectsService) {}
+
+  public ngOnInit(): void {
     this.formConfigs = [
       {
         type: 'text',
@@ -29,7 +33,8 @@ export class SubjectFormComponent implements OnInit {
       }
     ];
   }
-  public ngOnInit(): void {
-  }
 
+  public onAdd(event): void {
+    this.subjectsService.addSubject(event.subject, event.teacher);
+  }
 }
