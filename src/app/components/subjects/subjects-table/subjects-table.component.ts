@@ -11,6 +11,7 @@ import { map } from 'rxjs/operators';
 
 import { students, subjectsEnum } from './../../../common/constants/';
 import { marks } from './../../../common/constants/marks';
+import { TableSortService } from './../../../common/services/table-sort.service';
 import { IStudent } from './../../../shared/models/student.model';
 
 const DATE_FORMATS = {
@@ -45,11 +46,7 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
   public title: string;
   public teacher: string;
 
-constructor(private readonly route: ActivatedRoute) {}
-
-  private compare(a: number | string, b: number | string, isAsc: boolean): number {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-  }
+  constructor(private readonly route: ActivatedRoute, private readonly tableSortService: TableSortService) {}
 
   public ngOnInit(): void {
     this.subject$ =  this.route.paramMap.pipe(
@@ -60,7 +57,10 @@ constructor(private readonly route: ActivatedRoute) {}
       const subjectIndex = subjectsEnum[subject];
       this.teacher = marks[subjectIndex].teacher;
       this.dataSource = marks[subjectIndex].marks.map((elem, i) => {
-        const tmp = elem.filter((value) => value !== undefined);
+        let tmp = elem.filter((value) => value !== undefined);
+        if (tmp.length === 0) {
+          tmp = [0];
+        }
 
         return {
           marks: elem,
@@ -81,22 +81,7 @@ constructor(private readonly route: ActivatedRoute) {}
   }
 
   public sortData(sort: Sort): void {
-    const data = this.dataSource.slice();
-    if (sort.active === undefined || sort.direction === '') {
-      this.dataSource = data;
-
-      return;
-    }
-
-    this.dataSource = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name': return this.compare(a.student.name, b.student.name, isAsc);
-        case 'lastName': return this.compare(a.student.lastName, b.student.lastName, isAsc);
-        case 'averageMark': return this.compare(a.averageMark, b.averageMark, isAsc);
-        default: return 0;
-      }
-    });
+    this.dataSource = this.tableSortService.sortData(sort, this.dataSource);
   }
 
   public ngOnDestroy(): void {
