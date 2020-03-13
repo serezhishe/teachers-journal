@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -32,7 +32,7 @@ export class SubjectsTableComponent implements OnInit {
   public datesHeaders: Array<{column: string; control: FormControl}>;
   public teacher: string;
   public dateGroup;
-  public form;
+  public form: FormGroup;
 
   constructor(private readonly route: ActivatedRoute, private readonly tableSortService: TableSortService,
               private readonly formBuilder: FormBuilder, private readonly subjectsService: SubjectsService) {}

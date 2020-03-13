@@ -2,15 +2,21 @@ import { Injectable } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import * as moment from 'moment';
 
-import { marksList, students } from './../constants/';
+import { IStudent } from './../../shared/models/student.model';
+import { marksList } from './../constants/';
+import { StudentsService } from './students.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubjectsService {
   private readonly marksList: Array<{ subject: string; dates: number[]; teacher: string; marks: number[][] }>;
-  constructor() {
+  constructor(private readonly studentsService: StudentsService) {
     this.marksList = marksList;
+  }
+
+  private getAverageMark(marks: number[]): number {
+    return +(marks.reduce((prev: number, curr: number) => prev + curr, 0) / marks.length).toFixed(1);
   }
 
   private findSubjectInfo(subject: string): { subject: string; dates: number[]; teacher: string; marks: number[][] } {
@@ -33,24 +39,26 @@ export class SubjectsService {
     }
   }
 
-  public getDataSource(subject: string): any[] {
-    return this.findSubjectInfo(subject).marks.map((elem, i) => {
-      let tmp = elem.filter((value) => value !== undefined);
+  public getDataSource(subject: string): Array<{marks: number[]; averageMark: number; student: IStudent}> {
+    const marksArray = this.findSubjectInfo(subject).marks;
+
+    return this.studentsService.getStudents().map((student, i) => {
+      marksArray[i] = marksArray[i] ? marksArray[i] : [];
+      let tmp = marksArray[i].filter((value) => value !== undefined);
       if (tmp.length === 0) {
         tmp = [0];
       }
 
       return {
-        marks: elem,
-        averageMark: +(tmp.reduce((prev: number, curr: number) => prev + curr, 0) / tmp.length).toFixed(1),
-        student: students[i],
+        marks: marksArray[i],
+        averageMark: this.getAverageMark(tmp),
+        student,
       };
     });
   }
 
   public getDataHeaders(subject: string): Array<{column: string; control: FormControl}> {
-    return this.findSubjectInfo(subject).dates.map((elem) =>
-      ({
+    return this.findSubjectInfo(subject).dates.map((elem) => ({
         column: (new Date(elem)).toDateString(),
         control: new FormControl(moment(elem))
       }));

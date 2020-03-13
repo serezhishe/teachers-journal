@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 
-import { students, studentTableColumns } from './../../../common/constants/';
+import { studentTableColumns } from './../../../common/constants/';
+import { StudentsService } from './../../../common/services/students.service';
 import { TableSortService } from './../../../common/services/table-sort.service';
 import { IStudent } from './../../../shared/models/student.model';
 
@@ -14,10 +15,10 @@ export class StudentsTableComponent implements OnInit {
 
   public displayedColumns: string[];
   public dataSource: IStudent[];
-  constructor(private readonly tableSortService: TableSortService) {}
+  constructor(private readonly tableSortService: TableSortService, private readonly studentsService: StudentsService) {}
 
   public ngOnInit(): void {
-    this.dataSource  = students;
+    this.dataSource  = this.studentsService.getStudents();
     this.displayedColumns = studentTableColumns;
   }
 
