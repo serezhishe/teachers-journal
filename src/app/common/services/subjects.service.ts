@@ -57,11 +57,8 @@ export class SubjectsService {
     });
   }
 
-  public getDataHeaders(subject: string): Array<{column: string; control: FormControl}> {
-    return this.findSubjectInfo(subject).dates.map((elem) => ({
-        column: (new Date(elem)).toDateString(),
-        control: new FormControl(moment(elem))
-      }));
+  public getDataHeaders(subject: string): number[] {
+    return this.findSubjectInfo(subject).dates;
   }
 
   public getSubjects(): string[] {

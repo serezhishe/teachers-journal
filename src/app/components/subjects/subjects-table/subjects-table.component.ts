@@ -29,10 +29,12 @@ export class SubjectsTableComponent implements OnInit {
   public displayedColumns: string[];
   public subject: string;
   public dataSource: Array<{marks: number[]; averageMark: number; student: IStudent}>;
-  public datesHeaders: Array<{column: string; control: FormControl}>;
+  public datesHeaders: string[];
   public teacher: string;
   public dateGroup;
+  public marksGroup;
   public form: FormGroup;
+  public marksForm: FormGroup;
 
   constructor(private readonly route: ActivatedRoute, private readonly tableSortService: TableSortService,
               private readonly formBuilder: FormBuilder, private readonly subjectsService: SubjectsService) {}
@@ -44,11 +46,24 @@ export class SubjectsTableComponent implements OnInit {
     this.dataSource = this.subjectsService.getDataSource(this.subject);
 
     this.displayedColumns = ['name', 'lastName', 'averageMark'];
-    this.datesHeaders = this.subjectsService.getDataHeaders(this.subject);
-    this.datesHeaders.forEach((elem, i) => {
-        this.displayedColumns.push(elem.column);
-        this.dateGroup[`${i}`] = elem.control;
-      });
+    this.datesHeaders = this.subjectsService.getDataHeaders(this.subject).map((elem) => {
+      this.displayedColumns.push((new Date(elem)).toDateString());
+
+      return (new Date(elem)).toDateString();
+    });
+    this.dateGroup.dates = this.formBuilder.array(this.subjectsService.getDataHeaders(this.subject).map((elem, i) =>
+      this.formBuilder.group({
+        [(new Date(elem)).toDateString()]: moment(elem)
+      })));
+    this.dateGroup.marks = this.formBuilder.array(this.dataSource.map((elem) => {
+        const tmp = {};
+        this.datesHeaders.forEach((element, i) => {
+          tmp[element] = elem.marks[i];
+        });
+
+        return this.formBuilder.group(tmp);
+      }
+    ));
     this.dateGroup.teacher = this.teacher;
     this.form = this.formBuilder.group(this.dateGroup);
   }
@@ -60,6 +75,7 @@ export class SubjectsTableComponent implements OnInit {
   public onSubmit(event): void {
     this.subjectsService.updateTeacher(this.subject, event.teacher);
     this.subjectsService.updateDates(this.subject, event);
+    console.log(event);
   }
 
   public log(e): void {
