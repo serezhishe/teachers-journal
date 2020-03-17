@@ -1,44 +1,44 @@
 <mat-toolbar>{{subject | titlecase}}</mat-toolbar>
 <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)">
+  <button mat-stroked-button (click)="addDate()">Add Date</button>
   <div class="container">
-  <table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event)" class="mat-elevation-z8">
-    <ng-container matColumnDef="name" sticky>
-      <th mat-header-cell mat-sort-header="name" *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.student.name}} </td>
-    </ng-container>
+    <table mat-table matSort [dataSource]="tableData" (matSortChange)="sortData($event)">
+      <ng-container matColumnDef="name" sticky>
+        <th mat-header-cell mat-sort-header="name" *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.student.name}} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="lastName" sticky>
-      <th mat-header-cell mat-sort-header="lastName" *matHeaderCellDef> Last Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.student.lastName}} </td>
-    </ng-container>
+      <ng-container matColumnDef="lastName" sticky>
+        <th mat-header-cell mat-sort-header="lastName" *matHeaderCellDef> Last Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.student.lastName}} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="averageMark" sticky>
-      <th mat-header-cell mat-sort-header="averageMark" *matHeaderCellDef> Average Mark </th>
-      <td mat-cell *matCellDef="let element"> {{element.averageMark? element.averageMark:undefined}} </td>
-    </ng-container>
+      <ng-container matColumnDef="averageMark" sticky>
+        <th mat-header-cell mat-sort-header="averageMark" *matHeaderCellDef> Average Mark </th>
+        <td mat-cell *matCellDef="let element"> {{element.averageMark? element.averageMark : undefined}} </td>
+      </ng-container>
 
+      <ng-container *ngFor="let dateHeader of datesHeaders; index as i" [matColumnDef]="dateHeader">
+        <th mat-header-cell *matHeaderCellDef formArrayName="dates">
+          <mat-form-field>
+            <mat-label>Date</mat-label>
+            <input matInput [matDatepicker]="dp" disabled [formControlName]="i">
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </th>
+        <form-field formArrayName="marks">
+          <td mat-cell *matCellDef="let element" [formGroupName]="element.student.index">
+            <input type="number" [value]="element.marks[i]? element.marks[i]: ''" [formControlName]="i">
+          </td>
+        </form-field>
+      </ng-container>
 
-    <ng-container *ngFor="let dateHeader of datesHeaders; index as i" [matColumnDef]="dateHeader">
-      <th mat-header-cell *matHeaderCellDef formArrayName="dates">
-        <mat-form-field [formGroupName]="i">
-          <mat-label>Date</mat-label>
-          <input matInput [matDatepicker]="dp" disabled [formControlName]="dateHeader">
-          <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-          <mat-datepicker #dp disabled="false"></mat-datepicker>
-        </mat-form-field>
-      </th>
-      <form-field formArrayName="marks">
-        <td mat-cell *matCellDef="let element" [formGroupName]="element.student.index">
-          <input type="number" [value]="element.marks[i]? element.marks[i]: ''" [formControlName]="dateHeader">
-        </td>
-      </form-field>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns sticky: true" ></tr>
-    <tr mat-row appHighlight [mark]="row.averageMark" *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-</div>
-  <mat-toolbar>Teacher: 
+      <tr mat-header-row *matHeaderRowDef="displayedColumns sticky: true"></tr>
+      <tr mat-row appHighlight *matRowDef="let row; columns: displayedColumns;" [mark]="row.averageMark"></tr>
+    </table>
+  </div>
+  <mat-toolbar>Teacher:
       <input value="{{teacher | titlecase}}" placeholder="Enter teacher's name" formControlName="teacher">
   </mat-toolbar>
   <button mat-stroked-button type="submit">Save</button>

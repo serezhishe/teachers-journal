@@ -8,6 +8,7 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
 const routes: Routes = [
   { path: 'students', component: StudentsRootComponent },
   { path: 'subjects', component: SubjectsRootComponent },
+  { path: '', redirectTo: 'students', pathMatch: 'full'},
   { path: '**', component: PageNotFoundComponent }
 ];
 

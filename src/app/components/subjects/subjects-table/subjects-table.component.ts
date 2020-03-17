@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -7,10 +7,10 @@ import { Sort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 
-import { DATE_FORMATS } from './../../../common/constants/';
-import { SubjectsService } from './../../../common/services/subjects.service';
-import { TableSortService } from './../../../common/services/table-sort.service';
-import { IStudent } from './../../../shared/models/student.model';
+import { DATE_FORMATS } from '../../../common/constants';
+import { SubjectsService } from '../../../common/services/subjects.service';
+import { TableSortService } from '../../../common/services/table-sort.service';
+import { IStudent } from '../../../shared/models/student.model';
 
 @Component({
   selector: 'app-subjects-table',
@@ -28,57 +28,56 @@ import { IStudent } from './../../../shared/models/student.model';
 export class SubjectsTableComponent implements OnInit {
   public displayedColumns: string[];
   public subject: string;
-  public dataSource: Array<{marks: number[]; averageMark: number; student: IStudent}>;
+  public tableData: Array<{marks: number[]; averageMark: number; student: IStudent}>;
   public datesHeaders: string[];
   public teacher: string;
-  public dateGroup;
-  public marksGroup;
+  public dateGroup: {dates: FormArray; marks: FormArray; teacher: string};
   public form: FormGroup;
-  public marksForm: FormGroup;
 
   constructor(private readonly route: ActivatedRoute, private readonly tableSortService: TableSortService,
               private readonly formBuilder: FormBuilder, private readonly subjectsService: SubjectsService) {}
 
   public ngOnInit(): void {
-    this.dateGroup = {};
     this.subject = this.route.snapshot.params.subject;
     this.teacher = this.subjectsService.getTeacher(this.subject);
-    this.dataSource = this.subjectsService.getDataSource(this.subject);
+    this.tableData = this.subjectsService.getDataSource(this.subject);
 
     this.displayedColumns = ['name', 'lastName', 'averageMark'];
     this.datesHeaders = this.subjectsService.getDataHeaders(this.subject).map((elem) => {
-      this.displayedColumns.push((new Date(elem)).toDateString());
+      this.displayedColumns.push(elem.format(DATE_FORMATS.parse.dateInput));
 
-      return (new Date(elem)).toDateString();
+      return elem.format(DATE_FORMATS.parse.dateInput);
     });
-    this.dateGroup.dates = this.formBuilder.array(this.subjectsService.getDataHeaders(this.subject).map((elem, i) =>
-      this.formBuilder.group({
-        [(new Date(elem)).toDateString()]: moment(elem)
-      })));
-    this.dateGroup.marks = this.formBuilder.array(this.dataSource.map((elem) => {
-        const tmp = {};
-        this.datesHeaders.forEach((element, i) => {
-          tmp[element] = elem.marks[i];
-        });
-
-        return this.formBuilder.group(tmp);
-      }
-    ));
-    this.dateGroup.teacher = this.teacher;
+    this.dateGroup = {
+      dates: this.formBuilder.array(this.subjectsService.getDataHeaders(this.subject).map((elem) => elem)),
+      marks: this.formBuilder.array(this.tableData.map((elem) =>
+        this.formBuilder.array(this.datesHeaders.map((element, i) => elem.marks[i]))
+      )),
+      teacher: this.teacher,
+    };
     this.form = this.formBuilder.group(this.dateGroup);
   }
 
   public sortData(sort: Sort): void {
-    this.dataSource = this.tableSortService.sortData(sort, this.dataSource);
+    this.tableData = this.tableSortService.sortData(sort, this.tableData);
   }
 
-  public onSubmit(event): void {
+  public onSubmit(event: {teacher: string; dates: moment.Moment[]; marks: number[][]}): void {
+    this.subjectsService.updateMarks(this.subject, event.marks);
     this.subjectsService.updateTeacher(this.subject, event.teacher);
-    this.subjectsService.updateDates(this.subject, event);
-    console.log(event);
+    this.subjectsService.updateDates(this.subject, event.dates);
+    this.tableData = this.subjectsService.getDataSource(this.subject);
   }
 
-  public log(e): void {
-    console.log(new Date(e.target.value));
+  public addDate(): void {
+    const date = this.subjectsService.addDate(this.subject);
+    this.datesHeaders.push(date.format(DATE_FORMATS.parse.dateInput));
+    this.displayedColumns.push(date.format(DATE_FORMATS.parse.dateInput));
+    this.dateGroup.dates.push(new FormControl(date));
+    this.dateGroup.marks = this.formBuilder.array(this.tableData.map((elem) =>
+      this.formBuilder.array(this.datesHeaders.map((_, i) => elem.marks[i]))
+    ));
+    this.form = this.formBuilder.group(this.dateGroup);
   }
+
 }

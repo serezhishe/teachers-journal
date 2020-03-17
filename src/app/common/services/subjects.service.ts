@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import * as moment from 'moment';
 
 import { IStudent } from './../../shared/models/student.model';
 import { marksList } from './../constants/';
+import { DATE_FORMATS } from './../constants/date-format';
 import { StudentsService } from './students.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SubjectsService {
-  private readonly marksList: Array<{ subject: string; dates: number[]; teacher: string; marks: number[][] }>;
+  private readonly marksList: Array<{ subject: string; dates:  moment.Moment[]; teacher: string; marks: number[][] }>;
   constructor(private readonly studentsService: StudentsService) {
     this.marksList = marksList;
   }
@@ -19,7 +19,7 @@ export class SubjectsService {
     return +(marks.reduce((prev: number, curr: number) => prev + curr, 0) / marks.length).toFixed(1);
   }
 
-  private findSubjectInfo(subject: string): { subject: string; dates: number[]; teacher: string; marks: number[][] } {
+  private findSubjectInfo(subject: string): { subject: string; dates: moment.Moment[]; teacher: string; marks: number[][] } {
     return this.marksList.find((elem) => elem.subject === subject);
   }
 
@@ -31,12 +31,25 @@ export class SubjectsService {
     this.findSubjectInfo(subject).teacher = newValue;
   }
 
-  public updateDates(subject: string, newValues: number[]): void {
+  public updateMarks(subject: string, marks: number[][]): void {
+    this.findSubjectInfo(subject).marks = marks;
+  }
+
+  public updateDates(subject: string, newDates: moment.Moment[]): void {
     let i = 0;
-    while (newValues[i] !== undefined) {
-      this.findSubjectInfo(subject).dates[i] = newValues[i];
+    const prevDates = this.findSubjectInfo(subject).dates;
+    while (newDates[i] !== undefined) {
+      prevDates[i] = newDates[i];
       i++;
     }
+  }
+
+  public addDate(subject: string): moment.Moment {
+    const dates = this.findSubjectInfo(subject).dates;
+    const date = moment(dates[dates.length - 1]).add(1, 'days');
+    dates.push(date);
+
+    return date;
   }
 
   public getDataSource(subject: string): Array<{marks: number[]; averageMark: number; student: IStudent}> {
@@ -44,7 +57,7 @@ export class SubjectsService {
 
     return this.studentsService.getStudents().map((student, i) => {
       marksArray[i] = marksArray[i] ? marksArray[i] : [];
-      let tmp = marksArray[i].filter((value) => value !== undefined);
+      let tmp = marksArray[i].filter((value) => value || value ===  0);
       if (tmp.length === 0) {
         tmp = [0];
       }
@@ -57,7 +70,7 @@ export class SubjectsService {
     });
   }
 
-  public getDataHeaders(subject: string): number[] {
+  public getDataHeaders(subject: string): moment.Moment[] {
     return this.findSubjectInfo(subject).dates;
   }
 
@@ -66,7 +79,6 @@ export class SubjectsService {
   }
 
   public addSubject(subject: string, teacher: string): void {
-    console.log(subject, teacher);
     this.marksList.push({
       subject,
       dates: [],
