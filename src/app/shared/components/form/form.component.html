@@ -1,4 +1,4 @@
-<form [formGroup]="addingForm" (ngSubmit)="onSubmit(addingForm.value)">
+<form [formGroup]="addingForm" (ngSubmit)="onSubmit(addingForm.value)" class="container">
     <ng-container *ngFor="let config of configs">
         <div [ngSwitch]="config.type">
             <mat-form-field appearance="fill" *ngSwitchCase="'text'">
