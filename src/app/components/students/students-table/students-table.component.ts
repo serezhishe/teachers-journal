@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 
-import { studentTableColumns } from './../../../common/constants/';
-import { StudentsService } from './../../../common/services/students.service';
-import { TableSortService } from './../../../common/services/table-sort.service';
-import { IStudent } from './../../../shared/models/student.model';
+import { studentTableColumns } from '../../../common/constants/';
+import { isStudentsArray, TableSortHelper } from '../../../common/helpers/table-sort.helper';
+import { IStudent } from '../../../common/models/student.model';
+import { StudentsService } from '../../../common/services/students.service';
 
 @Component({
   selector: 'app-students-table',
@@ -14,16 +14,19 @@ import { IStudent } from './../../../shared/models/student.model';
 export class StudentsTableComponent implements OnInit {
 
   public displayedColumns: string[];
-  public dataSource: IStudent[];
-  constructor(private readonly tableSortService: TableSortService, private readonly studentsService: StudentsService) {}
+  public tableData: IStudent[];
+  constructor(private readonly studentsService: StudentsService) {}
 
   public ngOnInit(): void {
-    this.dataSource  = this.studentsService.getStudents();
+    this.tableData  = this.studentsService.getStudents();
     this.displayedColumns = studentTableColumns;
   }
 
   public sortData(sort: Sort): void {
-    this.dataSource = this.tableSortService.sortData(sort, this.dataSource);
+    const sortedData = TableSortHelper.sortData(sort, this.tableData);
+    if (isStudentsArray(sortedData)) {
+      this.tableData = sortedData;
+    }
   }
 
 }

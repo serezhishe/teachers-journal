@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { IFormConfig } from 'src/app/shared/models/form-config.model';
+
+import { subjectConfig } from '../../../common/configs/subject-form.config';
+import { IFormConfig } from '../../../common/models/form-config.model';
 
 import { SubjectsService } from './../../../common/services/subjects.service';
 
@@ -13,28 +15,10 @@ export class SubjectFormComponent implements OnInit {
   constructor(private readonly subjectsService: SubjectsService) {}
 
   public ngOnInit(): void {
-    this.formConfigs = [
-      {
-        type: 'text',
-        label: 'subject',
-        required: true,
-      }, {
-        type: 'text',
-        label: 'teacher',
-        required: true,
-      }, {
-        type: 'number',
-        label: 'cabinet',
-        required: false,
-      }, {
-        type: 'textarea',
-        label: 'description',
-        required: false,
-      }
-    ];
+    this.formConfigs = subjectConfig;
   }
 
-  public onAdd(event): void {
-    this.subjectsService.addSubject(event.subject, event.teacher);
+  public onAdd(subject: {subjectName: string; teacher: string; cabinet: number; description: string}): void {
+    this.subjectsService.addSubject(subject);
   }
 }

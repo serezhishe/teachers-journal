@@ -1,6 +1,6 @@
-import { DATE_FORMATS } from './date-format';
-import { marksList } from './marks';
-import { students } from './student';
-import { studentTableColumns } from './student-table-columns';
-import { subjectsList } from './subjects-list';
-export { students, subjectsList , studentTableColumns, marksList, DATE_FORMATS };
+export { DATE_FORMATS } from './date-format';
+export { marksList } from './marks';
+export { students } from './student';
+export { studentTableColumns } from './student-table-columns';
+export { subjectsList } from './subjects-list';
+export { niceBlue, niceGreen } from './colors';

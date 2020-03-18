@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { IFormConfig } from 'src/app/shared/models/form-config.model';
+import { IStudent } from 'src/app/common/models/student.model';
+
+import { studentConfig } from '../../../common/configs/student-form.config';
+import { IFormConfig } from '../../../common/models/form-config.model';
 
 import { StudentsService } from './../../../common/services/students.service';
-
 @Component({
   selector: 'app-student-form',
   templateUrl: './student-form.component.html',
@@ -13,27 +15,9 @@ export class StudentFormComponent implements OnInit {
   constructor(private readonly studentsService: StudentsService) {}
 
   public ngOnInit(): void {
-    this.formConfigs = [
-      {
-        type: 'text',
-        label: 'name',
-        required: true,
-      }, {
-        type: 'text',
-        label: 'lastName',
-        required: true,
-      }, {
-        type: 'text',
-        label: 'address',
-        required: false,
-      }, {
-        type: 'textarea',
-        label: 'description',
-        required: false,
-      }
-    ];
+    this.formConfigs = studentConfig;
   }
-  public onAdd(event): void {
-    this.studentsService.addStudent(event);
+  public onAdd(student: IStudent): void {
+    this.studentsService.addStudent(student);
   }
 }

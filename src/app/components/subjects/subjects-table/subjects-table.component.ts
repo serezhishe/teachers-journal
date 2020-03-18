@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -8,9 +8,9 @@ import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 
 import { DATE_FORMATS } from '../../../common/constants';
+import { isStudentsArray, TableSortHelper } from '../../../common/helpers/table-sort.helper';
+import { IStudentMarks } from '../../../common/models/subject-marks.model';
 import { SubjectsService } from '../../../common/services/subjects.service';
-import { TableSortService } from '../../../common/services/table-sort.service';
-import { IStudent } from '../../../shared/models/student.model';
 
 @Component({
   selector: 'app-subjects-table',
@@ -28,14 +28,16 @@ import { IStudent } from '../../../shared/models/student.model';
 export class SubjectsTableComponent implements OnInit {
   public displayedColumns: string[];
   public subject: string;
-  public tableData: Array<{marks: number[]; averageMark: number; student: IStudent}>;
+  public tableData: IStudentMarks[];
   public datesHeaders: string[];
   public teacher: string;
   public dateGroup: {dates: FormArray; marks: FormArray; teacher: string};
   public form: FormGroup;
 
-  constructor(private readonly route: ActivatedRoute, private readonly tableSortService: TableSortService,
-              private readonly formBuilder: FormBuilder, private readonly subjectsService: SubjectsService) {}
+  constructor(
+      private readonly route: ActivatedRoute, private readonly formBuilder: FormBuilder,
+      private readonly subjectsService: SubjectsService,
+    ) {}
 
   public ngOnInit(): void {
     this.subject = this.route.snapshot.params.subject;
@@ -50,8 +52,8 @@ export class SubjectsTableComponent implements OnInit {
     });
     this.dateGroup = {
       dates: this.formBuilder.array(this.subjectsService.getDataHeaders(this.subject).map((elem) => elem)),
-      marks: this.formBuilder.array(this.tableData.map((elem) =>
-        this.formBuilder.array(this.datesHeaders.map((element, i) => elem.marks[i]))
+      marks: this.formBuilder.array(this.tableData.map((element) =>
+        this.formBuilder.array(this.datesHeaders.map((_, i) => element.marks[i]))
       )),
       teacher: this.teacher,
     };
@@ -59,7 +61,10 @@ export class SubjectsTableComponent implements OnInit {
   }
 
   public sortData(sort: Sort): void {
-    this.tableData = this.tableSortService.sortData(sort, this.tableData);
+    const sortedData = TableSortHelper.sortData(sort, this.tableData);
+    if (!isStudentsArray(sortedData)) {
+      this.tableData = sortedData;
+    }
   }
 
   public onSubmit(event: {teacher: string; dates: moment.Moment[]; marks: number[][]}): void {

@@ -10,8 +10,9 @@ import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 
-import { HighlightDirective } from './../../common/helpers/highlight.directive';
-import { SharedModule } from './../../shared/shared.module';
+import { HighlightDirective } from '../../common/directives/highlight.directive';
+import { SharedModule } from '../../shared/shared.module';
+
 import { SubjectFormComponent } from './subject-form/subject-form.component';
 import { SubjectsPageComponent } from './subjects-page/subjects-page.component';
 import { SubjectsRootComponent } from './subjects-root/subjects-root.component';

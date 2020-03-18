@@ -1,26 +1,36 @@
 import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
 
+import { niceBlue, niceGreen} from '../constants/';
+
+const mediumMark = 5;
+
 @Directive({
   selector: '[appHighlight]'
 })
 export class HighlightDirective {
-  @Input() public mark: number;
+  private readonly badMarkColor: string;
+  private readonly goodMarkColor: string;
+  @Input()
+  public mark: number;
 
-  constructor(private readonly el: ElementRef, private readonly renderer: Renderer2) { }
+  constructor(private readonly el: ElementRef, private readonly renderer: Renderer2) {
+    this.badMarkColor = niceBlue;
+    this.goodMarkColor = niceGreen;
+  }
 
   @HostListener('mouseenter')
   private colorize(): void {
-      if (this.mark < 5) {
+      if (this.mark < mediumMark) {
         this.renderer.setStyle(
             this.el.nativeElement,
             'background',
-            'blue'
+            this.badMarkColor,
     );
       } else {
         this.renderer.setStyle(
             this.el.nativeElement,
             'background',
-            'green'
+            this.goodMarkColor,
       );
       }
   }

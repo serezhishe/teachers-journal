@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { students } from '../constants';
-
-import { IStudent } from './../../shared/models/student.model';
+import { IStudent } from '../models/student.model';
 
 @Injectable({
   providedIn: 'root'

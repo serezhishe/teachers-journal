@@ -1,4 +1,4 @@
-import { IStudent } from 'src/app/shared/models/student.model';
+import { IStudent } from 'src/app/common/models/student.model';
 
 export const students: IStudent[] = [
   {

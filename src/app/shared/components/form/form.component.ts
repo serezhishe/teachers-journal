@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { IFormConfig } from '../../models/form-config.model';
+import { IFormConfig } from '../../../common/models/form-config.model';
 
 @Component({
   selector: 'app-form',
@@ -13,8 +13,8 @@ export class FormComponent implements OnInit {
   @Input()
   public configs: IFormConfig[];
   @Output()
-  public add = new EventEmitter();
-  public controlGroup;
+  public add: EventEmitter<any> = new EventEmitter();
+  public controlGroup: any;
   public addingForm: FormGroup;
 
   constructor(private readonly formBuilder: FormBuilder, private readonly router: Router, private readonly route: ActivatedRoute) {}
@@ -27,8 +27,7 @@ export class FormComponent implements OnInit {
     this.addingForm = this.formBuilder.group(this.controlGroup);
   }
 
-  public onSubmit(value): void {
-    console.log(value);
+  public onSubmit(value: Record<string, unknown>): void {
     this.add.emit(value);
     this.router.navigate(['../'], {relativeTo: this.route});
   }

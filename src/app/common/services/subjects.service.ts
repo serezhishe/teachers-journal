@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 
-import { IStudent } from './../../shared/models/student.model';
-import { marksList } from './../constants/';
-import { DATE_FORMATS } from './../constants/date-format';
+import { marksList } from '../constants/';
+import { IStudent } from '../models/student.model';
+
+import { SessionStorageService } from './session-storage.service';
 import { StudentsService } from './students.service';
 
 @Injectable({
@@ -11,7 +12,9 @@ import { StudentsService } from './students.service';
 })
 export class SubjectsService {
   private readonly marksList: Array<{ subject: string; dates:  moment.Moment[]; teacher: string; marks: number[][] }>;
-  constructor(private readonly studentsService: StudentsService) {
+  constructor(
+      private readonly studentsService: StudentsService, private readonly sessionStorageService: SessionStorageService,
+    ) {
     this.marksList = marksList;
   }
 
@@ -78,11 +81,11 @@ export class SubjectsService {
     return this.marksList.map((elem) => elem.subject);
   }
 
-  public addSubject(subject: string, teacher: string): void {
+  public addSubject(subject: {subjectName: string; teacher: string; description?: string; cabinet?: number}): void {
     this.marksList.push({
-      subject,
+      subject: subject.subjectName,
       dates: [],
-      teacher,
+      teacher: subject.teacher,
       marks: [],
     });
   }
