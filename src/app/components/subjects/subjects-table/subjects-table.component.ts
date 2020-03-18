@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepicker } from '@angular/material/datepicker';
@@ -11,6 +11,8 @@ import { DATE_FORMATS } from '../../../common/constants';
 import { isStudentsArray, TableSortHelper } from '../../../common/helpers/table-sort.helper';
 import { IStudentMarks } from '../../../common/models/subject-marks.model';
 import { SubjectsService } from '../../../common/services/subjects.service';
+
+const MAX_MARK = 10;
 
 @Component({
   selector: 'app-subjects-table',
@@ -31,7 +33,7 @@ export class SubjectsTableComponent implements OnInit {
   public tableData: IStudentMarks[];
   public datesHeaders: string[];
   public teacher: string;
-  public dateGroup: {dates: FormArray; marks: FormArray; teacher: string};
+  public dateGroup: {dates: FormArray; marks: FormArray; teacher: FormControl};
   public form: FormGroup;
 
   constructor(
@@ -55,8 +57,8 @@ export class SubjectsTableComponent implements OnInit {
       dates: this.formBuilder.array(this.subjectsService.getDataHeaders().map((elem) => elem)),
       marks: this.formBuilder.array(this.tableData.map((element) =>
         this.formBuilder.array(this.datesHeaders.map((_, i) => element.marks[i]))
-      )),
-      teacher: this.teacher,
+      ),                            [Validators.min(0), Validators.max(MAX_MARK)]),
+      teacher: new FormControl(this.teacher, [Validators.required]),
     };
     this.form = this.formBuilder.group(this.dateGroup);
   }
@@ -69,6 +71,9 @@ export class SubjectsTableComponent implements OnInit {
   }
 
   public onSubmit(event: {teacher: string; dates: moment.Moment[]; marks: number[][]}): void {
+    if (this.form.invalid) {
+      return;
+    }
     this.subjectsService.updateMarks(event.marks);
     this.subjectsService.updateTeacher(event.teacher);
     this.subjectsService.updateDates(event.dates);

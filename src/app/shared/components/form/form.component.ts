@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { IFormConfig } from '../../../common/models/form-config.model';
@@ -22,12 +22,17 @@ export class FormComponent implements OnInit {
   public ngOnInit(): void {
     this.controlGroup = {};
     this.configs.forEach((elem) => {
-      this.controlGroup[elem.label] = elem.type === 'number' ? 0 : '';
+      const defaultValue = elem.type === 'number' ? 0 : '';
+      const validators = elem.required ? [Validators.required] : [];
+      this.controlGroup[elem.label] = new FormControl(defaultValue, validators);
     });
     this.addingForm = this.formBuilder.group(this.controlGroup);
   }
 
   public onSubmit(value: Record<string, unknown>): void {
+    if (this.addingForm.invalid) {
+      return;
+    }
     this.add.emit(value);
     this.router.navigate(['../'], {relativeTo: this.route});
   }
