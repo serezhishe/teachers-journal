@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { marksList, students, subjectsList } from '../constants/';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -8,6 +10,11 @@ export class SessionStorageService {
 
   constructor() {
     this.storage = window.sessionStorage;
+    marksList.forEach((elem) => {
+      this.setItem(elem.subject, JSON.stringify(elem));
+    });
+    this.setItem('subjectsList', JSON.stringify(subjectsList));
+    this.setItem('students', JSON.stringify(students));
   }
 
   get length(): number {

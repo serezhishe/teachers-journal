@@ -41,17 +41,18 @@ export class SubjectsTableComponent implements OnInit {
 
   public ngOnInit(): void {
     this.subject = this.route.snapshot.params.subject;
-    this.teacher = this.subjectsService.getTeacher(this.subject);
-    this.tableData = this.subjectsService.getDataSource(this.subject);
+    this.subjectsService.setCurrentSubject(this.subject);
+    this.teacher = this.subjectsService.getTeacher();
+    this.tableData = this.subjectsService.getDataSource();
 
     this.displayedColumns = ['name', 'lastName', 'averageMark'];
-    this.datesHeaders = this.subjectsService.getDataHeaders(this.subject).map((elem) => {
+    this.datesHeaders = this.subjectsService.getDataHeaders().map((elem) => {
       this.displayedColumns.push(elem.format(DATE_FORMATS.parse.dateInput));
 
       return elem.format(DATE_FORMATS.parse.dateInput);
     });
     this.dateGroup = {
-      dates: this.formBuilder.array(this.subjectsService.getDataHeaders(this.subject).map((elem) => elem)),
+      dates: this.formBuilder.array(this.subjectsService.getDataHeaders().map((elem) => elem)),
       marks: this.formBuilder.array(this.tableData.map((element) =>
         this.formBuilder.array(this.datesHeaders.map((_, i) => element.marks[i]))
       )),
@@ -68,14 +69,14 @@ export class SubjectsTableComponent implements OnInit {
   }
 
   public onSubmit(event: {teacher: string; dates: moment.Moment[]; marks: number[][]}): void {
-    this.subjectsService.updateMarks(this.subject, event.marks);
-    this.subjectsService.updateTeacher(this.subject, event.teacher);
-    this.subjectsService.updateDates(this.subject, event.dates);
-    this.tableData = this.subjectsService.getDataSource(this.subject);
+    this.subjectsService.updateMarks(event.marks);
+    this.subjectsService.updateTeacher(event.teacher);
+    this.subjectsService.updateDates(event.dates);
+    this.tableData = this.subjectsService.getDataSource();
   }
 
   public addDate(): void {
-    const date = this.subjectsService.addDate(this.subject);
+    const date = this.subjectsService.addDate();
     this.datesHeaders.push(date.format(DATE_FORMATS.parse.dateInput));
     this.displayedColumns.push(date.format(DATE_FORMATS.parse.dateInput));
     this.dateGroup.dates.push(new FormControl(date));

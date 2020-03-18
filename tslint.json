@@ -70,6 +70,7 @@
       "timeEnd",
       "trace"
     ],
+    "no-unnecessary-callback-wrapper": false,
     "no-construct": true,
     "no-parameter-properties": false,
     "no-debugger": true,

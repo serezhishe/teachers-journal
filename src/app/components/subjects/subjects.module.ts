@@ -15,7 +15,6 @@ import { SharedModule } from '../../shared/shared.module';
 
 import { SubjectFormComponent } from './subject-form/subject-form.component';
 import { SubjectsPageComponent } from './subjects-page/subjects-page.component';
-import { SubjectsRootComponent } from './subjects-root/subjects-root.component';
 import { SubjectsRoutingModule } from './subjects-routing.module';
 import { SubjectsTableComponent } from './subjects-table/subjects-table.component';
 
@@ -24,7 +23,6 @@ import { SubjectsTableComponent } from './subjects-table/subjects-table.componen
     SubjectFormComponent,
     SubjectsTableComponent,
     SubjectsPageComponent,
-    SubjectsRootComponent,
     HighlightDirective,
   ],
   imports: [
