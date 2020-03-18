@@ -8,7 +8,7 @@ export const studentConfig = [
       label: 'lastName',
       required: true,
     }, {
-      type: 'text',
+      type: 'textarea',
       label: 'address',
       required: false,
     }, {

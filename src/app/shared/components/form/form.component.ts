@@ -22,8 +22,20 @@ export class FormComponent implements OnInit {
   public ngOnInit(): void {
     this.controlGroup = {};
     this.configs.forEach((elem) => {
-      const defaultValue = elem.type === 'number' ? 0 : '';
-      const validators = elem.required ? [Validators.required] : [];
+      let defaultValue;
+      const validators = [];
+      if (elem.type === 'number') {
+        defaultValue = 0;
+        validators.push(Validators.min(0));
+      } else {
+        defaultValue = '';
+        if (elem.type === 'text') {
+          validators.push(Validators.pattern(/^[A-Za-z]+$/));
+        }
+      }
+      if (elem.required) {
+        validators.push(Validators.required);
+      }
       this.controlGroup[elem.label] = new FormControl(defaultValue, validators);
     });
     this.addingForm = this.formBuilder.group(this.controlGroup);
