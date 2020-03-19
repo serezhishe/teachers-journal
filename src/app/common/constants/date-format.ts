@@ -7,3 +7,5 @@ export const DATE_FORMATS = {
       monthYearLabel: 'MMMM YYYY',
     },
   };
+
+export const dateInputFormat = 'DD/MM/YY';

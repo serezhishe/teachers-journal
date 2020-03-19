@@ -2,18 +2,26 @@
     <ng-container *ngFor="let config of configs">
         <div [ngSwitch]="config.type">
             <mat-form-field appearance="fill" *ngSwitchCase="'text'">
-                <mat-label>{{config.label | titlecase}}</mat-label>
+                <mat-label>{{config.label | separateWords  | titlecase}}</mat-label>
                 <input matInput [required]="config.required" [formControlName]="config.label">
             </mat-form-field>
             <mat-form-field appearance="fill" *ngSwitchCase="'textarea'">
-                <mat-label>{{config.label | titlecase}}</mat-label>
+                <mat-label>{{config.label | separateWords  | titlecase}}</mat-label>
                 <textarea matInput [required]="config.required" [formControlName]="config.label"></textarea>
             </mat-form-field>
             <mat-form-field appearance="fill" *ngSwitchCase="'number'">
-                <mat-label>{{config.label | titlecase}}</mat-label>
+                <mat-label>{{config.label | separateWords  | titlecase}}</mat-label>
                 <input type="number" matInput [required]="config.required" [formControlName]="config.label">
             </mat-form-field>
         </div>
+        <mat-error *ngIf="addingForm.controls[config.label].errors">
+            <span *ngIf="addingForm.controls[config.label].errors.required && addingForm.controls[config.label].dirty">
+                {{config.label | separateWords  | titlecase}} is required
+            </span>
+            <span *ngIf="addingForm.controls[config.label].errors.pattern">
+                {{config.label | separateWords | titlecase}} includes incorrect symbols
+            </span>
+        </mat-error>
     </ng-container>
     <button type="submit" mat-raised-button>Add</button>
     <app-go-back-button></app-go-back-button>

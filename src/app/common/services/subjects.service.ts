@@ -19,6 +19,7 @@ export class SubjectsService {
   constructor(
       private readonly studentsService: StudentsService, private readonly sessionStorageService: SessionStorageService,
     ) {
+    this.subjects = JSON.parse(this.sessionStorageService.getItem('subjectsList'));
   }
 
   private getAverageMark(marks: number[]): number {

@@ -1,4 +1,4 @@
-export { DATE_FORMATS } from './date-format';
+export { DATE_FORMATS, dateInputFormat } from './date-format';
 export { marksList } from './marks';
 export { students } from './student';
 export { studentTableColumns } from './student-table-columns';

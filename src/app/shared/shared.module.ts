@@ -11,6 +11,7 @@ import { AddButtonComponent } from './components/add-button/add-button.component
 import { FormComponent } from './components/form/form.component';
 import { GoBackButtonComponent } from './components/go-back-button/go-back-button.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { SeparateWordsPipe } from './pipes/separate-words.pipe';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     AddButtonComponent,
     FormComponent,
     GoBackButtonComponent,
+    SeparateWordsPipe,
   ],
   imports: [
     CommonModule,
