@@ -22,9 +22,9 @@
         <th mat-header-cell *matHeaderCellDef formArrayName="dates">
           <mat-form-field ngClass="datepicker">
             <mat-label>Date</mat-label>
-            <input matInput [matDatepicker]="dp" [formControlName]="i" disabled>
+            <input matInput [matDatepicker]="dp" [formControlName]="i" readonly>
             <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-            <mat-datepicker #dp disabled="false"></mat-datepicker>
+            <mat-datepicker #dp></mat-datepicker>
           </mat-form-field>
           <mat-error *ngIf="form.controls.dates.controls[i].errors">
             No duplicate dates
@@ -47,7 +47,7 @@
   <mat-toolbar>Teacher:
       <input value="{{teacher | titlecase}}" placeholder="Enter teacher's name" formControlName="teacher">
       <mat-error *ngIf="form.controls.teacher.errors">
-        Teacher cannot contain numbers and special symbols
+        Teacher's field cannot contain numbers and special symbols
       </mat-error>
   </mat-toolbar>
   <button mat-raised-button type="submit">Save</button>

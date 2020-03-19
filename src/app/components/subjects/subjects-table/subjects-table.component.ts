@@ -11,7 +11,7 @@ import { IStudentMarks } from '../../../common/models/subject-marks.model';
 import { SubjectsService } from '../../../common/services/subjects.service';
 
 const MAX_MARK = 10;
-const baseDisplayed = ['name', 'lastName', 'averageMark'];
+const baseDisplayedColumns = ['name', 'lastName', 'averageMark'];
 
 @Component({
   selector: 'app-subjects-table',
@@ -39,7 +39,7 @@ export class SubjectsTableComponent implements OnInit {
     this.teacher = this.subjectsService.getTeacher();
     this.tableData = this.subjectsService.getDataSource();
 
-    this.displayedColumns = baseDisplayed;
+    this.displayedColumns = baseDisplayedColumns;
     this.datesHeaders = this.subjectsService.getDataHeaders().map((elem) => {
       this.displayedColumns.push(elem.format(dateInputFormat));
 
@@ -54,7 +54,7 @@ export class SubjectsTableComponent implements OnInit {
           )
         )
       ),
-      teacher: new FormControl(this.teacher, [Validators.required, Validators.pattern(/^[A-Za-z]+$/)]),
+      teacher: new FormControl(this.teacher, [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
     };
     this.form = this.formBuilder.group(this.marksGroup);
   }
@@ -68,6 +68,8 @@ export class SubjectsTableComponent implements OnInit {
 
   public onSubmit(newData: { teacher: string; dates: moment.Moment[]; marks: number[][] }): void {
     if (this.form.invalid) {
+      alert('There are some mistakes. Check again, please.');
+
       return;
     }
     this.subjectsService.updateMarks(newData.marks);
