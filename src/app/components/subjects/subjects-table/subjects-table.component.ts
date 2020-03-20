@@ -50,7 +50,9 @@ export class SubjectsTableComponent implements OnInit {
       marks: this.formBuilder.array(
         this.tableData.map((element) =>
           this.formBuilder.array(
-            this.datesHeaders.map((_, i) => new FormControl(element.marks[i], [Validators.min(0), Validators.max(MAX_MARK)]))
+            this.datesHeaders.map((_, i) => new FormControl(element.marks[i], [
+              Validators.pattern(/^[0-9/-]/), Validators.min(0), Validators.max(MAX_MARK),
+            ]))
           )
         )
       ),
