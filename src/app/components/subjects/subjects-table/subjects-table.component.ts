@@ -1,115 +1,98 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
-import { MatDatepicker } from '@angular/material/datepicker';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { Sort } from '@angular/material/sort';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
 
-import { students, subjectsEnum } from './../../../common/constants/';
-import { marks } from './../../../common/constants/marks';
-import { IStudent } from './../../../shared/models/student.model';
+import { dateInputFormat } from '../../../common/constants';
+import { isStudentsArray, TableSortHelper } from '../../../common/helpers/table-sort.helper';
+import { duplicateDateValidator } from '../../../common/helpers/validators';
+import { IStudentMarks } from '../../../common/models/subject-marks.model';
+import { SubjectsService } from '../../../common/services/subjects.service';
 
-const DATE_FORMATS = {
-  parse: {
-    dateInput: 'DD/MM/YY',
-  },
-  display: {
-    dateInput: 'DD/MM/YY',
-    monthYearLabel: 'MMM YYYY',
-  },
-};
+const MAX_MARK = 10;
+const baseDisplayedColumns = ['name', 'lastName', 'averageMark'];
 
 @Component({
   selector: 'app-subjects-table',
   templateUrl: './subjects-table.component.html',
   styleUrls: ['./subjects-table.component.scss'],
-  providers: [
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-    },
-    MatDatepicker,
-    {provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS},
-  ],
 })
-export class SubjectsTableComponent implements OnInit, OnDestroy {
-  private subjectSubscription: Subscription;
-  private subject$: Observable<string>;
+export class SubjectsTableComponent implements OnInit {
   public displayedColumns: string[];
-  public dataSource: Array<{marks; averageMark: number; student: IStudent}>;
-  public datesHeaders;
-  public title: string;
+  public subject: string;
+  public tableData: IStudentMarks[];
+  public datesHeaders: string[];
   public teacher: string;
+  public marksGroup: { dates: FormArray; marks: FormArray; teacher: FormControl };
+  public form: any;
 
-constructor(private readonly route: ActivatedRoute) {}
-
-  private compare(a: number | string, b: number | string, isAsc: boolean): number {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-  }
+  constructor(
+    private readonly route: ActivatedRoute,
+    private readonly formBuilder: FormBuilder,
+    private readonly subjectsService: SubjectsService
+  ) {}
 
   public ngOnInit(): void {
-    this.subject$ =  this.route.paramMap.pipe(
-      map((params: ParamMap) => params.get('subject')
-    ));
-    this.subjectSubscription = this.subject$.subscribe((subject) => {
-      this.title = subject;
-      const subjectIndex = subjectsEnum[subject];
-      this.teacher = marks[subjectIndex].teacher;
-      this.dataSource = marks[subjectIndex].marks.map((elem, i) => {
-        const tmp = elem.filter((value) => value !== undefined);
+    this.subject = this.route.snapshot.params.subject;
+    this.subjectsService.setCurrentSubject(this.subject);
+    this.teacher = this.subjectsService.getTeacher();
+    this.tableData = this.subjectsService.getDataSource();
 
-        return {
-          marks: elem,
-          averageMark: +(tmp.reduce((prev, curr) => prev + curr, 0) / tmp.length).toFixed(1),
-          student: students[i],
-        };
-      });
-      this.displayedColumns = ['name', 'lastName', 'averageMark'];
-      this.datesHeaders = marks[subjectsEnum[subject]].dates.map((elem) => {
-        this.displayedColumns.push((new Date(elem)).toDateString());
+    this.displayedColumns = baseDisplayedColumns;
+    this.datesHeaders = this.subjectsService.getDataHeaders().map((elem) => {
+      this.displayedColumns.push(elem.format(dateInputFormat));
 
-        return {
-          column: (new Date(elem)).toDateString(),
-          control: new FormControl(moment(elem))
-        };
-      });
+      return elem.format(dateInputFormat);
     });
+    this.marksGroup = {
+      dates: this.formBuilder.array(this.subjectsService.getDataHeaders().map((elem) => new FormControl(elem, [duplicateDateValidator()]))),
+      marks: this.formBuilder.array(
+        this.tableData.map((element) =>
+          this.formBuilder.array(
+            this.datesHeaders.map((_, i) => new FormControl(element.marks[i], [
+              Validators.pattern(/^[0-9/-]/), Validators.min(0), Validators.max(MAX_MARK),
+            ]))
+          )
+        )
+      ),
+      teacher: new FormControl(this.teacher, [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
+    };
+    this.form = this.formBuilder.group(this.marksGroup);
   }
 
   public sortData(sort: Sort): void {
-    const data = this.dataSource.slice();
-    if (sort.active === undefined || sort.direction === '') {
-      this.dataSource = data;
+    const sortedData = TableSortHelper.sortData(sort, this.tableData);
+    if (!isStudentsArray(sortedData)) {
+      this.tableData = sortedData;
+    }
+  }
+
+  public onSubmit(newData: { teacher: string; dates: moment.Moment[]; marks: number[][] }): void {
+    if (this.form.invalid) {
+      alert('There are some mistakes. Check again, please.');
 
       return;
     }
-
-    this.dataSource = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name': return this.compare(a.student.name, b.student.name, isAsc);
-        case 'lastName': return this.compare(a.student.lastName, b.student.lastName, isAsc);
-        case 'averageMark': return this.compare(a.averageMark, b.averageMark, isAsc);
-        default: return 0;
-      }
-    });
+    this.subjectsService.updateMarks(newData.marks);
+    this.subjectsService.updateTeacher(newData.teacher);
+    this.subjectsService.updateDates(newData.dates);
+    this.tableData = this.subjectsService.getDataSource();
   }
 
-  public ngOnDestroy(): void {
-    this.subjectSubscription.unsubscribe();
-  }
-
-  public onClick(event: Event): void {
-    console.log(event);
-  }
-
-  public log(e): void {
-    console.log(e.target.value.get('month'));
-    console.log(e.target.value.get('date'));
-    console.log(e);
+  public addDate(): void {
+    const date = this.subjectsService.addDate();
+    this.datesHeaders.push(date.format(dateInputFormat));
+    this.displayedColumns.push(date.format(dateInputFormat));
+    this.marksGroup.dates.push(new FormControl(date));
+    this.marksGroup.marks = this.formBuilder.array(
+      this.tableData.map((elem) =>
+        this.formBuilder.array(
+          this.datesHeaders.map((_, i) => elem.marks[i]),
+          [Validators.min(0), Validators.max(MAX_MARK)]
+        )
+      )
+    );
+    this.form = this.formBuilder.group(this.marksGroup);
   }
 }

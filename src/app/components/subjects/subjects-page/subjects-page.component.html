@@ -1,4 +1,4 @@
 <div>
-    <a mat-raised-button *ngFor="let subject of subjects" [routerLink]="[subject]">{{subject}}</a>
+    <a mat-raised-button *ngFor="let subject of subjects" [routerLink]="[subject]">{{subject | titlecase}}</a>
 </div>
 <app-add-button></app-add-button>

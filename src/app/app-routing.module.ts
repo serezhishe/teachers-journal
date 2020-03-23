@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { StudentsRootComponent } from './components/students/students-root/students-root.component';
-import { SubjectsRootComponent } from './components/subjects/subjects-root/subjects-root.component';
+import { StudentsTableComponent } from './components/students/students-table/students-table.component';
+import { SubjectsPageComponent } from './components/subjects/subjects-page/subjects-page.component';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
-  { path: 'students', component: StudentsRootComponent },
-  { path: 'subjects', component: SubjectsRootComponent },
+  { path: 'students', component: StudentsTableComponent },
+  { path: 'subjects', component: SubjectsPageComponent },
+  { path: '', redirectTo: 'students', pathMatch: 'full'},
   { path: '**', component: PageNotFoundComponent }
 ];
 

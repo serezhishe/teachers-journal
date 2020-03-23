@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { IFormConfig } from '../../models/form-config.model';
+import { IFormConfig } from '../../../common/models/form-config.model';
 
 @Component({
   selector: 'app-form',
@@ -12,7 +12,9 @@ import { IFormConfig } from '../../models/form-config.model';
 export class FormComponent implements OnInit {
   @Input()
   public configs: IFormConfig[];
-  public controlGroup;
+  @Output()
+  public add: EventEmitter<any> = new EventEmitter();
+  public controlGroup: any;
   public addingForm: FormGroup;
 
   constructor(private readonly formBuilder: FormBuilder, private readonly router: Router, private readonly route: ActivatedRoute) {}
@@ -20,13 +22,17 @@ export class FormComponent implements OnInit {
   public ngOnInit(): void {
     this.controlGroup = {};
     this.configs.forEach((elem) => {
-      this.controlGroup[elem.label] = elem.type === 'number' ? 0 : '';
+      const defaultValue = elem.type === 'number' ? 0 : '';
+      this.controlGroup[elem.label] = new FormControl(defaultValue, elem.validators);
     });
     this.addingForm = this.formBuilder.group(this.controlGroup);
   }
 
-  public onSubmit(value): void {
-    console.log(value);
+  public onSubmit(value: Record<string, unknown>): void {
+    if (this.addingForm.invalid) {
+      return;
+    }
+    this.add.emit(value);
     this.router.navigate(['../'], {relativeTo: this.route});
   }
 }

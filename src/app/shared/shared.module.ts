@@ -9,13 +9,17 @@ import { RouterModule } from '@angular/router';
 
 import { AddButtonComponent } from './components/add-button/add-button.component';
 import { FormComponent } from './components/form/form.component';
+import { GoBackButtonComponent } from './components/go-back-button/go-back-button.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { SeparateWordsPipe } from './pipes/separate-words.pipe';
 
 @NgModule({
   declarations: [
     PageNotFoundComponent,
     AddButtonComponent,
-    FormComponent
+    FormComponent,
+    GoBackButtonComponent,
+    SeparateWordsPipe,
   ],
   imports: [
     CommonModule,
@@ -28,6 +32,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
   ],
   exports: [
     PageNotFoundComponent,
+    GoBackButtonComponent,
     AddButtonComponent,
     MatButtonModule,
     MatIconModule,
