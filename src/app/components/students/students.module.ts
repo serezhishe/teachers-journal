@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 
@@ -17,6 +18,7 @@ import { StudentsTableComponent } from './students-table/students-table.componen
     CommonModule,
     MatTableModule,
     MatSortModule,
+    MatProgressSpinnerModule,
     SharedModule,
     StudentsRoutingModule,
   ],

@@ -1,4 +1,10 @@
-<div>
-    <a mat-raised-button *ngFor="let subject of subjects" [routerLink]="[subject]">{{subject | titlecase}}</a>
-</div>
-<app-add-button></app-add-button>
+<ng-container *ngIf="loaded; else elseTemplate">
+    <div>
+        <a mat-raised-button *ngFor="let subject of subjects" [routerLink]="[subject]">{{subject | titlecase}}</a>
+    </div>
+    <app-add-button></app-add-button>
+</ng-container>
+<ng-template #elseTemplate>
+    <mat-spinner></mat-spinner>
+    LOADING...
+</ng-template>

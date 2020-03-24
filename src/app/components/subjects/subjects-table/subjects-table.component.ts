@@ -76,6 +76,7 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
   }
 
   public sortData(sort: Sort): void {
+    sort.active = sort.active === 'averageMark' ? sort.active : `student.${sort.active}`;
     const sortedData = TableSortHelper.sortData(sort, this.tableData);
     if (!isStudentsArray(sortedData)) {
       this.tableData = sortedData;

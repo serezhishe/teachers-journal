@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
-import { Observable, of } from 'rxjs';
-import { map, pluck, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 import { dateInputFormat } from '../constants';
+import { IStudent } from '../models/student.model';
 import { ISubjectInfo } from '../models/subject-info.model';
 import { IStudentMarks } from '../models/subject-marks.model';
 
@@ -49,30 +50,30 @@ export class SubjectsService {
     this.sessionStorageService.updateItem(`subjects/${subject}`, newData);
   }
 
-  public updateTeacher(newValue: string): void {
-    this.currentSubject.teacher = newValue;
-  }
+  // public updateTeacher(newValue: string): void {
+  //   this.currentSubject.teacher = newValue;
+  // }
 
-  public updateMarks(marks: Map<string, number[]>): void {
-    this.currentSubject.marks = marks;
-    this.sessionStorageService.setItem(this.currentSubject.name, JSON.stringify(this.currentSubject));
-  }
+  // public updateMarks(marks: Map<string, number[]>): void {
+  //   this.currentSubject.marks = marks;
+  //   this.sessionStorageService.setItem(this.currentSubject.name, JSON.stringify(this.currentSubject));
+  // }
 
-  public updateDates(newDates: moment.Moment[]): void {
-    let i = 0;
-    const prevDates = this.currentSubject.dates;
-    while (newDates[i] !== undefined) {
-      prevDates[i] = newDates[i];
-      i++;
-    }
-    this.sessionStorageService.setItem(this.currentSubject.name, JSON.stringify(this.currentSubject));
-  }
+  // public updateDates(newDates: moment.Moment[]): void {
+  //   let i = 0;
+  //   const prevDates = this.currentSubject.dates;
+  //   while (newDates[i] !== undefined) {
+  //     prevDates[i] = newDates[i];
+  //     i++;
+  //   }
+  //   this.sessionStorageService.setItem(this.currentSubject.name, JSON.stringify(this.currentSubject));
+  // }
 
   public addDate(): moment.Moment {
     const dates = this.currentSubject.dates;
     const date = moment(dates[dates.length - 1]).add(1, 'days');
     dates.push(date);
-    // this.sessionStorageService.updateItem(`subjects/${this.currentSubject.name}`, {dates});
+    this.sessionStorageService.updateItem(`subjects/${this.currentSubject.name}`, {dates});
 
     return date;
   }
@@ -102,7 +103,7 @@ export class SubjectsService {
 
   public getSubjects(): Observable <any> {
     return this.sessionStorageService.getItem('subjects').pipe(
-        map((subjects) =>
+        map((subjects: ISubjectInfo[]) =>
           subjects.map((elem) => elem.name))
       );
   }
@@ -114,7 +115,7 @@ export class SubjectsService {
       teacher: subject.teacher,
       marks: new Map<string, number[]>(),
     };
-    const subscription = this.studentsService.getStudents().subscribe((students) => {
+    const subscription = this.studentsService.getStudents().subscribe((students: IStudent[]) => {
       students.forEach((student) => tmp.marks[student._id] = [undefined]);
       this.sessionStorageService.pushItem('subjects', tmp);
       subscription.unsubscribe();

@@ -11,12 +11,15 @@ import { SubjectsService } from './../../../common/services/subjects.service';
 export class SubjectsPageComponent implements OnInit, OnDestroy {
   public subjects: string[];
   public subjectsSubscription: Subscription;
+  public loaded: boolean;
 
   constructor(private readonly subjectsService: SubjectsService) {}
 
   public ngOnInit(): void {
+    this.loaded = false;
     this.subjectsSubscription = this.subjectsService.getSubjects().subscribe((subjectList) => {
       this.subjects = subjectList;
+      this.loaded = true;
     });
   }
 

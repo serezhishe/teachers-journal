@@ -6,6 +6,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/mat
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -41,6 +42,7 @@ import { SubjectsTableComponent } from './subjects-table/subjects-table.componen
     ReactiveFormsModule,
     MatFormFieldModule,
     MatDatepickerModule,
+    MatProgressSpinnerModule,
     SubjectsRoutingModule,
   ],
   providers: [

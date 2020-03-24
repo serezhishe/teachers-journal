@@ -6,7 +6,7 @@ import { delay, filter, pluck, tap } from 'rxjs/operators';
 import { BASE_URL } from '../constants/base-url';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SessionStorageService {
   private readonly storage: Storage;
@@ -27,23 +27,27 @@ export class SessionStorageService {
 
   public getItem(key: string): Observable<any> {
     if (this.storage.getItem(key) === null) {
-      this.http.get(`${BASE_URL}/${key}`).pipe(
-        tap((response) => {
-          this.storage.setItem(key, JSON.stringify(response));
-        }),
-        delay(1000),
-      ).subscribe((value) => {
-        this.storage$.next({[key]: value});
-      });
+      this.http
+        .get(`${BASE_URL}/${key}`)
+        .pipe(
+          tap((response) => {
+            this.storage.setItem(key, JSON.stringify(response));
+          }),
+          delay(1000)
+        )
+        .subscribe((value) => {
+          this.storage$.next({ [key]: value });
+        });
     } else {
-      of({[key]: JSON.parse(this.storage.getItem(key))}).pipe(delay(1)).subscribe((some) => {
-        this.storage$.next(some);
-      });
+      of({ [key]: JSON.parse(this.storage.getItem(key)) })
+        .pipe(delay(1))
+        .subscribe((some) => {
+          this.storage$.next(some);
+        });
     }
 
     return this.storage$.pipe(
-      filter((value) =>
-        value[key] !== undefined),
+      filter((value) => value[key] !== undefined),
       // tap((value) => {
       //     console.log(value);
       //   }),
@@ -62,11 +66,8 @@ export class SessionStorageService {
   public pushItem(key: string, value: any): void {
     this.http.post(`${BASE_URL}/${key}`, value, { observe: 'response' }).subscribe((response: HttpResponse<any>) => {
       if (response.ok) {
-        this.storage.setItem(key, JSON.stringify([
-          ...JSON.parse(this.storage.getItem(key)),
-          response.body
-        ]));
-        this.storage$.next({[key]: JSON.parse(this.storage.getItem(key))});
+        this.storage.setItem(key, JSON.stringify([...JSON.parse(this.storage.getItem(key)), response.body]));
+        this.storage$.next({ [key]: JSON.parse(this.storage.getItem(key)) });
       } else {
         console.log(response);
       }
@@ -77,7 +78,7 @@ export class SessionStorageService {
     this.http.patch(`${BASE_URL}/${key}`, value, { observe: 'response' }).subscribe((response: HttpResponse<any>) => {
       if (response.ok) {
         this.storage.setItem(key, JSON.stringify(response.body));
-        this.storage$.next({[key]: response.body});
+        this.storage$.next({ [key]: response.body });
       } else {
         console.log(response);
       }
@@ -88,7 +89,7 @@ export class SessionStorageService {
     this.http.post(`${BASE_URL}/${key}`, value, { observe: 'response' }).subscribe((response: HttpResponse<any>) => {
       if (response.ok) {
         this.storage.setItem(key, JSON.stringify(response.body));
-        this.storage$.next({[key]: JSON.parse(this.storage.getItem(key))});
+        this.storage$.next({ [key]: JSON.parse(this.storage.getItem(key)) });
       } else {
         console.log(response);
       }
