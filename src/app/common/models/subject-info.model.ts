@@ -1,8 +1,10 @@
 import * as moment from 'moment';
 
 export interface ISubjectInfo {
-  subject: string;
+  name: string;
   dates: moment.Moment[];
   teacher: string;
-  marks: number[][];
+  marks: Map<string, number[]>;
+  cabinet?: number;
+  _id: string;
 }

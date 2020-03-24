@@ -10,7 +10,8 @@ const subjectSchema = new Schema({
     required: true,
   },
   marks: {
-    type: [[Number]],
+    type: Map,
+    of: [Number],
     required: true,
   },
   teacher: {

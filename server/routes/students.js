@@ -34,12 +34,11 @@ api.get('/', asyncHandler(async (req, res) => {
 api.post('/', asyncHandler(async (req, res) => {
   const { name, lastName, address, description } = req.body;
 
-  if ( !name || !lastName) {
+  if (!name || !lastName) {
     return res.sendStatus(400);
   }
 
-  res.send(await createStudent({ name, lastName, address, description }));
-
+  res.status(200).send(await createStudent({ name, lastName, address, description }));
 }));
 
 // api.put('/:id', validateIdParam, asyncHandler(async (req, res) => {

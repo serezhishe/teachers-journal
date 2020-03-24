@@ -3,11 +3,11 @@ const Subject = require('../models/subject');
 
 exports.createSubject = async function ({ name, marks, dates, teacher, description, cabinet } = {}) {
   const subject = new Subject({ name, marks, dates, teacher, description, cabinet });
-
+  console.log(subject)
   return subject.save();
 }
 
-exports.updateSubject = async function ({ id, name, marks, dates, teacher, description, cabinet, _deletedAt }) {
+exports.updateSubject = async function ({ name, marks, dates, teacher, description, cabinet, _deletedAt }) {
 
   const valuesToUpdate = {
     name,
@@ -27,7 +27,8 @@ exports.updateSubject = async function ({ id, name, marks, dates, teacher, descr
     return result;
   }, {});
 
-  return await Subject.updateOne({ _id: id }, omited);
+  await Subject.updateOne({ name: name }, omited);
+  return Subject.findOne({ name: name })
 }
 
 exports.deleteSubject = async function (id) {
@@ -35,7 +36,7 @@ exports.deleteSubject = async function (id) {
 };
 
 exports.getSubjectByName = async function (name) {
-  return await Subject.find({ name: name });
+  return await Subject.findOne({ name: name });
 }
 
 exports.getAll = async function () {

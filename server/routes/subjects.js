@@ -14,13 +14,13 @@ const {
 } = require('../utils/validator');
 
 const validateIdParam = validateParam('id');
+const validateNameParam = validateParam('name');
 
 const api = Router();
 
 api.get('/', asyncHandler(async (req, res) => {
-  const subjects = (await getAll()).map(subject => subject.name);
 
-  res.send(subjects)
+  res.send(await getAll())
 }));
 
 api.get('/:name', asyncHandler(async (req, res) => {
@@ -55,15 +55,14 @@ api.post('/', asyncHandler(async (req, res) => {
 //   res.send(200);
 // }));
 
-api.patch('/:id', validateIdParam, asyncHandler(async (req, res) => {
-  const { id } = req.params;
-  const { name, marks, dates, teacher, cabinet } = req.body;
-
-  await updateSubject({ id, name, marks, dates, teacher, cabinet });
-  res.send(200);
+api.patch('/:name', validateNameParam, asyncHandler(async (req, res) => {
+  const { name } = req.params;
+  const { marks, dates, teacher, cabinet } = req.body;
+  console.log(name)
+  res.status(200).send(await updateSubject({ name, marks, dates, teacher, cabinet }));
 }));
 
-api.delete('/:id', validateIdParam, asyncHandler(async (req, res) => {
+api.delete('/:name', validateNameParam, asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   await deleteSubject(id);
