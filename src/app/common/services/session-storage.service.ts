@@ -75,7 +75,16 @@ export class SessionStorageService {
   }
 
   public updateItem(key: string, value: any): void {
-    this.http.patch(`${BASE_URL}/${key}`, value, { observe: 'response' }).subscribe((response: HttpResponse<any>) => {
+    const prevValue = JSON.parse(this.storage.getItem(key));
+    const updateValue = Object.keys(value).reduce((result, prop) => {
+      if (value[prop] !== undefined && JSON.stringify(value[prop]) !== JSON.stringify(prevValue[prop])) {
+        result[prop] = value[prop];
+      }
+
+      return result;
+    }, {});
+    console.log(updateValue);
+    this.http.patch(`${BASE_URL}/${key}`, updateValue, { observe: 'response' }).subscribe((response: HttpResponse<any>) => {
       if (response.ok) {
         this.storage.setItem(key, JSON.stringify(response.body));
         this.storage$.next({ [key]: response.body });
