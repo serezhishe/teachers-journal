@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
+
+import { SessionStorageService } from '../common/services/session-storage.service';
 
 @Component({
   selector: 'app-root',
@@ -7,8 +9,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   public title: string;
-
-  constructor() {
+  constructor(private readonly sessionStorageService: SessionStorageService) {
     this.title = 'Teacher\'s Journal';
+  }
+  @HostListener('window:beforeunload', ['$event']) public unloadHandler(event: Event) {
+    this.sessionStorageService.clear();
+    event.preventDefault();
   }
 }

@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
+import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
 
 import { IFormConfig } from '../../../common/models';
 
@@ -16,7 +18,6 @@ export class FormComponent implements OnInit {
   public add: EventEmitter<any> = new EventEmitter();
   public controlGroup: any;
   public addingForm: FormGroup;
-
   constructor(private readonly formBuilder: FormBuilder, private readonly router: Router, private readonly route: ActivatedRoute) {}
 
   public ngOnInit(): void {
@@ -33,6 +34,28 @@ export class FormComponent implements OnInit {
       return;
     }
     this.add.emit(value);
+    this.addingForm.markAsUntouched();
     this.router.navigate(['../'], {relativeTo: this.route});
+  }
+
+  public canDeactivate(): Observable<boolean> | boolean {
+    if (this.addingForm.dirty && this.addingForm.touched) {
+      if (this.addingForm.valid) {
+        return of(window.confirm('Do you want to submit the information?')).pipe(
+          switchMap((submit) => {
+            if (submit) {
+              this.add.emit(this.addingForm.value);
+              this.addingForm.reset();
+            }
+
+            return of(window.confirm('Do you want to leave the page?'));
+          })
+        );
+      }
+
+      return of(window.confirm('Information is invalid, are you sure want to leave the page?'));
+    }
+
+    return true;
   }
 }

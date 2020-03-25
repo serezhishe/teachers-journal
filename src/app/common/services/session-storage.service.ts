@@ -49,9 +49,9 @@ export class SessionStorageService {
 
     return this.storage$.pipe(
       filter((value) => value[key] !== undefined),
-      // tap((value) => {
-      //     console.log(value);
-      //   }),
+      tap((value) => {
+          console.log(value);
+        }),
       pluck(key)
     );
   }

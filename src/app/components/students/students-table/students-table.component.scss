@@ -1,3 +1,11 @@
 table {
     width: 100%;
   }
+
+.delete{
+    color: red;
+    display: none;
+}
+.shown .delete {
+   display:block  
+}
