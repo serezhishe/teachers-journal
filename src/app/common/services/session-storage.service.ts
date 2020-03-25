@@ -5,6 +5,7 @@ import { delay, filter, pluck, tap } from 'rxjs/operators';
 
 import { BASE_URL } from '../constants/base-url';
 
+const DELAY_TO_SHOW_HTTP = 1000;
 @Injectable({
   providedIn: 'root',
 })
@@ -33,7 +34,7 @@ export class SessionStorageService {
           tap((response) => {
             this.storage.setItem(key, JSON.stringify(response));
           }),
-          delay(1000)
+          delay(DELAY_TO_SHOW_HTTP)
         )
         .subscribe((value) => {
           this.storage$.next({ [key]: value });
@@ -66,7 +67,10 @@ export class SessionStorageService {
   public pushItem(key: string, value: any): void {
     this.http.post(`${BASE_URL}/${key}`, value, { observe: 'response' }).subscribe((response: HttpResponse<any>) => {
       if (response.ok) {
-        this.storage.setItem(key, JSON.stringify([...JSON.parse(this.storage.getItem(key)), response.body]));
+        this.storage.setItem(key, JSON.stringify([
+          ...JSON.parse(this.storage.getItem(key)),
+          response.body
+        ]));
         this.storage$.next({ [key]: JSON.parse(this.storage.getItem(key)) });
       } else {
         console.log(response);

@@ -6,7 +6,7 @@ import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 
 import { dateInputFormat } from '../../../common/constants';
-import { isStudentsArray, TableSortHelper } from '../../../common/helpers/table-sort.helper';
+import { TableSortHelper } from '../../../common/helpers/table-sort.helper';
 import { duplicateDateValidator } from '../../../common/helpers/validators';
 import { IStudentMarks } from '../../../common/models/subject-marks.model';
 import { SubjectsService } from '../../../common/services/subjects.service';
@@ -78,9 +78,7 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
   public sortData(sort: Sort): void {
     sort.active = sort.active === 'averageMark' ? sort.active : `student.${sort.active}`;
     const sortedData = TableSortHelper.sortData(sort, this.tableData);
-    if (!isStudentsArray(sortedData)) {
-      this.tableData = sortedData;
-    }
+    this.tableData = sortedData;
   }
 
   public onSubmit(newData: { teacher: string; dates: moment.Moment[]; marks: any }): void {

@@ -3,7 +3,7 @@ import { Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 
 import { studentTableColumns } from '../../../common/constants/';
-import { isStudentsArray, TableSortHelper } from '../../../common/helpers/table-sort.helper';
+import { TableSortHelper } from '../../../common/helpers/table-sort.helper';
 import { IStudent } from '../../../common/models/student.model';
 import { StudentsService } from '../../../common/services/students.service';
 
@@ -31,9 +31,7 @@ export class StudentsTableComponent implements OnInit, OnDestroy {
 
   public sortData(sort: Sort): void {
     const sortedData = TableSortHelper.sortData(sort, this.tableData);
-    if (isStudentsArray(sortedData)) {
-      this.tableData = sortedData;
-    }
+    this.tableData = sortedData;
   }
 
   public ngOnDestroy(): void {
