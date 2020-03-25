@@ -21,16 +21,20 @@ export class SubjectsService {
 
   constructor(
       private readonly studentsService: StudentsService, private readonly sessionStorageService: SessionStorageService,
-      private readonly http: HttpClient,
     ) {}
 
   private getAverageMark(marks: number[]): number {
-    return +(marks.reduce((prev: number, curr: number) => prev + curr, 0) / marks.length).toFixed(1);
+    let tmp = marks.filter((value) => value || value ===  0);
+    if (tmp.length === 0) {
+      tmp = [0];
+    }
+
+    return +(tmp.reduce((prev, curr) => prev + curr, 0) / tmp.length).toFixed(1);
   }
 
-  public getSubjectInfo(subject: string): Observable<any> {
+  public getSubjectInfo(subject: string): Observable<ISubjectInfo> {
     return this.sessionStorageService.getItem(`subjects/${subject}`).pipe(
-      tap((subjectInfo) => {
+      tap((subjectInfo: ISubjectInfo) => {
         this.currentSubject = subjectInfo;
       })
     );
@@ -84,20 +88,16 @@ export class SubjectsService {
     return this.studentsService.getStudents().pipe(
       map((students) => students.map((student) => {
         marksArray[student._id] = marksArray[student._id] ? marksArray[student._id] : [];
-        let tmp = marksArray[student._id].filter((value) => value || value ===  0);
-        if (tmp.length === 0) {
-          tmp = [0];
-        }
 
         return {
           marks: marksArray[student._id],
-          averageMark: this.getAverageMark(tmp),
+          averageMark: this.getAverageMark(marksArray[student._id]),
           student,
         };
       })));
   }
 
-  public getDataHeaders(): moment.Moment[] {
+  public getDateHeaders(): moment.Moment[] {
     return this.currentSubject.dates.map((elem) => moment(elem));
   }
 

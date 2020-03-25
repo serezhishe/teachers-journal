@@ -2,9 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material/sort';
 import { Subscription } from 'rxjs';
 
-import { studentTableColumns } from '../../../common/constants/';
+import { studentTableColumns } from '../../../common/constants';
 import { TableSortHelper } from '../../../common/helpers/table-sort.helper';
-import { IStudent } from '../../../common/models/student.model';
+import { IStudent } from '../../../common/models';
 import { StudentsService } from '../../../common/services/students.service';
 
 @Component({
@@ -30,8 +30,7 @@ export class StudentsTableComponent implements OnInit, OnDestroy {
   }
 
   public sortData(sort: Sort): void {
-    const sortedData = TableSortHelper.sortData(sort, this.tableData);
-    this.tableData = sortedData;
+    this.tableData = TableSortHelper.sortData(sort, this.tableData);
   }
 
   public ngOnDestroy(): void {

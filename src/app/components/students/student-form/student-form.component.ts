@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { IStudent } from 'src/app/common/models/student.model';
 
-import { studentConfig } from '../../../common/configs/student-form.config';
-import { IFormConfig } from '../../../common/models/form-config.model';
-
-import { StudentsService } from './../../../common/services/students.service';
+import { studentConfig } from '../../../common/configs';
+import { IFormConfig, IStudent } from '../../../common/models';
+import { StudentsService } from '../../../common/services/students.service';
 @Component({
   selector: 'app-student-form',
   templateUrl: './student-form.component.html',

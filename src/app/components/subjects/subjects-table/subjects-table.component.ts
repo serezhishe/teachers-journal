@@ -5,14 +5,13 @@ import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 
-import { dateInputFormat } from '../../../common/constants';
+import { dateInputFormat, subjectTableColumns } from '../../../common/constants';
 import { TableSortHelper } from '../../../common/helpers/table-sort.helper';
 import { duplicateDateValidator } from '../../../common/helpers/validators';
-import { IStudentMarks } from '../../../common/models/subject-marks.model';
+import { IStudentMarks } from '../../../common/models';
 import { SubjectsService } from '../../../common/services/subjects.service';
 
 const MAX_MARK = 10;
-const baseDisplayedColumns = ['name', 'lastName', 'averageMark'];
 
 @Component({
   selector: 'app-subjects-table',
@@ -34,24 +33,25 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
     private readonly route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
     private readonly subjectsService: SubjectsService
-  ) {}
+  ) {
+  }
 
   public ngOnInit(): void {
     this.subject = this.route.snapshot.params.subject;
     this.loaded = false;
     this.subscription = this.subjectsService.getSubjectInfo(this.subject).subscribe((subjectInfo) => {
       this.teacher = subjectInfo.teacher;
-      this.displayedColumns = baseDisplayedColumns.concat();
-      this.datesHeaders = this.subjectsService.getDataHeaders().map((elem) => {
+      this.displayedColumns = subjectTableColumns.concat();
+      this.datesHeaders = this.subjectsService.getDateHeaders().map((elem) => {
         this.displayedColumns.push(elem.format(dateInputFormat));
 
         return elem.format(dateInputFormat);
       });
-      const subscription = this.subjectsService.getDataSource().subscribe((data) => {
+      const dataSourceSubscription = this.subjectsService.getDataSource().subscribe((data) => {
         this.tableData = data;
         this.marksGroup = {
         dates: this.formBuilder.array(
-          this.subjectsService.getDataHeaders().map((elem) => new FormControl(elem, [duplicateDateValidator()]))
+          this.subjectsService.getDateHeaders().map((elem) => new FormControl(elem, [duplicateDateValidator()]))
         ),
         marks: undefined,
         teacher: new FormControl(this.teacher, [Validators.required, Validators.pattern(/^[A-Za-z\s]+$/)]),
@@ -60,13 +60,13 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
         this.tableData.forEach((element) => {
           tmp[element.student._id] = this.formBuilder.array(
             this.datesHeaders.map((_, i) => new FormControl(element.marks[i], [
-              Validators.pattern(/^[0-9/-]/), Validators.min(0), Validators.max(MAX_MARK),
+              Validators.pattern(/^[0-9]/), Validators.min(0), Validators.max(MAX_MARK),
             ])));
         });
         this.marksGroup.marks = this.formBuilder.group(tmp);
         this.form = this.formBuilder.group(this.marksGroup);
         this.loaded = true;
-        subscription.unsubscribe();
+        dataSourceSubscription.unsubscribe();
       });
   });
   }
@@ -77,11 +77,10 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
 
   public sortData(sort: Sort): void {
     sort.active = sort.active === 'averageMark' ? sort.active : `student.${sort.active}`;
-    const sortedData = TableSortHelper.sortData(sort, this.tableData);
-    this.tableData = sortedData;
+    this.tableData = TableSortHelper.sortData(sort, this.tableData);
   }
 
-  public onSubmit(newData: { teacher: string; dates: moment.Moment[]; marks: any }): void {
+  public onSubmit(newData: { teacher: string; dates: moment.Moment[]; marks: Map<string, number[]> }): void {
     if (this.form.invalid) {
       alert('There are some mistakes. Check again, please.');
 

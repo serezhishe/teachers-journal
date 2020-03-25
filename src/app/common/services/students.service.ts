@@ -13,7 +13,7 @@ export class StudentsService {
   constructor(private readonly sessionStorageService: SessionStorageService) {
   }
 
-  public getStudents(): Observable<any> {
+  public getStudents(): Observable<IStudent[]> {
     return this.sessionStorageService.getItem('students');
   }
 
