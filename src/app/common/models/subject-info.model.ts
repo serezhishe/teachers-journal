@@ -7,4 +7,5 @@ export interface ISubjectInfo {
   marks: Map<string, number[]>;
   cabinet?: number;
   _id: string;
+  description: string;
 }

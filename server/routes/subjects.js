@@ -13,7 +13,6 @@ const {
   validateParam,
 } = require('../utils/validator');
 
-const validateIdParam = validateParam('id');
 const validateNameParam = validateParam('name');
 
 const api = Router();
@@ -32,13 +31,13 @@ api.get('/:name', asyncHandler(async (req, res) => {
 }));
 
 api.post('/', asyncHandler(async (req, res) => {
-  const { name, marks, dates, teacher, cabinet } = req.body;
+  const { name, marks, dates, teacher, cabinet, description } = req.body;
 
   if ( !name || !marks || !dates || !teacher ) {
     return res.sendStatus(400);
   }
 
-  res.send(await createSubject({ name, marks, dates, teacher, cabinet }));
+  res.send(await createSubject({ name, marks, dates, teacher, cabinet, description }));
 
 }));
 
@@ -57,9 +56,9 @@ api.post('/', asyncHandler(async (req, res) => {
 
 api.patch('/:name', validateNameParam, asyncHandler(async (req, res) => {
   const { name } = req.params;
-  const { marks, dates, teacher, cabinet } = req.body;
+  const { marks, dates, teacher, cabinet, description } = req.body;
   console.log(name)
-  res.status(200).send(await updateSubject({ name, marks, dates, teacher, cabinet }));
+  res.status(200).send(await updateSubject({ name, marks, dates, teacher, cabinet, description }));
 }));
 
 api.delete('/:name', validateNameParam, asyncHandler(async (req, res) => {

@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { Sort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 
 import { dateInputFormat, subjectTableColumns } from '../../../common/constants';
 import { TableSortHelper } from '../../../common/helpers/table-sort.helper';

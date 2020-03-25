@@ -3,7 +3,6 @@ const Subject = require('../models/subject');
 
 exports.createSubject = async function ({ name, marks, dates, teacher, description, cabinet } = {}) {
   const subject = new Subject({ name, marks, dates, teacher, description, cabinet });
-  console.log(subject)
   return subject.save();
 }
 

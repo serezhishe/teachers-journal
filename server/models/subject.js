@@ -23,6 +23,10 @@ const subjectSchema = new Schema({
     min: 0,
     default: null,
   },
+  description: {
+    type: String,
+    default: '',
+  },
   _deletedAt: {
     type: Date,
     default: null,

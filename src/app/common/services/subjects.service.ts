@@ -1,10 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
-import { dateInputFormat } from '../constants';
 import { IStudent } from '../models/student.model';
 import { ISubjectInfo } from '../models/subject-info.model';
 import { IStudentMarks } from '../models/subject-marks.model';
@@ -17,7 +15,6 @@ import { StudentsService } from './students.service';
 })
 export class SubjectsService {
   private currentSubject: ISubjectInfo;
-  public subjects: string[];
 
   constructor(
       private readonly studentsService: StudentsService, private readonly sessionStorageService: SessionStorageService,
@@ -40,38 +37,9 @@ export class SubjectsService {
     );
   }
 
-  // public setCurrentSubject(subject: string): void {
-  //   this.findSubjectInfo(subject).subscribe((subjectInfo) => {
-  //     this.currentSubject = subjectInfo as ISubjectInfo;
-  //   });
-  // }
-
-  public getTeacher(): string {
-    return this.currentSubject.teacher;
-  }
-
   public updateSubject(subject: string, newData: any): void {
     this.sessionStorageService.updateItem(`subjects/${subject}`, newData);
   }
-
-  // public updateTeacher(newValue: string): void {
-  //   this.currentSubject.teacher = newValue;
-  // }
-
-  // public updateMarks(marks: Map<string, number[]>): void {
-  //   this.currentSubject.marks = marks;
-  //   this.sessionStorageService.setItem(this.currentSubject.name, JSON.stringify(this.currentSubject));
-  // }
-
-  // public updateDates(newDates: moment.Moment[]): void {
-  //   let i = 0;
-  //   const prevDates = this.currentSubject.dates;
-  //   while (newDates[i] !== undefined) {
-  //     prevDates[i] = newDates[i];
-  //     i++;
-  //   }
-  //   this.sessionStorageService.setItem(this.currentSubject.name, JSON.stringify(this.currentSubject));
-  // }
 
   public addDate(): moment.Moment {
     const dates = this.currentSubject.dates;
@@ -108,12 +76,14 @@ export class SubjectsService {
       );
   }
 
-  public addSubject(subject: ISubjectInfo): void {
+  public addSubject({name, teacher, cabinet, description}: ISubjectInfo): void {
     const tmp = {
-      name: subject.name,
+      name,
       dates: [moment()],
-      teacher: subject.teacher,
+      teacher,
       marks: new Map<string, number[]>(),
+      cabinet,
+      description,
     };
     const subscription = this.studentsService.getStudents().subscribe((students: IStudent[]) => {
       students.forEach((student) => tmp.marks[student._id] = [undefined]);
