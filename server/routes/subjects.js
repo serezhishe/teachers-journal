@@ -62,11 +62,11 @@ api.patch('/:name', validateNameParam, asyncHandler(async (req, res) => {
 }));
 
 api.delete('/:name', validateNameParam, asyncHandler(async (req, res) => {
-  const { id } = req.params;
+  const { name } = req.params;
 
-  await deleteSubject(id);
+  await deleteSubject(name);
 
-  res.send(200);
+  res.status(200).send(JSON.stringify({}));
 }));
 
 module.exports = api;

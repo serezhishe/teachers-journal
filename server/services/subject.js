@@ -30,8 +30,8 @@ exports.updateSubject = async function ({ name, marks, dates, teacher, descripti
   return Subject.findOne({ name: name })
 }
 
-exports.deleteSubject = async function (id) {
-  return await exports.updateSubject({ id, _deletedAt: Date.now() });
+exports.deleteSubject = async function (name) {
+  return await exports.updateSubject({ name, _deletedAt: Date.now() });
 };
 
 exports.getSubjectByName = async function (name) {

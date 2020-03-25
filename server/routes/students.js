@@ -59,7 +59,7 @@ api.patch('/:id', validateIdParam, asyncHandler(async (req, res) => {
   const { name, lastName, address, description } = req.body;
 
   await updateStudent({ id, name, lastName, address, description });
-  res.send(200);
+  res.sendStatus(200);
 }));
 
 api.delete('/:id', validateIdParam, asyncHandler(async (req, res) => {
@@ -67,7 +67,7 @@ api.delete('/:id', validateIdParam, asyncHandler(async (req, res) => {
 
   await deleteStudent(id);
 
-  res.send(200);
+  res.status(200).send(JSON.stringify({}));
 }));
 
 module.exports = api;

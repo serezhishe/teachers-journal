@@ -20,4 +20,8 @@ export class StudentsService {
   public addStudent(newStudent: IStudent): void {
     this.sessionStorageService.pushItem('students', newStudent);
   }
+
+  public deleteStudent(studentToDelete: IStudent): void {
+    this.sessionStorageService.deleteItem('students', studentToDelete._id);
+  }
 }

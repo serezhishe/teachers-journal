@@ -60,8 +60,23 @@ export class SessionStorageService {
     return this.storage.key(index);
   }
 
-  public removeItem(key: string): void {
-    this.storage.removeItem(key);
+  public deleteItem(path: string, key: string): void {
+    this.http.delete(`${BASE_URL}/${path}/${key}`, { observe: 'response'}).subscribe((deleteResponse: HttpResponse<any>) => {
+      if (deleteResponse.ok) {
+        this.http.get(`${BASE_URL}/${path}`)
+          .pipe(
+            tap((response) => {
+              console.log(response);
+              this.storage.setItem(path, JSON.stringify(response));
+            }),
+          )
+          .subscribe((value) => {
+            this.storage$.next({ [path]: value });
+          });
+      } else {
+        console.log(deleteResponse);
+      }
+    });
   }
 
   public pushItem(key: string, value: any): void {
@@ -87,7 +102,7 @@ export class SessionStorageService {
 
       return result;
     }, {});
-    console.log(updateValue);
+
     this.http.patch(`${BASE_URL}/${key}`, updateValue, { observe: 'response' }).subscribe((response: HttpResponse<any>) => {
       if (response.ok) {
         this.storage.setItem(key, JSON.stringify(response.body));

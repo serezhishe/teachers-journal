@@ -7,7 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterModule } from '@angular/router';
 
+import { RemoveDirective } from '../common/directives/remove.directive';
+
 import { AddButtonComponent } from './components/add-button/add-button.component';
+import { DeleteButtonComponent } from './components/delete-button/delete-button.component';
 import { FormComponent } from './components/form/form.component';
 import { GoBackButtonComponent } from './components/go-back-button/go-back-button.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
@@ -20,6 +23,8 @@ import { SeparateWordsPipe } from './pipes/separate-words.pipe';
     FormComponent,
     GoBackButtonComponent,
     SeparateWordsPipe,
+    DeleteButtonComponent,
+    RemoveDirective,
   ],
   imports: [
     CommonModule,
@@ -38,7 +43,9 @@ import { SeparateWordsPipe } from './pipes/separate-words.pipe';
     MatIconModule,
     FormComponent,
     ReactiveFormsModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    DeleteButtonComponent,
+    RemoveDirective,
   ]
 })
 export class SharedModule { }

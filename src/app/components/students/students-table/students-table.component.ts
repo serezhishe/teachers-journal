@@ -36,4 +36,8 @@ export class StudentsTableComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.studentSubscription.unsubscribe();
   }
+
+  public delete(student: IStudent): void {
+    this.studentsService.deleteStudent(student);
+  }
 }

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 
+import { ISubjectInfo } from './../../../common/models/subject-info.model';
 import { SubjectsService } from './../../../common/services/subjects.service';
 
 @Component({
@@ -21,6 +22,10 @@ export class SubjectsPageComponent implements OnInit, OnDestroy {
       this.subjects = subjectList;
       this.loaded = true;
     });
+  }
+
+  public delete(subject: string): void {
+    this.subjectsService.deleteSubject(subject);
   }
 
   public ngOnDestroy(): void {

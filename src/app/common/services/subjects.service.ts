@@ -69,7 +69,7 @@ export class SubjectsService {
     return this.currentSubject.dates.map((elem) => moment(elem));
   }
 
-  public getSubjects(): Observable <any> {
+  public getSubjects(): Observable<string[]> {
     return this.sessionStorageService.getItem('subjects').pipe(
         map((subjects: ISubjectInfo[]) =>
           subjects.map((elem) => elem.name))
@@ -90,5 +90,9 @@ export class SubjectsService {
       this.sessionStorageService.pushItem('subjects', tmp);
       subscription.unsubscribe();
     });
+  }
+
+  public deleteSubject(subject: string): void {
+    this.sessionStorageService.deleteItem('subjects', subject);
   }
 }

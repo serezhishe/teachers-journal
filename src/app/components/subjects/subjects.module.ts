@@ -11,8 +11,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
-import { DATE_FORMATS } from 'src/app/common/constants';
 
+import { DATE_FORMATS } from '../../common/constants';
 import { HighlightDirective } from '../../common/directives/highlight.directive';
 import { SharedModule } from '../../shared/shared.module';
 

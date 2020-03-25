@@ -2,10 +2,10 @@ table {
     width: 100%;
   }
 
-.delete{
+app-delete-button {
     color: red;
     display: none;
 }
-.shown .delete {
-   display:block  
+.shown app-delete-button {
+   display: inline-block;  
 }
