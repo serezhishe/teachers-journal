@@ -1,12 +1,12 @@
 <div *ngIf="loaded; else elseTemplate" class="container">
     <div *ngFor="let subject of subjects" appRemove class="subject">
-        <a mat-raised-button [routerLink]="[subject]">
-            {{subject | titlecase}}
+        <a mat-raised-button [routerLink]="[subject._id]">
+            {{subject.name | titlecase}}
         </a>
-        <app-delete-button (click)="delete(subject)"></app-delete-button>
+        <app-delete-button (click)="delete(subject._id)"></app-delete-button>
     </div>
-    <app-add-button></app-add-button>
 </div>
+<app-add-button></app-add-button>
 <ng-template #elseTemplate>
     <mat-spinner></mat-spinner>
     LOADING...

@@ -7,6 +7,8 @@ input {
   font: inherit;
   border: none;
   margin-left: 10px;
+  width: 50%;
+  display: inline-block;
 }
 
 input:focus {
@@ -23,4 +25,13 @@ input:focus {
 
 mat-error {
   font-size: smaller;
+}
+
+app-delete-button {
+  color: red;
+  display: none;
+  width: 50%;
+}
+.shown app-delete-button {
+ display: inline-block;  
 }

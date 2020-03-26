@@ -6,7 +6,7 @@ exports.createSubject = async function ({ name, marks, dates, teacher, descripti
   return subject.save();
 }
 
-exports.updateSubject = async function ({ name, marks, dates, teacher, description, cabinet, _deletedAt }) {
+exports.updateSubject = async function ({ id, name, marks, dates, teacher, description, cabinet, _deletedAt }) {
 
   const valuesToUpdate = {
     name,
@@ -25,17 +25,16 @@ exports.updateSubject = async function ({ name, marks, dates, teacher, descripti
 
     return result;
   }, {});
-
-  await Subject.updateOne({ name: name }, omited);
-  return Subject.findOne({ name: name })
+  await Subject.updateOne({ _id: id }, omited);
+  return Subject.findOne({ _id: id })
 }
 
-exports.deleteSubject = async function (name) {
-  return await exports.updateSubject({ name, _deletedAt: Date.now() });
+exports.deleteSubject = async function (id) {
+  return await exports.updateSubject({ id: id, _deletedAt: Date.now() });
 };
 
-exports.getSubjectByName = async function (name) {
-  return await Subject.findOne({ name: name });
+exports.getSubjectById = async function (id) {
+  return await Subject.findOne({ _id: id, });
 }
 
 exports.getAll = async function () {

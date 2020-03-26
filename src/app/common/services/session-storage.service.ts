@@ -32,6 +32,7 @@ export class SessionStorageService {
         .get(`${BASE_URL}/${key}`)
         .pipe(
           tap((response) => {
+            console.log(response);
             this.storage.setItem(key, JSON.stringify(response));
           }),
           delay(DELAY_TO_SHOW_HTTP)
@@ -50,8 +51,8 @@ export class SessionStorageService {
     return this.storage$.pipe(
       filter((value) => value[key] !== undefined),
       tap((value) => {
-          console.log(value);
-        }),
+        console.log(value);
+      }),
       pluck(key)
     );
   }
@@ -61,14 +62,15 @@ export class SessionStorageService {
   }
 
   public deleteItem(path: string, key: string): void {
-    this.http.delete(`${BASE_URL}/${path}/${key}`, { observe: 'response'}).subscribe((deleteResponse: HttpResponse<any>) => {
+    this.http.delete(`${BASE_URL}/${path}/${key}`, { observe: 'response' }).subscribe((deleteResponse: HttpResponse<any>) => {
       if (deleteResponse.ok) {
-        this.http.get(`${BASE_URL}/${path}`)
+        this.http
+          .get(`${BASE_URL}/${path}`)
           .pipe(
             tap((response) => {
               console.log(response);
               this.storage.setItem(path, JSON.stringify(response));
-            }),
+            })
           )
           .subscribe((value) => {
             this.storage$.next({ [path]: value });
@@ -82,10 +84,7 @@ export class SessionStorageService {
   public pushItem(key: string, value: any): void {
     this.http.post(`${BASE_URL}/${key}`, value, { observe: 'response' }).subscribe((response: HttpResponse<any>) => {
       if (response.ok) {
-        this.storage.setItem(key, JSON.stringify([
-          ...JSON.parse(this.storage.getItem(key)),
-          response.body
-        ]));
+        this.storage.setItem(key, JSON.stringify([...JSON.parse(this.storage.getItem(key)), response.body]));
         this.storage$.next({ [key]: JSON.parse(this.storage.getItem(key)) });
       } else {
         console.log(response);
@@ -95,6 +94,7 @@ export class SessionStorageService {
 
   public updateItem(key: string, value: any): void {
     const prevValue = JSON.parse(this.storage.getItem(key));
+    console.log(this.storage);
     const updateValue = Object.keys(value).reduce((result, prop) => {
       if (value[prop] !== undefined && JSON.stringify(value[prop]) !== JSON.stringify(prevValue[prop])) {
         result[prop] = value[prop];

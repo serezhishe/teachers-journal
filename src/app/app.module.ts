@@ -12,10 +12,12 @@ import { StudentsModule } from './components/students/students.module';
 import { SubjectsModule } from './components/subjects/subjects.module';
 import { AppComponent } from './root/app.component';
 import { SharedModule } from './shared/shared.module';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 @NgModule({
   declarations: [
     AppComponent,
     PanelComponent,
+    BreadcrumbsComponent,
   ],
   imports: [
     BrowserModule,

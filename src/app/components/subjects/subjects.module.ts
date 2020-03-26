@@ -17,6 +17,7 @@ import { HighlightDirective } from '../../common/directives/highlight.directive'
 import { SharedModule } from '../../shared/shared.module';
 
 import { SubjectFormComponent } from './subject-form/subject-form.component';
+import { SubjectRootComponent } from './subject-root/subject-root.component';
 import { SubjectsPageComponent } from './subjects-page/subjects-page.component';
 import { SubjectsRoutingModule } from './subjects-routing.module';
 import { SubjectsTableComponent } from './subjects-table/subjects-table.component';
@@ -27,6 +28,7 @@ import { SubjectsTableComponent } from './subjects-table/subjects-table.componen
     SubjectsTableComponent,
     SubjectsPageComponent,
     HighlightDirective,
+    SubjectRootComponent,
   ],
   imports: [
     MatDatepickerModule,

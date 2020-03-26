@@ -18,9 +18,9 @@ const validateIdParam = validateParam('id');
 const api = Router();
 
 api.get('/', asyncHandler(async (req, res) => {
-  const subjects = await getAll();
+  const students = await getAll();
 
-  res.send(subjects)
+  res.send(students)
 }));
 
 // api.get('/:id', asyncHandler(async (req, res) => {

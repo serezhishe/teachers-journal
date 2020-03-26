@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { IStudent } from '../models/student.model';
+import { IStudent } from '../models';
 
 import { SessionStorageService } from './session-storage.service';
 

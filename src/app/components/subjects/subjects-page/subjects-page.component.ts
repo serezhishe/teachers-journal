@@ -10,7 +10,7 @@ import { SubjectsService } from './../../../common/services/subjects.service';
   styleUrls: ['./subjects-page.component.scss']
 })
 export class SubjectsPageComponent implements OnInit, OnDestroy {
-  public subjects: string[];
+  public subjects: Partial<ISubjectInfo>;
   public subjectsSubscription: Subscription;
   public loaded: boolean;
 
@@ -24,8 +24,8 @@ export class SubjectsPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  public delete(subject: string): void {
-    this.subjectsService.deleteSubject(subject);
+  public delete(subjectID: string): void {
+    this.subjectsService.deleteSubject(subjectID);
   }
 
   public ngOnDestroy(): void {

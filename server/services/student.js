@@ -1,9 +1,16 @@
-const Student = require('../models/Student');
+const Student = require('../models/student');
+const Subject = require('../models/subject');
 
+const {
+  updateSubject
+} = require('../services/subject');
 
 exports.createStudent = async function ({ name, lastName, address, description } = {}) {
   const student = new Student({ name, lastName, address, description });
-
+  (await Subject.find({_deletedAt: null})).forEach(elem => {
+    elem.marks.set('' + student._id, []);
+    updateSubject(elem);
+  })
   return student.save();
 }
 
@@ -29,6 +36,10 @@ exports.updateStudent = async function ({ id, name, lastName, address, descripti
 }
 
 exports.deleteStudent = async function (id) {
+  (await Subject.find({_deletedAt: null})).forEach(elem => {
+    elem.marks.delete(id);
+    updateSubject(elem);
+  })
   return await exports.updateStudent({ id, _deletedAt: Date.now() });
 };
 

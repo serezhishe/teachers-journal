@@ -6,7 +6,7 @@ const {
   createSubject,
   updateSubject,
   deleteSubject,
-  getSubjectByName,
+  getSubjectById,
 } = require('../services/subject');
 
 const {
@@ -14,18 +14,19 @@ const {
 } = require('../utils/validator');
 
 const validateNameParam = validateParam('name');
+const validateIdParam = validateParam('id');
 
 const api = Router();
 
 api.get('/', asyncHandler(async (req, res) => {
 
-  res.send(await getAll())
+  res.send((await getAll()).map(elem => ({name: elem.name, _id: elem._id})))
 }));
 
-api.get('/:name', asyncHandler(async (req, res) => {
-  const { name } = req.params;
+api.get('/:id', asyncHandler(async (req, res) => {
+  const { id } = req.params;
 
-  const subject = await getSubjectByName(name);
+  const subject = await getSubjectById(id);
 
   res.send(subject);
 }));
@@ -54,17 +55,17 @@ api.post('/', asyncHandler(async (req, res) => {
 //   res.send(200);
 // }));
 
-api.patch('/:name', validateNameParam, asyncHandler(async (req, res) => {
-  const { name } = req.params;
-  const { marks, dates, teacher, cabinet, description } = req.body;
-  console.log(name)
-  res.status(200).send(await updateSubject({ name, marks, dates, teacher, cabinet, description }));
+api.patch('/:id', validateIdParam, asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const { name, marks, dates, teacher, cabinet, description } = req.body;
+
+  res.status(200).send(await updateSubject({ id, name, marks, dates, teacher, cabinet, description }));
 }));
 
-api.delete('/:name', validateNameParam, asyncHandler(async (req, res) => {
-  const { name } = req.params;
+api.delete('/:id', validateIdParam, asyncHandler(async (req, res) => {
+  const { id } = req.params;
 
-  await deleteSubject(name);
+  await deleteSubject(id);
 
   res.status(200).send(JSON.stringify({}));
 }));

@@ -1,4 +1,4 @@
-<mat-toolbar>{{subject | titlecase}}</mat-toolbar>
+<mat-toolbar>{{subjectName | titlecase}}</mat-toolbar>
 <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" *ngIf="loaded; else loading">
   <button mat-stroked-button type="button" (click)="addDate()">Add Date</button>
   <div class="container">
@@ -20,9 +20,10 @@
 
       <ng-container *ngFor="let dateHeader of datesHeaders; index as i" [matColumnDef]="dateHeader">
         <th mat-header-cell *matHeaderCellDef formArrayName="dates">
-          <mat-form-field ngClass="datepicker">
+          <mat-form-field ngClass="datepicker" appRemove>
             <mat-label>Date</mat-label>
             <input matInput [matDatepicker]="dp" [formControlName]="i" readonly>
+            <app-delete-button (click)="deleteDate(i)"></app-delete-button>
             <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
             <mat-datepicker #dp></mat-datepicker>
           </mat-form-field>
@@ -36,11 +37,9 @@
               <mat-error *ngIf="form.controls.marks.controls[element.student._id].controls[i].errors.pattern; else elseTemplate">
                 Mark should be integer
               </mat-error>
-              <ng-template #elseTemplate>
-                <mat-error #elseTemplate>
-                  Mark should be between 0 and 10
-                </mat-error>
-              </ng-template>
+              <mat-error #elseTemplate>
+                Mark should be between 0 and 10
+              </mat-error>
             </ng-container>
             <input matInput type="number" [value]="element.marks[i]? element.marks[i]: ''" [formControlName]="i">
           </td>

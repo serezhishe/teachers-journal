@@ -29,25 +29,31 @@ export class SubjectsService {
     return +(tmp.reduce((prev, curr) => prev + curr, 0) / tmp.length).toFixed(1);
   }
 
-  public getSubjectInfo(subject: string): Observable<ISubjectInfo> {
-    return this.sessionStorageService.getItem(`subjects/${subject}`).pipe(
+  public getSubjectInfo(subjectID: string): Observable<ISubjectInfo> {
+    return this.sessionStorageService.getItem(`subjects/${subjectID}`).pipe(
       tap((subjectInfo: ISubjectInfo) => {
         this.currentSubject = subjectInfo;
       })
     );
   }
 
-  public updateSubject(subject: string, newData: any): void {
-    this.sessionStorageService.updateItem(`subjects/${subject}`, newData);
+  public updateSubject(subjectID: string, newData: Partial<ISubjectInfo>): void {
+    this.sessionStorageService.updateItem(`subjects/${subjectID}`, newData);
   }
 
   public addDate(): moment.Moment {
     const dates = this.currentSubject.dates;
     const date = moment(dates[dates.length - 1]).add(1, 'days');
     dates.push(date);
-    this.sessionStorageService.updateItem(`subjects/${this.currentSubject.name}`, {dates});
+    this.sessionStorageService.updateItem(`subjects/${this.currentSubject._id}`, {dates});
 
     return date;
+  }
+
+  public deleteDate(index: number): void {
+    const dates = this.currentSubject.dates;
+    dates.splice(index, 1);
+    this.sessionStorageService.updateItem(`subjects/${this.currentSubject._id}`, {dates});
   }
 
   public getDataSource(): Observable<IStudentMarks[]> {
@@ -69,11 +75,8 @@ export class SubjectsService {
     return this.currentSubject.dates.map((elem) => moment(elem));
   }
 
-  public getSubjects(): Observable<string[]> {
-    return this.sessionStorageService.getItem('subjects').pipe(
-        map((subjects: ISubjectInfo[]) =>
-          subjects.map((elem) => elem.name))
-      );
+  public getSubjects(): Observable<Partial<ISubjectInfo>> {
+    return this.sessionStorageService.getItem('subjects');
   }
 
   public addSubject({name, teacher, cabinet, description}: ISubjectInfo): void {
