@@ -1,3 +1,5 @@
+<label>Name: <input matInput type="search" [formControl]="searchName"></label>
+<label>Last Name: <input matInput type="search" [formControl]="searchLastName"></label>
 <table mat-table matSort [dataSource]="tableData" (matSortChange)="sortData($event)" *ngIf="loaded; else loading">
   <ng-container matColumnDef="index">
     <th mat-header-cell mat-sort-header="index" *matHeaderCellDef> id </th>

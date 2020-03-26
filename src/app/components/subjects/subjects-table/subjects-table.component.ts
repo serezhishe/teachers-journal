@@ -91,7 +91,7 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
     this.subjectsService.updateSubject(this.subjectID, newData);
   }
 
-  public deleteDate(dateIndex: number) {
+  public deleteDate(dateIndex: number): void {
     this.subjectsService.deleteDate(dateIndex);
   }
 
@@ -113,7 +113,6 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
     (this.form as FormGroup).removeControl('marks');
     (this.form as FormGroup).registerControl('marks', this.formBuilder.group(tmp));
     this.marksGroup.marks = this.formBuilder.group(tmp);
-    console.log(this.form);
     // this.form = this.formBuilder.group(this.marksGroup);
   }
 }
