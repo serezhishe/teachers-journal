@@ -36,7 +36,7 @@ export class BreadcrumbsComponent implements OnInit {
       let label = route.routeConfig?.data?.breadcrumb ||  '';
       let path = route.routeConfig?.data ? route.routeConfig.path : '';
       const lastRoutePart = path.split('/').pop();
-      if (lastRoutePart[0] === ':' && !!route.snapshot) {
+      if (lastRoutePart[0] === ':') {
         const paramName = lastRoutePart.split(':')[1];
         path = path.replace(lastRoutePart, route.snapshot.params[paramName]);
         label = route.snapshot.params[paramName];
@@ -46,7 +46,7 @@ export class BreadcrumbsComponent implements OnInit {
               ...breadcrumbs,
               {
                 label: elem.name,
-                url,
+                url: `${url}/${elem._id}`,
               }
             ]));
         }
