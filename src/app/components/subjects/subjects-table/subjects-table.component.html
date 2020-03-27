@@ -37,9 +37,12 @@
               <mat-error *ngIf="form.controls.marks.controls[element.student._id].controls[i].errors.pattern; else elseTemplate">
                 Mark should be integer
               </mat-error>
-              <mat-error #elseTemplate>
-                Mark should be between 0 and 10
-              </mat-error>
+              <ng-template #elseTemplate>
+                <mat-error>
+                  Mark should be between 0 and 10
+                </mat-error>
+              </ng-template>
+              
             </ng-container>
             <input matInput type="number" [value]="element.marks[i]? element.marks[i]: ''" [formControlName]="i">
           </td>

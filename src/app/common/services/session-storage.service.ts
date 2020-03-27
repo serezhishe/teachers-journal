@@ -27,25 +27,27 @@ export class SessionStorageService {
   }
 
   public getItem(key: string): Observable<any> {
-    if (this.storage.getItem(key) === null) {
-      this.http
-        .get(`${BASE_URL}/${key}`)
-        .pipe(
-          tap((response) => {
-            console.log(response);
-            this.storage.setItem(key, JSON.stringify(response));
-          }),
-          delay(DELAY_TO_SHOW_HTTP)
-        )
-        .subscribe((value) => {
-          this.storage$.next({ [key]: value });
-        });
-    } else {
-      of({ [key]: JSON.parse(this.storage.getItem(key)) })
-        .pipe(delay(1))
-        .subscribe((some) => {
-          this.storage$.next(some);
-        });
+    if (this.storage.getItem(key) !== 'loading') {
+      if (this.storage.getItem(key) === null) {
+        this.storage.setItem(key, 'loading');
+        this.http
+          .post(`${BASE_URL}/${key.split('/')[0]}`, { type: 'get', id: key.split('/')[1]})
+          .pipe(
+            tap((response) => {
+              this.storage.setItem(key, JSON.stringify(response));
+            }),
+            delay(DELAY_TO_SHOW_HTTP)
+          )
+          .subscribe((value) => {
+            this.storage$.next({ [key]: value });
+          });
+      } else {
+        of({ [key]: JSON.parse(this.storage.getItem(key)) })
+          .pipe(delay(1))
+          .subscribe((some) => {
+            this.storage$.next(some);
+          });
+      }
     }
 
     return this.storage$.pipe(

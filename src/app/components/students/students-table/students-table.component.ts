@@ -2,12 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Sort } from '@angular/material/sort';
 import { combineLatest, Subscription } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 import { studentTableColumns } from '../../../common/constants';
 import { TableSortHelper } from '../../../common/helpers/table-sort.helper';
 import { IStudent } from '../../../common/models';
 import { StudentsService } from '../../../common/services/students.service';
-import { map, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-students-table',
@@ -15,7 +15,6 @@ import { map, distinctUntilChanged } from 'rxjs/operators';
   styleUrls: ['./students-table.component.scss'],
 })
 export class StudentsTableComponent implements OnInit, OnDestroy {
-
   public displayedColumns: string[];
   public tableData: IStudent[];
   public loaded: boolean;
@@ -32,14 +31,17 @@ export class StudentsTableComponent implements OnInit, OnDestroy {
       this.studentsService.getStudents(),
       this.searchName.valueChanges,
       this.searchLastName.valueChanges,
-    ]).pipe(
-      distinctUntilChanged(),
-      map(([students, name, lastname]) => students.filter((student) =>
-        student.name.toLowerCase().includes(name) && student.lastName.toLowerCase().includes(lastname)))
-    ).subscribe((students) => {
-      this.tableData = students;
-      this.loaded = true;
-    });
+    ])
+      .pipe(
+        distinctUntilChanged(),
+        map(([students, name, lastname]) =>
+          students.filter((student) => student.name.toLowerCase().includes(name) && student.lastName.toLowerCase().includes(lastname))
+        )
+      )
+      .subscribe((students) => {
+        this.tableData = students;
+        this.loaded = true;
+      });
     this.searchName.setValue('');
     this.searchLastName.setValue('');
     this.displayedColumns = studentTableColumns;

@@ -6,9 +6,9 @@ import { MatTableModule } from '@angular/material/table';
 
 import { SharedModule } from './../../shared/shared.module';
 import { StudentFormComponent } from './student-form/student-form.component';
+import { StudentsRootComponent } from './students-root/students-root.component';
 import { StudentsRoutingModule } from './students-routing.module';
 import { StudentsTableComponent } from './students-table/students-table.component';
-import { StudentsRootComponent } from './students-root/students-root.component';
 
 @NgModule({
   declarations: [

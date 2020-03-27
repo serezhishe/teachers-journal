@@ -1,3 +1,4 @@
+<input type="search" [formControl]="searchSubjects">
 <div *ngIf="loaded; else elseTemplate" class="container">
     <div *ngFor="let subject of subjects" appRemove class="subject">
         <a mat-raised-button [routerLink]="[subject._id]">

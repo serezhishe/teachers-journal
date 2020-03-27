@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { IStudent } from '../models';
 
@@ -14,7 +15,12 @@ export class StudentsService {
   }
 
   public getStudents(): Observable<IStudent[]> {
-    return this.sessionStorageService.getItem('students');
+    return this.sessionStorageService.getItem('students').pipe(
+      map((students: IStudent[]) => students.map((student, index) => ({
+        ...student,
+        index,
+      })))
+    );
   }
 
   public addStudent(newStudent: IStudent): void {

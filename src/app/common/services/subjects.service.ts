@@ -75,7 +75,7 @@ export class SubjectsService {
     return this.currentSubject.dates.map((elem) => moment(elem));
   }
 
-  public getSubjects(): Observable<Partial<ISubjectInfo>> {
+  public getSubjects(): Observable<Array<Partial<ISubjectInfo>>> {
     return this.sessionStorageService.getItem('subjects');
   }
 
