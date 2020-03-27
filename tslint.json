@@ -172,6 +172,7 @@
     "increment-decrement": [true, "allow-post"],
     "object-literal-key-quotes": false,
     "strict-comparisons": false,
+    "arrow-parens": false,
     "no-unnecessary-class": false,
     "strict-boolean-expressions": false,
     "only-arrow-functions": false

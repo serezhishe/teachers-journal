@@ -24,7 +24,7 @@ export class SubjectsPageComponent implements OnInit, OnDestroy {
     this.searchSubjects = new FormControl();
     this.subjectsSubscription = combineLatest([this.subjectsService.getSubjects(), this.searchSubjects.valueChanges]).subscribe(
       ([subjectList, subjectName]) => {
-        this.subjects = subjectList.filter((subject) => subject.name.includes(subjectName));
+        this.subjects = subjectList.filter((subject) => subject.name.toLowerCase().includes(subjectName));
         this.loaded = true;
       }
     );
