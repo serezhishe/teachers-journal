@@ -40,7 +40,8 @@ exports.deleteStudent = async function (id) {
     elem.marks.delete(id);
     updateSubject(elem);
   })
-  return await exports.updateStudent({ id, _deletedAt: Date.now() });
+  return await Student.deleteOne({ _id: id})
+  // return await exports.updateStudent({ id, _deletedAt: Date.now() });
 };
 
 exports.getStudentById = async function (id) {
@@ -48,5 +49,5 @@ exports.getStudentById = async function (id) {
 }
 
 exports.getAll = async function () {
-  return await Student.find({ _deletedAt: null });
+  return await Student.find();
 }

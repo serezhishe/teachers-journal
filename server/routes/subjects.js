@@ -32,14 +32,24 @@ api.get('/:id', asyncHandler(async (req, res) => {
 }));
 
 api.post('/', asyncHandler(async (req, res) => {
-  const { name, marks, dates, teacher, cabinet, description } = req.body;
+  const { id, type, name, marks, dates, teacher, cabinet, description } = req.body;
 
-  if ( !name || !marks || !dates || !teacher ) {
-    return res.sendStatus(400);
+  if (type === 'get') {
+    if (id) {
+      const subject = await getSubjectById(id);
+    
+      res.send(subject);
+    } else {
+      res.send((await getAll()).map(elem => ({name: elem.name, _id: elem._id})))
+    }
+  } else {
+    if ( !name || !marks || !dates || !teacher ) {
+      return res.sendStatus(400);
+    }
+  
+    res.send(await createSubject({ name, marks, dates, teacher, cabinet, description }));
+  
   }
-
-  res.send(await createSubject({ name, marks, dates, teacher, cabinet, description }));
-
 }));
 
 // api.put('/:id', validateIdParam, asyncHandler(async (req, res) => {

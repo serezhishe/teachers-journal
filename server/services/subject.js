@@ -30,7 +30,8 @@ exports.updateSubject = async function ({ id, name, marks, dates, teacher, descr
 }
 
 exports.deleteSubject = async function (id) {
-  return await exports.updateSubject({ id: id, _deletedAt: Date.now() });
+  return await Subject.deleteOne({ _id: id})
+  // return await exports.updateSubject({ id: id, _deletedAt: Date.now() });
 };
 
 exports.getSubjectById = async function (id) {
@@ -38,5 +39,5 @@ exports.getSubjectById = async function (id) {
 }
 
 exports.getAll = async function () {
-  return await Subject.find({ _deletedAt: null });
+  return await Subject.find();
 }

@@ -32,13 +32,18 @@ api.get('/', asyncHandler(async (req, res) => {
 // }));
 
 api.post('/', asyncHandler(async (req, res) => {
-  const { name, lastName, address, description } = req.body;
-
-  if (!name || !lastName) {
-    return res.sendStatus(400);
+  const { type, name, lastName, address, description } = req.body;
+  if (type === 'get') {
+    const students = await getAll();
+  
+    res.status(200).send(students);
+  } else {
+    if (!name || !lastName) {
+      return res.sendStatus(400);
+    }
+  
+    res.status(200).send(await createStudent({ name, lastName, address, description }));
   }
-
-  res.status(200).send(await createStudent({ name, lastName, address, description }));
 }));
 
 // api.put('/:id', validateIdParam, asyncHandler(async (req, res) => {
