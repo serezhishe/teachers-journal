@@ -41,7 +41,6 @@ api.post('/', asyncHandler(async (req, res) => {
     if (!name || !lastName) {
       return res.sendStatus(400);
     }
-  
     res.status(200).send(await createStudent({ name, lastName, address, description }));
   }
 }));

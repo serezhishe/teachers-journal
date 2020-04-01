@@ -1,4 +1,4 @@
-import { IStudent } from '../models/student.model';
+import { IStudent } from './student.model';
 
 export interface IStudentMarks {
     student: IStudent;

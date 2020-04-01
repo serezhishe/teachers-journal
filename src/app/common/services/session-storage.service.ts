@@ -11,11 +11,9 @@ const DELAY_TO_SHOW_HTTP = 1000;
 })
 export class SessionStorageService {
   private readonly storage: Storage;
-  private readonly storage$: Subject<any>;
 
-  constructor(private readonly http: HttpClient) {
+  constructor() {
     this.storage = window.sessionStorage;
-    this.storage$ = new Subject();
   }
 
   get length(): number {
@@ -26,103 +24,18 @@ export class SessionStorageService {
     this.storage.clear();
   }
 
-  public getItem(key: string): Observable<any> {
-    if (this.storage.getItem(key) !== 'loading') {
-      if (this.storage.getItem(key) === null) {
-        this.storage.setItem(key, 'loading');
-        this.http
-          .post(`${BASE_URL}/${key.split('/')[0]}`, { type: 'get', id: key.split('/')[1]})
-          .pipe(
-            tap((response) => {
-              this.storage.setItem(key, JSON.stringify(response));
-            }),
-            delay(DELAY_TO_SHOW_HTTP)
-          )
-          .subscribe((value) => {
-            this.storage$.next({ [key]: value });
-          });
-      } else {
-        of({ [key]: JSON.parse(this.storage.getItem(key)) })
-          .pipe(delay(1))
-          .subscribe((some) => {
-            this.storage$.next(some);
-          });
-      }
-    }
-
-    return this.storage$.pipe(
-      filter((value) => value[key] !== undefined),
-      tap((value) => {
-        console.log(value);
-      }),
-      pluck(key)
-    );
+  public getItem<T>(key: string): T {
+    return JSON.parse(this.storage.getItem(key));
   }
 
-  public key(index: number): string | null {
-    return this.storage.key(index);
+  public setItem(key: string, value: any): any {
+    this.storage.setItem(key, JSON.stringify(value));
   }
 
-  public deleteItem(path: string, key: string): void {
-    this.http.delete(`${BASE_URL}/${path}/${key}`, { observe: 'response' }).subscribe((deleteResponse: HttpResponse<any>) => {
-      if (deleteResponse.ok) {
-        this.http
-          .get(`${BASE_URL}/${path}`)
-          .pipe(
-            tap((response) => {
-              console.log(response);
-              this.storage.setItem(path, JSON.stringify(response));
-            })
-          )
-          .subscribe((value) => {
-            this.storage$.next({ [path]: value });
-          });
-      } else {
-        console.log(deleteResponse);
-      }
-    });
-  }
-
-  public pushItem(key: string, value: any): void {
-    this.http.post(`${BASE_URL}/${key}`, value, { observe: 'response' }).subscribe((response: HttpResponse<any>) => {
-      if (response.ok) {
-        this.storage.setItem(key, JSON.stringify([...JSON.parse(this.storage.getItem(key)), response.body]));
-        this.storage$.next({ [key]: JSON.parse(this.storage.getItem(key)) });
-      } else {
-        console.log(response);
-      }
-    });
-  }
-
-  public updateItem(key: string, value: any): void {
-    const prevValue = JSON.parse(this.storage.getItem(key));
-    console.log(this.storage);
-    const updateValue = Object.keys(value).reduce((result, prop) => {
-      if (value[prop] !== undefined && JSON.stringify(value[prop]) !== JSON.stringify(prevValue[prop])) {
-        result[prop] = value[prop];
-      }
-
-      return result;
-    }, {});
-
-    this.http.patch(`${BASE_URL}/${key}`, updateValue, { observe: 'response' }).subscribe((response: HttpResponse<any>) => {
-      if (response.ok) {
-        this.storage.setItem(key, JSON.stringify(response.body));
-        this.storage$.next({ [key]: response.body });
-      } else {
-        console.log(response);
-      }
-    });
-  }
-
-  public setItem(key: string, value: any): void {
-    this.http.post(`${BASE_URL}/${key}`, value, { observe: 'response' }).subscribe((response: HttpResponse<any>) => {
-      if (response.ok) {
-        this.storage.setItem(key, JSON.stringify(response.body));
-        this.storage$.next({ [key]: JSON.parse(this.storage.getItem(key)) });
-      } else {
-        console.log(response);
-      }
-    });
+  public deleteItem(array: string, id: string): any {
+    this.storage.removeItem(`${array}/${id}`);
+    const tmp: any[] = JSON.parse(this.storage.getItem(array));
+    tmp.splice(tmp.findIndex(element => element._id === id), 1);
+    this.storage.setItem(array, JSON.stringify(tmp));
   }
 }

@@ -5,7 +5,10 @@
     <table mat-table matSort [dataSource]="tableData" (matSortChange)="sortData($event)">
       <ng-container matColumnDef="name" sticky>
         <th mat-header-cell mat-sort-header="name" *matHeaderCellDef class="sticky">Name</th>
-        <td mat-cell *matCellDef="let element" class="sticky">{{ element.student.name }}</td>
+        <td mat-cell *matCellDef="let element" class="sticky" appHover>
+          {{ element.student.name }}
+          <app-delete-button (click)="deleteStudent(element.student._id)"></app-delete-button>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="lastName" sticky>
@@ -20,7 +23,7 @@
 
       <ng-container *ngFor="let dateHeader of datesHeaders; index as i" [matColumnDef]="dateHeader">
         <th mat-header-cell *matHeaderCellDef formArrayName="dates" mat-sort-header="{{dateHeader}}">
-          <mat-form-field ngClass="datepicker" appRemove>
+          <mat-form-field ngClass="datepicker" appHover>
             <mat-label>Date</mat-label>
             <input matInput [matDatepicker]="dp" [formControlName]="i" readonly />
             <app-delete-button (click)="deleteDate(i)"></app-delete-button>
@@ -33,17 +36,7 @@
         </th>
         <form-field formGroupName="marks">
           <td mat-cell *matCellDef="let element" [formArrayName]="element.student._id">
-            <ng-container *ngIf="form.controls.marks.controls[element.student._id].controls[i].errors">
-              <mat-error *ngIf="form.controls.marks.controls[element.student._id].controls[i].errors.pattern; else elseTemplate">
-                Mark should be integer
-              </mat-error>
-              <ng-template #elseTemplate>
-                <mat-error>
-                  Mark should be between 0 and 10
-                </mat-error>
-              </ng-template>
-            </ng-container>
-            <input matInput type="number" [value]="element.marks[i] ? element.marks[i] : ''" [formControlName]="i" />
+            <app-mark-input [value]="element.marks[i]" [formControlName]="i" ></app-mark-input>
           </td>
         </form-field>
       </ng-container>

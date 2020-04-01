@@ -1,17 +1,17 @@
 import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
 @Directive({
-  selector: '[appRemove]',
+  selector: '[appHover]',
 })
-export class RemoveDirective {
+export class HoverDirective {
   constructor(private readonly el: ElementRef, private readonly renderer: Renderer2) {}
 
   @HostListener('mouseenter')
-  private showRemoveButton(): void {
+  private addShownClass(): void {
     this.renderer.addClass(this.el.nativeElement, 'shown');
   }
   @HostListener('mouseleave')
-  private hideRemoveButton(): void {
+  private removeShownClass(): void {
     this.renderer.removeClass(this.el.nativeElement, 'shown');
   }
 }

@@ -1,0 +1,2 @@
+<mat-error *ngIf="errors">Mark must be between 0 and 10</mat-error>
+<input matInput type="number" [(ngModel)]="value" (ngModelChange)="updateValue($event)"/><br />

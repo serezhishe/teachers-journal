@@ -1,10 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import * as moment from 'moment';
-import { combineLatest, Observable, Subscription } from 'rxjs';
+import { FormControl, FormGroup } from '@angular/forms';
+import { combineLatest, Subscription } from 'rxjs';
 
-import { ISubjectInfo } from './../../../common/models/subject-info.model';
-import { SubjectsService } from './../../../common/services/subjects.service';
+import { ISubjectInfo } from '../../../common/models/subject-info.model';
+import { SubjectsService } from '../../../common/services/subjects.service';
 
 @Component({
   selector: 'app-subjects-page',

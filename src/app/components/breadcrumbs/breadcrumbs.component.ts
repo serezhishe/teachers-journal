@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { distinctUntilChanged, filter, first, map } from 'rxjs/operators';
-
-import { SubjectsService } from '../../common/services/subjects.service';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
 
 import { IBreadCrumb } from './breadcrumb.interface';
 
@@ -18,7 +15,6 @@ export class BreadcrumbsComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly subjectsService: SubjectsService
   ) {}
 
   public ngOnInit(): void {
@@ -28,15 +24,13 @@ export class BreadcrumbsComponent implements OnInit {
         distinctUntilChanged()
       )
       .subscribe(() => {
-        this.buildBreadCrumb(this.activatedRoute.root)
-          .pipe(first())
-          .subscribe(value => {
-            this.breadcrumbs = value;
-          });
+        this.breadcrumbs = this.buildBreadCrumb(this.activatedRoute.root);
       });
   }
 
-  public buildBreadCrumb(route: ActivatedRoute, url: string = '', breadcrumbs: IBreadCrumb[] = []): Observable<IBreadCrumb[]> {
+  public buildBreadCrumb(route: ActivatedRoute): IBreadCrumb[] {
+    let url: string = '';
+    const breadcrumbs: IBreadCrumb[] = [];
     while (route) {
       let label = route.routeConfig?.data?.breadcrumb || '';
       let path = route.routeConfig?.data ? route.routeConfig.path : '';
@@ -45,17 +39,6 @@ export class BreadcrumbsComponent implements OnInit {
         const paramName = lastRoutePart.split(':')[1];
         path = path.replace(lastRoutePart, route.snapshot.params[paramName]);
         label = route.snapshot.params[paramName];
-        if (paramName === 'subject') {
-          return this.subjectsService.getSubjectInfo(route.snapshot.params[paramName]).pipe(
-            map(elem => [
-              ...breadcrumbs,
-              {
-                label: elem.name,
-                url: `${url}/${elem._id}`,
-              },
-            ])
-          );
-        }
       }
 
       url = path ? `${url}/${path}` : url;
@@ -69,6 +52,6 @@ export class BreadcrumbsComponent implements OnInit {
       route = route.firstChild;
     }
 
-    return of(breadcrumbs);
+    return breadcrumbs;
   }
 }

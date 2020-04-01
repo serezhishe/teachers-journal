@@ -1,5 +1,5 @@
 const Student = require('../models/student');
-const Subject = require('../models/subject');
+const SubjectPage = require('../models/subject-page');
 
 const {
   updateSubject
@@ -7,11 +7,15 @@ const {
 
 exports.createStudent = async function ({ name, lastName, address, description } = {}) {
   const student = new Student({ name, lastName, address, description });
-  (await Subject.find({_deletedAt: null})).forEach(elem => {
+  (await SubjectPage.find()).forEach(async elem => {
+    elem.students.push('' + student._id);
     elem.marks.set('' + student._id, []);
-    updateSubject(elem);
-  })
-  return student.save();
+    await updateSubject({
+      ...JSON.parse(JSON.stringify(elem)),
+      id: elem.subjectID,
+    });
+  });
+  return await student.save();
 }
 
 exports.updateStudent = async function ({ id, name, lastName, address, description, _deletedAt }) {
@@ -36,9 +40,13 @@ exports.updateStudent = async function ({ id, name, lastName, address, descripti
 }
 
 exports.deleteStudent = async function (id) {
-  (await Subject.find({_deletedAt: null})).forEach(elem => {
+  (await SubjectPage.find()).forEach(async (elem) => {
     elem.marks.delete(id);
-    updateSubject(elem);
+    elem.students.splice(elem.students.findIndex(studentID => studentID === id), 1);
+    await updateSubject({
+      ...JSON.parse(JSON.stringify(elem)),
+      id: elem.subjectID,
+    });
   })
   return await Student.deleteOne({ _id: id})
   // return await exports.updateStudent({ id, _deletedAt: Date.now() });

@@ -7,12 +7,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
+import { httpInterceptorProviders } from './common/http-interceptors';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { PanelComponent } from './components/panel/panel.component';
 import { StudentsModule } from './components/students/students.module';
 import { SubjectsModule } from './components/subjects/subjects.module';
 import { AppComponent } from './root/app.component';
 import { SharedModule } from './shared/shared.module';
-import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +32,9 @@ import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.compo
     MatButtonToggleModule,
     AppRoutingModule,
   ],
-  providers: [],
+  providers: [
+    httpInterceptorProviders,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

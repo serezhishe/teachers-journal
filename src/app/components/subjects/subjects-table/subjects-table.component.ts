@@ -4,7 +4,6 @@ import { Sort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
-import { first } from 'rxjs/operators';
 
 import { dateInputFormat, subjectTableColumns } from '../../../common/constants';
 import { TableSortHelper } from '../../../common/helpers/table-sort.helper';
@@ -30,6 +29,7 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
   public form: any;
   public loaded: boolean;
   public subscription: Subscription;
+  public subs: Subscription;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -38,46 +38,38 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-    this.subjectID = this.route.snapshot.params.subject;
+    this.subjectName = this.route.snapshot.params.subject;
     this.loaded = false;
-    this.subscription = this.subjectsService.getSubjectInfo(this.subjectID).subscribe(subjectInfo => {
-      this.subjectName = subjectInfo.name;
-      this.teacher = subjectInfo.teacher;
-      this.displayedColumns = subjectTableColumns.concat();
-      this.datesHeaders = this.subjectsService.getDateHeaders().map(elem => {
-        this.displayedColumns.push(elem.format(dateInputFormat));
-
-        return elem.format(dateInputFormat);
-      });
-      this.subjectsService
-        .getDataSource()
-        .pipe(first())
-        .subscribe(data => {
-          this.tableData = data;
-          this.marksGroup = {
-            dates: this.formBuilder.array(
-              this.subjectsService.getDateHeaders().map(elem => new FormControl(elem, [duplicateDateValidator()]))
-            ),
-            marks: undefined,
-            teacher: new FormControl(this.teacher, [Validators.required, Validators.pattern(/^[A-Za-zА-яа-я\s]+$/)]),
-          };
-          const tmp = {};
-          this.tableData.forEach(element => {
-            tmp[element.student._id] = this.formBuilder.array(
-              this.datesHeaders.map(
-                (_, i) => new FormControl(element.marks[i], [Validators.pattern(/^[0-9]/), Validators.min(0), Validators.max(MAX_MARK)])
-              )
-            );
-          });
-          this.marksGroup.marks = this.formBuilder.group(tmp);
-          this.loaded = true;
-          this.form = this.formBuilder.group(this.marksGroup);
+    this.subscription = this.subjectsService.getSubjectPage(this.subjectName).subscribe(subjectPage => {
+      this.teacher = subjectPage.teacher;
+      this.marksGroup = {
+        marks: undefined,
+        dates: undefined,
+        teacher: undefined,
+      };
+      this.marksGroup.teacher = new FormControl(this.teacher, [Validators.required, Validators.pattern(/^[A-Za-zА-яа-я\s]+$/)]);
+      this.datesHeaders = subjectPage.dates.map(date => moment(date).format(dateInputFormat));
+      this.displayedColumns = subjectTableColumns.concat(this.datesHeaders);
+      this.marksGroup.dates = this.formBuilder.array(
+        subjectPage.dates.map(elem => new FormControl(moment(elem), [duplicateDateValidator()]))
+      );
+      this.subs = this.subjectsService.getDataSource().subscribe(data => {
+        this.tableData = data;
+        const tmp = {};
+        this.tableData.forEach(element => {
+          tmp[element.student._id] = this.formBuilder.array(this.datesHeaders.map((_, i) => new FormControl(element.marks[i])));
         });
+        this.marksGroup.marks = this.formBuilder.group(tmp);
+        this.form = this.formBuilder.group(this.marksGroup);
+        this.loaded = true;
+      });
     });
   }
 
   public ngOnDestroy(): void {
+    this.subs?.unsubscribe();
     this.subscription.unsubscribe();
+    this.subjectsService.clearSubject();
   }
 
   public sortData(sort: Sort): void {
@@ -91,7 +83,7 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
 
       return;
     }
-    this.subjectsService.updateSubject(this.subjectID, newData);
+    this.subjectsService.updateCurrentSubject(newData);
   }
 
   public deleteDate(dateIndex: number): void {
@@ -99,22 +91,10 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
   }
 
   public addDate(): void {
-    const date = this.subjectsService.addDate();
-    this.datesHeaders.push(date.format(dateInputFormat));
-    this.displayedColumns.push(date.format(dateInputFormat));
-    this.marksGroup.dates.push(new FormControl(date));
-    (this.form as FormGroup).removeControl('dates');
-    (this.form as FormGroup).registerControl('dates', this.marksGroup.dates);
-    const tmp = {};
-    this.tableData.forEach(element => {
-      tmp[element.student._id] = this.formBuilder.array(
-        this.datesHeaders.map(
-          (_, i) => new FormControl(element.marks[i], [Validators.pattern(/^[0-9/-]/), Validators.min(0), Validators.max(MAX_MARK)])
-        )
-      );
-    });
-    (this.form as FormGroup).removeControl('marks');
-    (this.form as FormGroup).registerControl('marks', this.formBuilder.group(tmp));
-    this.marksGroup.marks = this.formBuilder.group(tmp);
+    this.subjectsService.createDate();
+  }
+
+  public deleteStudent(studentID: string): void {
+    this.subjectsService.removeStudentFromSubject(studentID);
   }
 }

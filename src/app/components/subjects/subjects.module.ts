@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -16,6 +16,7 @@ import { DATE_FORMATS } from '../../common/constants';
 import { HighlightDirective } from '../../common/directives/highlight.directive';
 import { SharedModule } from '../../shared/shared.module';
 
+import { MarkInputComponent } from './mark-input/mark-input.component';
 import { SubjectFormComponent } from './subject-form/subject-form.component';
 import { SubjectRootComponent } from './subject-root/subject-root.component';
 import { SubjectsPageComponent } from './subjects-page/subjects-page.component';
@@ -29,6 +30,7 @@ import { SubjectsTableComponent } from './subjects-table/subjects-table.componen
     SubjectsPageComponent,
     HighlightDirective,
     SubjectRootComponent,
+    MarkInputComponent,
   ],
   imports: [
     MatDatepickerModule,
@@ -45,6 +47,7 @@ import { SubjectsTableComponent } from './subjects-table/subjects-table.componen
     MatFormFieldModule,
     MatDatepickerModule,
     MatProgressSpinnerModule,
+    FormsModule,
     SubjectsRoutingModule,
   ],
   providers: [

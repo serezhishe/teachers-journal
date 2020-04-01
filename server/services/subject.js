@@ -1,41 +1,62 @@
 const Subject = require('../models/subject');
+const SubjectPage = require('../models/subject-page');
+const Student = require('../models/student');
 
 
 exports.createSubject = async function ({ name, marks, dates, teacher, description, cabinet } = {}) {
-  const subject = new Subject({ name, marks, dates, teacher, description, cabinet });
+  const subject = new Subject({ name, teacher, description, cabinet });
+  const studentsList = (await Student.find()).map(elem => elem._id);
+  const subjectPage = new SubjectPage({ marks, dates, subjectID: subject._id, students: studentsList });
+  subjectPage.save();
   return subject.save();
 }
 
-exports.updateSubject = async function ({ id, name, marks, dates, teacher, description, cabinet, _deletedAt }) {
-
-  const valuesToUpdate = {
+exports.updateSubject = async function ({ id, name, marks, dates, teacher, description, cabinet, students, _deletedAt }) {
+  const subjectValuesToUpdate = {
     name,
-    marks,
-    dates,
     teacher,
+    _deletedAt,
     description,
     cabinet,
+  }
+  
+  const pageValuesToUpdate = {
+    marks,
+    dates,
+    students,
     _deletedAt,
   };
 
-  const omited = Object.keys(valuesToUpdate).reduce((result, keys) => {
-    if (valuesToUpdate[keys] !== undefined) {
-      result[keys] = valuesToUpdate[keys];
+  const subjectOmited = Object.keys(subjectValuesToUpdate).reduce((result, keys) => {
+    if (subjectValuesToUpdate[keys] !== undefined) {
+      result[keys] = subjectValuesToUpdate[keys];
     }
 
     return result;
   }, {});
-  await Subject.updateOne({ _id: id }, omited);
-  return Subject.findOne({ _id: id })
+
+  const pageOmited = Object.keys(pageValuesToUpdate).reduce((result, keys) => {
+    if (pageValuesToUpdate[keys] !== undefined) {
+      result[keys] = pageValuesToUpdate[keys];
+    }
+    return result;
+  }, {});
+
+  await Subject.updateOne({ _id: id }, subjectOmited);
+  await SubjectPage.updateOne({ subjectID: id }, pageOmited);
+  return {
+    ...JSON.parse(JSON.stringify(await Subject.findOne({ _id: id }))),
+    ...JSON.parse(JSON.stringify(await SubjectPage.findOne({ subjectID: id }))),
+  }
 }
 
 exports.deleteSubject = async function (id) {
-  return await Subject.deleteOne({ _id: id})
-  // return await exports.updateSubject({ id: id, _deletedAt: Date.now() });
+  await SubjectPage.deleteOne({ subjectID: id });
+  return await Subject.deleteOne({ _id: id })
 };
 
 exports.getSubjectById = async function (id) {
-  return await Subject.findOne({ _id: id, });
+  return await SubjectPage.findOne({ subjectID: id, });
 }
 
 exports.getAll = async function () {

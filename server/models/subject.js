@@ -5,15 +5,6 @@ const subjectSchema = new Schema({
     type: String,
     required: true,
   },
-  dates: {
-    type: [String],
-    required: true,
-  },
-  marks: {
-    type: Map,
-    of: [Number],
-    required: true,
-  },
   teacher: {
     type: String,
     required: true,

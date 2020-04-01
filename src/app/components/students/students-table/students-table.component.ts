@@ -55,6 +55,10 @@ export class StudentsTableComponent implements OnInit, OnDestroy {
     this.studentSubscription.unsubscribe();
   }
 
+  public cancelEvent(event: MouseEvent): void {
+    event.stopImmediatePropagation();
+  }
+
   public delete(student: IStudent): void {
     this.studentsService.deleteStudent(student);
   }

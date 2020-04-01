@@ -3,9 +3,20 @@ table {
   }
 
 app-delete-button {
-    color: red;
     display: none;
 }
 .shown app-delete-button {
    display: inline-block;  
+}
+
+th {
+  width: 20%;
+}
+
+.search {
+  display: none;
+}
+
+.shown .search {
+  display: inline-block;
 }

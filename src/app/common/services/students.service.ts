@@ -1,33 +1,49 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
+import { BASE_URL } from '../constants/base-url';
 import { IStudent } from '../models';
 
 import { SessionStorageService } from './session-storage.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class StudentsService {
-
-  constructor(private readonly sessionStorageService: SessionStorageService) {
-  }
-
-  public getStudents(): Observable<IStudent[]> {
-    return this.sessionStorageService.getItem('students').pipe(
-      map((students: IStudent[]) => students.map((student, index) => ({
-        ...student,
-        index,
-      })))
+  private readonly students$: BehaviorSubject<IStudent[]>;
+  constructor(private readonly http: HttpClient, private readonly sessionStorageService: SessionStorageService) {
+    this.students$ = new BehaviorSubject([]);
+    this.http.get<IStudent[]>(`${BASE_URL}/students`).subscribe(students =>
+      this.students$.next(
+        students.map((student, index) => ({
+          ...student,
+          index,
+        }))
+      )
     );
   }
 
+  public getStudents(): Observable<IStudent[]> {
+    return this.students$.pipe(filter(students => students.length > 0));
+  }
+
   public addStudent(newStudent: IStudent): void {
-    this.sessionStorageService.pushItem('students', newStudent);
+    this.http.post<IStudent>(`${BASE_URL}/students`, newStudent).subscribe(response => {
+      this.students$.next([
+        ...this.students$.value,
+        {
+          ...response,
+          index: this.students$.value.length,
+        },
+      ]);
+    });
   }
 
   public deleteStudent(studentToDelete: IStudent): void {
-    this.sessionStorageService.deleteItem('students', studentToDelete._id);
+    this.http.delete(`${BASE_URL}/students/${studentToDelete._id}`).subscribe(_ => {
+      this.students$.next(this.sessionStorageService.getItem<IStudent[]>('students').map((elem, index) => ({...elem, index})));
+    });
   }
 }
