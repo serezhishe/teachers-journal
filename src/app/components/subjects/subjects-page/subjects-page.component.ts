@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { combineLatest, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
+import { map, startWith, switchMap } from 'rxjs/operators';
 
 import { ISubjectInfo } from '../../../common/models/subject-info.model';
 import { SubjectsService } from '../../../common/services/subjects.service';
@@ -10,31 +11,25 @@ import { SubjectsService } from '../../../common/services/subjects.service';
   templateUrl: './subjects-page.component.html',
   styleUrls: ['./subjects-page.component.scss'],
 })
-export class SubjectsPageComponent implements OnInit, OnDestroy {
-  public subjects: ISubjectInfo[];
-  public subjectsSubscription: Subscription;
-  public loaded: boolean;
+export class SubjectsPageComponent implements OnInit {
+  public subjects$: Observable<ISubjectInfo[]>;
   public searchSubjects: FormControl;
 
-  constructor(private readonly subjectsService: SubjectsService) {}
+  constructor(private readonly subjectsService: SubjectsService) { }
 
   public ngOnInit(): void {
-    this.loaded = false;
     this.searchSubjects = new FormControl();
-    this.subjectsSubscription = combineLatest([this.subjectsService.getSubjects(), this.searchSubjects.valueChanges]).subscribe(
-      ([subjectList, subjectName]) => {
-        this.subjects = subjectList.filter(subject => subject.name.toLowerCase().includes(subjectName));
-        this.loaded = true;
-      }
+    this.subjects$ = this.searchSubjects.valueChanges.pipe(
+      startWith(''),
+      switchMap(searchValue =>
+        this.subjectsService.getSubjects().pipe(
+          map(subjectList => subjectList.filter(subject => subject.name.toLowerCase().includes(searchValue)))
+        ))
     );
-    this.searchSubjects.setValue('');
   }
 
   public delete(subjectID: string): void {
     this.subjectsService.deleteSubject(subjectID);
   }
 
-  public ngOnDestroy(): void {
-    this.subjectsSubscription.unsubscribe();
-  }
 }

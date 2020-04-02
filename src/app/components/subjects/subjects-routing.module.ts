@@ -12,7 +12,7 @@ const routes: Routes = [
     children: [
       {path: '', component: SubjectsPageComponent },
       {path: 'form', component: SubjectFormComponent, canDeactivate: [CanDeactivateGuard], data: {breadcrumb: 'form'}},
-      {path: ':subject', component: SubjectsTableComponent, data: {breadcrumb: ''}},
+      {path: 'subject/:subject', component: SubjectsTableComponent, data: {breadcrumb: ''}},
     ]
   },
 ];
