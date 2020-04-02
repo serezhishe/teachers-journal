@@ -1,10 +1,12 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
-import { catchError, retry, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { parseURL } from '../helpers/http.helper';
 import { SessionStorageService } from '../services/session-storage.service';
+
+const subjectPageKeys = ['subjectID', 'dates', 'marks', 'students'];
 
 @Injectable()
 export class StorageInterceptorService implements HttpInterceptor {
@@ -57,11 +59,27 @@ export class StorageInterceptorService implements HttpInterceptor {
     return next.handle(request).pipe(
       tap(event => {
         if (event instanceof HttpResponse && event.ok) {
-          // this.sessionStorageService.setItem(`${path}/${event.body._id}`, event.body);
-          this.sessionStorageService.setItem(path, [
-            ...this.sessionStorageService.getItem<any>(path),
-            event.body
-          ]);
+          if (event.body.subjectID) {
+            const subjectPage = Object.keys(event.body).reduce((result, key) => {
+              if (subjectPageKeys.includes(key)) {
+                result[key] = event.body[key];
+              }
+
+              return result;
+            }, {});
+
+            const subjectInfo = Object.keys(event.body).reduce((result, key) => {
+              if (!subjectPageKeys.includes(key)) {
+                result[key] = event.body[key];
+              }
+
+              return result;
+            }, {});
+            this.sessionStorageService.setItem(`${path}/${event.body.subjectID}`, subjectPage);
+            this.sessionStorageService.setItem(path, [...this.sessionStorageService.getItem<any[]>(path), subjectInfo]);
+          } else {
+            this.sessionStorageService.setItem(path, [...this.sessionStorageService.getItem<any[]>(path), event.body]);
+          }
         }
       })
     );

@@ -7,8 +7,11 @@ exports.createSubject = async function ({ name, marks, dates, teacher, descripti
   const subject = new Subject({ name, teacher, description, cabinet });
   const studentsList = (await Student.find()).map(elem => elem._id);
   const subjectPage = new SubjectPage({ marks, dates, subjectID: subject._id, students: studentsList });
-  subjectPage.save();
-  return subject.save();
+  
+  return {
+    ...JSON.parse(JSON.stringify(await subjectPage.save())),
+    ...JSON.parse(JSON.stringify(await subject.save())),
+  };
 }
 
 exports.updateSubject = async function ({ id, name, marks, dates, teacher, description, cabinet, students, _deletedAt }) {

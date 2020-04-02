@@ -42,7 +42,7 @@ exports.updateStudent = async function ({ id, name, lastName, address, descripti
 exports.deleteStudent = async function (id) {
   (await SubjectPage.find()).forEach(async (elem) => {
     elem.marks.delete(id);
-    elem.students.splice(elem.students.findIndex(studentID => studentID === id), 1);
+    elem.students = elem.students.filter(studentID => studentID !== id);
     await updateSubject({
       ...JSON.parse(JSON.stringify(elem)),
       id: elem.subjectID,

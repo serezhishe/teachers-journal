@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { combineLatest, Subscription } from 'rxjs';
 
 import { ISubjectInfo } from '../../../common/models/subject-info.model';
@@ -11,7 +11,7 @@ import { SubjectsService } from '../../../common/services/subjects.service';
   styleUrls: ['./subjects-page.component.scss'],
 })
 export class SubjectsPageComponent implements OnInit, OnDestroy {
-  public subjects: Array<Partial<ISubjectInfo>>;
+  public subjects: ISubjectInfo[];
   public subjectsSubscription: Subscription;
   public loaded: boolean;
   public searchSubjects: FormControl;
@@ -23,7 +23,7 @@ export class SubjectsPageComponent implements OnInit, OnDestroy {
     this.searchSubjects = new FormControl();
     this.subjectsSubscription = combineLatest([this.subjectsService.getSubjects(), this.searchSubjects.valueChanges]).subscribe(
       ([subjectList, subjectName]) => {
-        this.subjects = subjectList.filter((subject) => subject.name.toLowerCase().includes(subjectName));
+        this.subjects = subjectList.filter(subject => subject.name.toLowerCase().includes(subjectName));
         this.loaded = true;
       }
     );

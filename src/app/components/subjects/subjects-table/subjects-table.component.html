@@ -22,7 +22,7 @@
       </ng-container>
 
       <ng-container *ngFor="let dateHeader of datesHeaders; index as i" [matColumnDef]="dateHeader">
-        <th mat-header-cell *matHeaderCellDef formArrayName="dates" mat-sort-header="{{dateHeader}}">
+        <th mat-header-cell *matHeaderCellDef formArrayName="dates" mat-sort-header="{{ dateHeader }}">
           <mat-form-field ngClass="datepicker" appHover>
             <mat-label>Date</mat-label>
             <input matInput [matDatepicker]="dp" [formControlName]="i" readonly />
@@ -36,7 +36,7 @@
         </th>
         <form-field formGroupName="marks">
           <td mat-cell *matCellDef="let element" [formArrayName]="element.student._id">
-            <app-mark-input [value]="element.marks[i]" [formControlName]="i" ></app-mark-input>
+            <app-mark-input [value]="element.marks[i]" [formControlName]="i"></app-mark-input>
           </td>
         </form-field>
       </ng-container>

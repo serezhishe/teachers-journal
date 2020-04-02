@@ -1,11 +1,5 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, Subject } from 'rxjs';
-import { delay, filter, pluck, tap } from 'rxjs/operators';
 
-import { BASE_URL } from '../constants/base-url';
-
-const DELAY_TO_SHOW_HTTP = 1000;
 @Injectable({
   providedIn: 'root',
 })
@@ -35,7 +29,6 @@ export class SessionStorageService {
   public deleteItem(array: string, id: string): any {
     this.storage.removeItem(`${array}/${id}`);
     const tmp: any[] = JSON.parse(this.storage.getItem(array));
-    tmp.splice(tmp.findIndex(element => element._id === id), 1);
-    this.storage.setItem(array, JSON.stringify(tmp));
+    this.storage.setItem(array, JSON.stringify(tmp.filter(element => element._id !== id)));
   }
 }
