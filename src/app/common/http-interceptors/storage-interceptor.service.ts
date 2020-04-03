@@ -6,7 +6,7 @@ import { tap } from 'rxjs/operators';
 import { parseURL } from '../helpers/http.helper';
 import { SessionStorageService } from '../services/session-storage.service';
 
-const subjectPageKeys = ['subjectID', 'dates', 'marks', 'students'];
+const subjectPageKeys = ['subjectId', 'dates', 'marks', 'students'];
 
 @Injectable()
 export class StorageInterceptorService implements HttpInterceptor {
@@ -59,15 +59,7 @@ export class StorageInterceptorService implements HttpInterceptor {
     return next.handle(request).pipe(
       tap(event => {
         if (event instanceof HttpResponse && event.ok) {
-          if (event.body.subjectID) {
-            const subjectPage = Object.keys(event.body).reduce((result, key) => {
-              if (subjectPageKeys.includes(key)) {
-                result[key] = event.body[key];
-              }
-
-              return result;
-            }, {});
-
+          if (event.body.subjectId) {
             const subjectInfo = Object.keys(event.body).reduce((result, key) => {
               if (!subjectPageKeys.includes(key)) {
                 result[key] = event.body[key];
@@ -75,7 +67,7 @@ export class StorageInterceptorService implements HttpInterceptor {
 
               return result;
             }, {});
-            this.sessionStorageService.setItem(`${path}/${event.body.subjectID}`, subjectPage);
+            this.sessionStorageService.setItem(`${path}/${event.body.subjectId}`, event.body);
             this.sessionStorageService.setItem(path, [...this.sessionStorageService.getItem<any[]>(path), subjectInfo]);
           } else {
             this.sessionStorageService.setItem(path, [...this.sessionStorageService.getItem<any[]>(path), event.body]);

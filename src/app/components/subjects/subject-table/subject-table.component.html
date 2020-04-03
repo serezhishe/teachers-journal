@@ -23,7 +23,7 @@
 
       <ng-container *ngFor="let dateHeader of datesHeaders; index as i" [matColumnDef]="dateHeader">
         <th mat-header-cell *matHeaderCellDef formArrayName="dates" mat-sort-header="{{ dateHeader }}">
-          <mat-form-field ngClass="datepicker" appHover>
+          <mat-form-field appHover>
             <mat-label>Date</mat-label>
             <input matInput [matDatepicker]="dp" [formControlName]="i" readonly />
             <app-delete-button (click)="deleteDate(i)"></app-delete-button>

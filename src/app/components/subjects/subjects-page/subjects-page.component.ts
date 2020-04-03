@@ -28,8 +28,8 @@ export class SubjectsPageComponent implements OnInit {
     );
   }
 
-  public delete(subjectID: string): void {
-    this.subjectsService.deleteSubject(subjectID);
+  public delete(subjectId: string): void {
+    this.subjectsService.deleteSubject(subjectId);
   }
 
 }

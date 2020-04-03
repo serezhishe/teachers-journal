@@ -51,15 +51,16 @@ export class SubjectsService {
 
   public updateCurrentSubject(newData: Partial<ISubjectPage & ISubjectInfo>): void {
     const id = this.currentSubject$.value.subjectId;
+    newData.marks = new Map(Object.entries(newData.marks));
 
-    if (
-      JSON.stringify({
-        ...this.currentSubject$.value,
-        ...newData,
-      }) === JSON.stringify(this.currentSubject$.value)
-    ) {
-      return;
-    }
+    // if (
+    //   JSON.stringify({
+    //     ...this.currentSubject$.value,
+    //     ...newData,
+    //   }) === JSON.stringify(this.currentSubject$.value)
+    // ) {
+    //   return;
+    // }
     this.http
       .patch<ISubjectPage & ISubjectInfo>(
         `${BASE_URL}/subjects/${id}`,
@@ -87,6 +88,7 @@ export class SubjectsService {
   public deleteDate(index: number): void {
     const dates = this.currentSubject$.value.dates;
     dates.splice(index, 1);
+
     this.currentSubject$.next({
       ...this.currentSubject$.value,
       dates,
@@ -100,8 +102,8 @@ export class SubjectsService {
     return students
       .filter(student => currentSubject.students.includes(student._id))
       .map(student => ({
-        marks: currentSubject.marks[student._id],
-        averageMark: this.getAverageMark(currentSubject.marks[student._id]),
+        marks: currentSubject.marks.get(student._id),
+        averageMark: this.getAverageMark(currentSubject.marks.get(student._id)),
         student,
       }));
   }
@@ -134,7 +136,7 @@ export class SubjectsService {
       students: [],
     };
     this.studentsService.getCurrentStudents().map(student => {
-      tmp.marks[student._id] = [];
+      tmp.marks.set(student._id, []);
       tmp.students.push(student._id);
     });
     this.http
@@ -158,7 +160,7 @@ export class SubjectsService {
   public removeStudentFromSubject(id: string): void {
     this.currentSubject$.next({
       ...this.currentSubject$.value,
-      students: this.currentSubject$.value.students.filter(studentID => studentID !== id),
+      students: this.currentSubject$.value.students.filter(studentId => studentId !== id),
     });
   }
 }

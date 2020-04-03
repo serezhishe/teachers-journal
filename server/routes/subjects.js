@@ -45,7 +45,7 @@ api.post('/', asyncHandler(async (req, res) => {
     if ( !name || !marks || !dates || !teacher ) {
       return res.sendStatus(400);
     }
-  
+
     res.send(await createSubject({ name, marks, dates, teacher, cabinet, description }));
   
   }

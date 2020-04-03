@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ComponentFactoryResolver, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Sort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
@@ -19,7 +19,7 @@ import { SubjectsService } from '../../../common/services/subjects.service';
 export class SubjectTableComponent implements OnInit, OnDestroy {
   public displayedColumns: string[];
   public subjectName: string;
-  public subjectID: string;
+  public subjectId: string;
   public tableData: IStudentMarks[];
   public datesHeaders: string[];
   public teacher: string;
@@ -27,7 +27,6 @@ export class SubjectTableComponent implements OnInit, OnDestroy {
   public form: any;
   public loaded: boolean;
   public subscription: Subscription;
-  public subs: Subscription;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -41,7 +40,7 @@ export class SubjectTableComponent implements OnInit, OnDestroy {
       dates: undefined,
       teacher: undefined,
     };
-    this.subjectGroup.teacher = new FormControl(this.teacher, [Validators.required, Validators.pattern(/^[A-Za-zА-яа-я\s]+$/)]);
+    this.subjectGroup.teacher = new FormControl(this.teacher, [Validators.required, Validators.pattern(/^[A-Za-zА-Яа-я\s]+$/)]);
     this.subjectGroup.dates = this.formBuilder.array(
       subjectPage.dates.map(elem => new FormControl(moment(elem), [duplicateDateValidator()]))
     );
@@ -59,7 +58,6 @@ export class SubjectTableComponent implements OnInit, OnDestroy {
     this.loaded = false;
     this.subscription = this.subjectsService.getSubject(this.subjectName).subscribe(subjectPage => {
       this.teacher = subjectPage.teacher;
-
       this.datesHeaders = subjectPage.dates.map(date => moment(date).format(dateInputFormat));
       this.displayedColumns = subjectTableColumns.concat(this.datesHeaders);
       this.tableData = this.subjectsService.getDataSource();
