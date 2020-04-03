@@ -12,7 +12,7 @@ exports.createStudent = async function ({ name, lastName, address, description }
     elem.marks.set('' + student._id, []);
     await updateSubject({
       ...JSON.parse(JSON.stringify(elem)),
-      id: elem.subjectID,
+      id: elem.subjectId,
     });
   });
   return await student.save();
@@ -42,10 +42,10 @@ exports.updateStudent = async function ({ id, name, lastName, address, descripti
 exports.deleteStudent = async function (id) {
   (await SubjectPage.find()).forEach(async (elem) => {
     elem.marks.delete(id);
-    elem.students = elem.students.filter(studentID => studentID !== id);
+    elem.students = elem.students.filter(studentId => studentId !== id);
     await updateSubject({
       ...JSON.parse(JSON.stringify(elem)),
-      id: elem.subjectID,
+      id: elem.subjectId,
     });
   })
   return await Student.deleteOne({ _id: id})

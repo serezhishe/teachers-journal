@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -29,6 +30,7 @@ import { SharedModule } from './shared/shared.module';
     MatTabsModule,
     StudentsModule,
     SubjectsModule,
+    MatProgressSpinnerModule,
     MatButtonToggleModule,
     AppRoutingModule,
   ],

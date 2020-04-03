@@ -12,11 +12,11 @@ import { IStudentMarks, ISubjectInfo, ISubjectPage } from '../../../common/model
 import { SubjectsService } from '../../../common/services/subjects.service';
 
 @Component({
-  selector: 'app-subjects-table',
-  templateUrl: './subjects-table.component.html',
-  styleUrls: ['./subjects-table.component.scss'],
+  selector: 'app-subject-table',
+  templateUrl: './subject-table.component.html',
+  styleUrls: ['./subject-table.component.scss'],
 })
-export class SubjectsTableComponent implements OnInit, OnDestroy {
+export class SubjectTableComponent implements OnInit, OnDestroy {
   public displayedColumns: string[];
   public subjectName: string;
   public subjectID: string;
@@ -59,6 +59,7 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
     this.loaded = false;
     this.subscription = this.subjectsService.getSubject(this.subjectName).subscribe(subjectPage => {
       this.teacher = subjectPage.teacher;
+
       this.datesHeaders = subjectPage.dates.map(date => moment(date).format(dateInputFormat));
       this.displayedColumns = subjectTableColumns.concat(this.datesHeaders);
       this.tableData = this.subjectsService.getDataSource();
@@ -69,7 +70,6 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     this.subscription.unsubscribe();
-    this.subjectsService.clearSubject();
   }
 
   public sortData(sort: Sort): void {
@@ -77,7 +77,7 @@ export class SubjectsTableComponent implements OnInit, OnDestroy {
     this.tableData = TableSortHelper.sortData(sort, this.tableData);
   }
 
-  public onSubmit(newData: { teacher: string; dates: moment.Moment[]; marks: Map<string, number[]> }): void {
+  public onSubmit(newData: Partial<ISubjectInfo & ISubjectPage>): void {
     if (this.form.invalid) {
       alert('There are some mistakes. Check again, please.');
 

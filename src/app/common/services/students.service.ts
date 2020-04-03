@@ -16,6 +16,9 @@ export class StudentsService {
 
   constructor(private readonly http: HttpClient, private readonly sessionStorageService: SessionStorageService) {
     this.students$ = new BehaviorSubject(undefined);
+  }
+
+  public getStudents(): Observable<IStudent[]> {
     this.http
       .get<IStudent[]>(`${BASE_URL}/students`)
       .pipe(take(1))
@@ -27,9 +30,7 @@ export class StudentsService {
           }))
         )
       );
-  }
 
-  public getStudents(): Observable<IStudent[]> {
     return this.students$.pipe(filter(students => students !== undefined));
   }
 

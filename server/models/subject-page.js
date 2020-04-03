@@ -1,7 +1,6 @@
 const { Schema, model } = require('mongoose');
-const moment = require('moment');
 const subjectPageSchema = new Schema({
-  subjectID: {
+  subjectId: {
     type: String,
     required: true,
   },

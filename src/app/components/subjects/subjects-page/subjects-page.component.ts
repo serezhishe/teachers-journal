@@ -22,7 +22,7 @@ export class SubjectsPageComponent implements OnInit {
     this.subjects$ = this.searchSubjects.valueChanges.pipe(
       startWith(''),
       switchMap(searchValue =>
-        this.subjectsService.getSubjects().pipe(
+        this.subjectsService.getSubjectList().pipe(
           map(subjectList => subjectList.filter(subject => subject.name.toLowerCase().includes(searchValue)))
         ))
     );

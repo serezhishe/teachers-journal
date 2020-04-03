@@ -6,7 +6,7 @@ const Student = require('../models/student');
 exports.createSubject = async function ({ name, marks, dates, teacher, description, cabinet } = {}) {
   const subject = new Subject({ name, teacher, description, cabinet });
   const studentsList = (await Student.find()).map(elem => elem._id);
-  const subjectPage = new SubjectPage({ marks, dates, subjectID: subject._id, students: studentsList });
+  const subjectPage = new SubjectPage({ marks, dates, subjectId: subject._id, students: studentsList });
   
   return {
     ...JSON.parse(JSON.stringify(await subjectPage.save())),
@@ -46,20 +46,23 @@ exports.updateSubject = async function ({ id, name, marks, dates, teacher, descr
   }, {});
 
   await Subject.updateOne({ _id: id }, subjectOmited);
-  await SubjectPage.updateOne({ subjectID: id }, pageOmited);
+  await SubjectPage.updateOne({ subjectId: id }, pageOmited);
   return {
     ...JSON.parse(JSON.stringify(await Subject.findOne({ _id: id }))),
-    ...JSON.parse(JSON.stringify(await SubjectPage.findOne({ subjectID: id }))),
+    ...JSON.parse(JSON.stringify(await SubjectPage.findOne({ subjectId: id }))),
   }
 }
 
 exports.deleteSubject = async function (id) {
-  await SubjectPage.deleteOne({ subjectID: id });
+  await SubjectPage.deleteOne({ subjectId: id });
   return await Subject.deleteOne({ _id: id })
 };
 
 exports.getSubjectById = async function (id) {
-  return await SubjectPage.findOne({ subjectID: id, });
+  return {
+    ...JSON.parse(JSON.stringify(await SubjectPage.findOne({ subjectId: id, }))),
+    ...JSON.parse(JSON.stringify(await Subject.findOne({ _id: id, }))),
+  };
 }
 
 exports.getAll = async function () {

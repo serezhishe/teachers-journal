@@ -1,5 +1,5 @@
 export interface ISubjectPage {
-  subjectID: string;
+  subjectId: string;
   dates: string[];
   marks: Map<string, number[]>;
   students: string[];

@@ -1,7 +1,7 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as moment from 'moment';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 
 import { BASE_URL } from '../constants';
@@ -15,15 +15,12 @@ import { StudentsService } from './students.service';
 export class SubjectsService {
   private readonly currentSubject$: BehaviorSubject<ISubjectPage & ISubjectInfo>;
   private readonly subjectsList$: BehaviorSubject<ISubjectInfo[]>;
-  private subjectSubscription: Subscription;
+  private readonly subjectIdList: Map<string, string>;
 
   constructor(private readonly studentsService: StudentsService, private readonly http: HttpClient) {
     this.currentSubject$ = new BehaviorSubject(undefined);
     this.subjectsList$ = new BehaviorSubject(undefined);
-    this.http
-      .get<ISubjectInfo[]>(`${BASE_URL}/subjects`)
-      .pipe(take(1))
-      .subscribe(response => this.subjectsList$.next(response));
+    this.subjectIdList = new Map();
   }
 
   private getAverageMark(marks: number[]): number {
@@ -32,32 +29,28 @@ export class SubjectsService {
       tmp = [0];
     }
 
-    return +(tmp.reduce((prev, curr) => prev + curr, 0) / tmp.length).toFixed(1);
+    return +(tmp.reduce((sum, mark) => sum + mark, 0) / tmp.length).toFixed(1);
   }
 
   private addSubjectToList(newSubject: ISubjectInfo): void {
+    this.subjectIdList.set(newSubject.name, newSubject._id);
     this.subjectsList$.next([...this.subjectsList$.value, newSubject]);
   }
 
   public getSubject(subjectName: string): Observable<ISubjectPage & ISubjectInfo> {
-    this.subjectSubscription = this.getSubjects().subscribe(subjectList => {
-      const subjectInfo = subjectList.find(subject => subject.name === subjectName);
-      this.http
-        .get<ISubjectPage>(`${BASE_URL}/subjects/${subjectInfo._id}`)
-        .pipe(take(1))
-        .subscribe(response => {
-          this.currentSubject$.next({
-            ...response,
-            ...subjectInfo,
-          });
-        });
-    });
+    const id = this.subjectIdList.get(subjectName);
+    this.http
+      .get<ISubjectPage & ISubjectInfo>(`${BASE_URL}/subjects/${id}`)
+      .pipe(take(1))
+      .subscribe(response => {
+        this.currentSubject$.next(response);
+      });
 
     return this.currentSubject$.pipe(filter(subject => subject?.name === subjectName));
   }
 
-  public updateCurrentSubject(newData: Partial<ISubjectPage | ISubjectInfo>): void {
-    const id = this.currentSubject$.value.subjectID;
+  public updateCurrentSubject(newData: Partial<ISubjectPage & ISubjectInfo>): void {
+    const id = this.currentSubject$.value.subjectId;
 
     if (
       JSON.stringify({
@@ -68,17 +61,14 @@ export class SubjectsService {
       return;
     }
     this.http
-      .patch<ISubjectPage | ISubjectInfo>(
+      .patch<ISubjectPage & ISubjectInfo>(
         `${BASE_URL}/subjects/${id}`,
         { ...this.currentSubject$.value, ...newData },
         { observe: 'response' }
       )
       .pipe(take(1))
-      .subscribe((response: HttpResponse<ISubjectPage | ISubjectInfo>) => {
-        this.currentSubject$.next({
-          ...this.currentSubject$.value,
-          ...response.body,
-        });
+      .subscribe((response: HttpResponse<ISubjectPage & ISubjectInfo>) => {
+        this.currentSubject$.next(response.body);
       });
   }
 
@@ -92,10 +82,6 @@ export class SubjectsService {
     });
 
     return date;
-  }
-
-  public clearSubject(): void {
-    this.subjectSubscription.unsubscribe();
   }
 
   public deleteDate(index: number): void {
@@ -120,7 +106,15 @@ export class SubjectsService {
       }));
   }
 
-  public getSubjects(): Observable<ISubjectInfo[]> {
+  public getSubjectList(): Observable<ISubjectInfo[]> {
+    this.http
+      .get<ISubjectInfo[]>(`${BASE_URL}/subjects`)
+      .pipe(take(1))
+      .subscribe(response => {
+        response.forEach(subjectInfo => this.subjectIdList.set(subjectInfo.name, subjectInfo._id));
+        this.subjectsList$.next(response);
+      });
+
     return this.subjectsList$.pipe(filter(list => list !== undefined));
   }
 
@@ -151,12 +145,13 @@ export class SubjectsService {
       });
   }
 
-  public deleteSubject(subjectID: string): void {
+  public deleteSubject(subjectId: string): void {
     this.http
-      .delete(`${BASE_URL}/subjects/${subjectID}`)
+      .delete(`${BASE_URL}/subjects/${subjectId}`)
       .pipe(take(1))
       .subscribe(() => {
-        this.subjectsList$.next([...this.subjectsList$.value.filter(subject => subject._id !== subjectID)]);
+        this.subjectIdList.delete(this.subjectsList$.value.find(subject => subject._id === subjectId).name);
+        this.subjectsList$.next([...this.subjectsList$.value.filter(subject => subject._id !== subjectId)]);
       });
   }
 

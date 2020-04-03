@@ -19,14 +19,14 @@ import { SharedModule } from '../../shared/shared.module';
 import { MarkInputComponent } from './mark-input/mark-input.component';
 import { SubjectFormComponent } from './subject-form/subject-form.component';
 import { SubjectRootComponent } from './subject-root/subject-root.component';
+import { SubjectTableComponent } from './subject-table/subject-table.component';
 import { SubjectsPageComponent } from './subjects-page/subjects-page.component';
 import { SubjectsRoutingModule } from './subjects-routing.module';
-import { SubjectsTableComponent } from './subjects-table/subjects-table.component';
 
 @NgModule({
   declarations: [
     SubjectFormComponent,
-    SubjectsTableComponent,
+    SubjectTableComponent,
     SubjectsPageComponent,
     HighlightDirective,
     SubjectRootComponent,
