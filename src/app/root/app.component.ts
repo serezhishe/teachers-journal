@@ -21,9 +21,12 @@ export class AppComponent implements OnInit {
     private readonly translate: TranslateService,
   ) {
     this.translate.addLangs(['en', 'ru']);
-    this.translate.reloadLang('ru');
-    this.translate.reloadLang('en');
     this.translate.setDefaultLang(this.translate.getBrowserLang());
+    this.translate.langs.forEach(el => {
+      if (this.translate.defaultLang !== el) {
+        this.translate.reloadLang(el);
+      }
+    });
   }
 
   @HostListener('window:beforeunload', ['$event'])
