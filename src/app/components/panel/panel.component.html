@@ -1,6 +1,12 @@
 <mat-toolbar>
-    <span>{{title}}</span>
+  <span>
+    {{ 'app.title' | translate }}
+  </span>
+  <mat-button-toggle-group>
+    <mat-button-toggle (click)="useLanguage('en')">English</mat-button-toggle>
+    <mat-button-toggle (click)="useLanguage('ru')">Russian</mat-button-toggle>
+  </mat-button-toggle-group>
 </mat-toolbar>
 <mat-button-toggle-group>
-    <mat-button-toggle *ngFor="let tab of tabs"  [routerLink]="tab">{{tab | titlecase}}</mat-button-toggle>
+  <mat-button-toggle *ngFor="let tab of tabs" [routerLink]="tab">{{ 'app.tabs.' + tab | translate | titlecase }}</mat-button-toggle>
 </mat-button-toggle-group>
