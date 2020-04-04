@@ -5,6 +5,10 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "save": "Save",
+    "languages": {
+      "ru": "Russian",
+      "en": "English"
+    },
     "tabs": {
       "students": "students",
       "subjects": "subjects",

@@ -35,8 +35,8 @@ export class StudentsTableComponent implements OnInit, OnDestroy {
       .pipe(
         distinctUntilChanged(),
         map(([students, name, lastname]) =>
-          students.filter((student) => student.name.toLowerCase().includes(name) && student.lastName.toLowerCase().includes(lastname))
-        )
+          students.filter((student) => student.name.toLowerCase().includes(name) && student.lastName.toLowerCase().includes(lastname)),
+        ),
       )
       .subscribe((students) => {
         this.tableData = students;

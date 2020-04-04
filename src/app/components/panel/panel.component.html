@@ -3,8 +3,8 @@
     {{ 'app.title' | translate }}
   </span>
   <mat-button-toggle-group>
-    <mat-button-toggle (click)="useLanguage('en')">English</mat-button-toggle>
-    <mat-button-toggle (click)="useLanguage('ru')">Russian</mat-button-toggle>
+    <mat-button-toggle (click)="useLanguage('en')">{{ 'app.languages.en' | translate }}</mat-button-toggle>
+    <mat-button-toggle (click)="useLanguage('ru')">{{ 'app.languages.ru' | translate }}</mat-button-toggle>
   </mat-button-toggle-group>
 </mat-toolbar>
 <mat-button-toggle-group>
