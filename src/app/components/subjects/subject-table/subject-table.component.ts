@@ -19,14 +19,14 @@ import { SubjectsService } from '../../../common/services/subjects.service';
 export class SubjectTableComponent implements OnInit, OnDestroy {
   public displayedColumns: string[];
   public subjectName: string;
-  public subjectId: string;
+  public subjectId: string; // REVIEW: is it necessary?
   public tableData: IStudentMarks[];
   public datesHeaders: string[];
   public teacher: string;
   public subjectGroup: { dates: FormArray; marks: FormGroup; teacher: FormControl };
   public form: any;
   public loaded: boolean;
-  public subscription: Subscription;
+  public subscription: Subscription; // REVIEW: subscription for what?
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -35,7 +35,7 @@ export class SubjectTableComponent implements OnInit, OnDestroy {
   ) {}
 
   private createFormGroup(subjectPage: ISubjectPage & ISubjectInfo): FormGroup {
-    this.subjectGroup = {
+    this.subjectGroup = { // REVIEW: create interface and declare like `this.subjectGroup: ISubjectGroup`
       marks: undefined,
       dates: undefined,
       teacher: undefined,
@@ -56,7 +56,7 @@ export class SubjectTableComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.subjectName = this.route.snapshot.params.subject;
     this.loaded = false;
-    this.subscription = this.subjectsService.getSubject(this.subjectName).subscribe(subjectPage => {
+    this.subscription = this.subjectsService.getSubject(this.subjectName).subscribe(subjectPage => { // REVIEW: why `subjectPage` is any?
       this.teacher = subjectPage.teacher;
       this.datesHeaders = subjectPage.dates.map(date => moment(date).format(dateInputFormat));
       this.displayedColumns = subjectTableColumns.concat(this.datesHeaders);

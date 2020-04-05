@@ -13,14 +13,14 @@ import { SubjectsService } from '../common/services/subjects.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  public loaded: boolean;
+  public loaded: boolean; // REVIEW: usually it used to be named like `isLoading`, which means that your data is coming from server
   constructor(
     private readonly sessionStorageService: SessionStorageService,
     private readonly subjectsService: SubjectsService,
     private readonly studentsService: StudentsService,
     private readonly translate: TranslateService,
   ) {
-    this.translate.addLangs(['en', 'ru']);
+    this.translate.addLangs(['en', 'ru']); // REVIEW: enums
     this.translate.setDefaultLang(this.translate.getBrowserLang());
     this.translate.langs.forEach(el => {
       if (this.translate.defaultLang !== el) {

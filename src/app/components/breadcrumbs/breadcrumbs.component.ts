@@ -28,7 +28,7 @@ export class BreadcrumbsComponent implements OnInit {
       });
   }
 
-  public buildBreadCrumb(route: ActivatedRoute): IBreadCrumb[] {
+  public buildBreadCrumb(route: ActivatedRoute): IBreadCrumb[] { // REVIEW: name `buildBreadCrumb` -> `buildBreadCrumbs`
     let url: string = '';
     const breadcrumbs: IBreadCrumb[] = [];
     while (route) {

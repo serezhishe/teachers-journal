@@ -1,4 +1,4 @@
-export const studentTableColumns = [
+export const studentTableColumns = [ // REVIEW: enum
     'index',
     'name',
     'lastName',

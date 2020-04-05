@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { parseURL } from '../helpers/http.helper';
 
 @Injectable()
-export class MapFixInterceptorService implements HttpInterceptor {
+export class MapFixInterceptorService implements HttpInterceptor { // REVIEW: what is going on here?
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const { path, id }: { path: string; id: string } = parseURL(request.url);
 

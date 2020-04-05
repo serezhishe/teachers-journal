@@ -13,12 +13,12 @@ import { StudentsService } from './students.service';
   providedIn: 'root',
 })
 export class SubjectsService {
-  private readonly currentSubject$: BehaviorSubject<ISubjectPage & ISubjectInfo>;
+  private readonly currentSubject$: BehaviorSubject<ISubjectPage & ISubjectInfo>; // REVIEW: don't think that intersection types everywhere is cool
   private readonly subjectsList$: BehaviorSubject<ISubjectInfo[]>;
   private readonly subjectIdList: Map<string, string>;
 
   constructor(private readonly studentsService: StudentsService, private readonly http: HttpClient) {
-    this.currentSubject$ = new BehaviorSubject(undefined);
+    this.currentSubject$ = new BehaviorSubject(undefined); // REVIEW: init with adequate value
     this.subjectsList$ = new BehaviorSubject(undefined);
     this.subjectIdList = new Map();
   }
@@ -29,7 +29,7 @@ export class SubjectsService {
       tmp = [0];
     }
 
-    return +(tmp.reduce((sum, mark) => sum + mark, 0) / tmp.length).toFixed(1);
+    return +(tmp.reduce((sum, mark) => sum + mark, 0) / tmp.length).toFixed(1); // REVIEW: calculate upper and return value
   }
 
   private addSubjectToList(newSubject: ISubjectInfo): void {
@@ -117,7 +117,7 @@ export class SubjectsService {
         this.subjectsList$.next(response);
       });
 
-    return this.subjectsList$.pipe(filter(list => list !== undefined));
+    return this.subjectsList$.pipe(filter(list => list !== undefined)); // REVIEW: what if list will be `null`?
   }
 
   public addSubject({ name, teacher, cabinet, description }: ISubjectInfo): void {
@@ -126,7 +126,7 @@ export class SubjectsService {
 
       return;
     }
-    const tmp = {
+    const tmp = { // REVIEW: name not `tmp`
       name,
       dates: [moment()],
       teacher,

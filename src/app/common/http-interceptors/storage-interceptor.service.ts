@@ -6,7 +6,7 @@ import { tap } from 'rxjs/operators';
 import { parseURL } from '../helpers/http.helper';
 import { SessionStorageService } from '../services/session-storage.service';
 
-const subjectPageKeys = ['subjectId', 'dates', 'marks', 'students'];
+const subjectPageKeys = ['subjectId', 'dates', 'marks', 'students']; // REVIEW: enum
 
 @Injectable()
 export class StorageInterceptorService implements HttpInterceptor {
@@ -26,7 +26,7 @@ export class StorageInterceptorService implements HttpInterceptor {
 
   private handleGetRequest(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const { path, id }: { path: string; id: string } = parseURL(request.url);
-    if (id === undefined) {
+    if (id === undefined) { // REVIEW: what if id == `null`?
       if (this.sessionStorageService.getItem(path)) {
         return of(new HttpResponse({ status: 200, body: this.sessionStorageService.getItem(path) }));
       }
@@ -90,7 +90,8 @@ export class StorageInterceptorService implements HttpInterceptor {
   }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.method === 'PATCH') {
+    // REVIEWS: use `swith case` at least
+    if (req.method === 'PATCH') { // REVIEW: request methods in enum
       return this.handlePatchRequest(req, next);
     }
     if (req.method === 'GET') {
