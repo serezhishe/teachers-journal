@@ -75,7 +75,9 @@ export class SubjectsService {
   public deleteDate(index: number): void {
     const dates = this.currentSubject$.value.dates;
     dates.splice(index, 1);
-
+    this.currentSubject$.value.marks.forEach((marks, id) => {
+      this.currentSubject$.value.marks.set(id, marks.filter((_, i) => i !== index));
+    });
     this.currentSubject$.next({
       ...this.currentSubject$.value,
       dates,
