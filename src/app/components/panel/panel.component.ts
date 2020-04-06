@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 enum TABS {
@@ -19,10 +19,12 @@ export class PanelComponent implements OnInit {
   constructor(private readonly translate: TranslateService) {}
 
   public ngOnInit(): void {
-    this.tabs = [];
-    for (const tab in TABS) {
-      this.tabs.push(TABS[tab]);
-    }
+    this.tabs = [
+      TABS.students,
+      TABS.subjects,
+      TABS.statistics,
+      TABS.export,
+    ];
   }
 
   public useLanguage(language: string): void {

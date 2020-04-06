@@ -20,7 +20,7 @@ import { SubjectsService } from '../../../common/services/subjects.service';
 export class SubjectTableComponent implements OnInit {
   public displayedColumns: string[];
   public subjectName: string;
-  public tableData: Observable<IStudentMarks[]>;
+  public tableData$: Observable<IStudentMarks[]>;
   public datesHeaders: string[];
   public teacher: string;
   public subjectFormGroup: ISubjectFormGroup;
@@ -42,25 +42,26 @@ export class SubjectTableComponent implements OnInit {
     this.subjectFormGroup.dates = this.formBuilder.array(
       subjectPage.dates.map(elem => new FormControl(moment(elem), [duplicateDateValidator()])),
     );
-    const tmp = {};
+    const markGroup = {};
     dataSource.forEach(element => {
-      tmp[element.student._id] = this.formBuilder.array(this.datesHeaders.map((_, i) => new FormControl(element.marks[i])));
+      markGroup[element.student._id] = this.formBuilder.array(this.datesHeaders.map((_, i) => new FormControl(element.marks[i])));
     });
-    this.subjectFormGroup.marks = this.formBuilder.group(tmp);
+    this.subjectFormGroup.marks = this.formBuilder.group(markGroup);
 
     return this.formBuilder.group(this.subjectFormGroup);
   }
 
   public ngOnInit(): void {
     this.subjectName = this.route.snapshot.params.subject;
-    this.tableData = this.subjectsService.getSubject(this.subjectName).pipe(
+    this.tableData$ = this.subjectsService.getSubject(this.subjectName).pipe(
       map((subjectPage: ISubjectPage) => {
         this.teacher = subjectPage.teacher;
         this.datesHeaders = subjectPage.dates.map(date => moment(date).format(dateInputFormat));
-        this.displayedColumns = [];
-        for (const column in subjectTableColumns) {
-          this.displayedColumns.push(subjectTableColumns[column]);
-        }
+        this.displayedColumns = [
+          subjectTableColumns.name,
+          subjectTableColumns.lastName,
+          subjectTableColumns.averageMark,
+        ];
         this.displayedColumns.push(...this.datesHeaders);
         const dataSource = this.subjectsService.getDataSource();
         this.form = this.createFormGroup(subjectPage, dataSource);
@@ -76,7 +77,7 @@ export class SubjectTableComponent implements OnInit {
     } else {
       sort.active = sort.active === 'averageMark' ? sort.active : `student.${sort.active}`;
     }
-    this.tableData = merge(this.tableData, of(TableSortHelper.sortData(sort, data)));
+    this.tableData$ = merge(this.tableData$, of(TableSortHelper.sortData(sort, data)));
   }
 
   public onSubmit(newData: Partial<ISubjectPage>): void {

@@ -1,5 +1,5 @@
 <mat-toolbar>{{ subjectName | titlecase }}</mat-toolbar>
-<form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" *ngIf="tableData | async as dataSource; else loading">
+<form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" *ngIf="tableData$ | async as dataSource; else loading">
   <button mat-stroked-button type="button" (click)="addDate()">{{ 'app.subjects.addDate' | translate }}</button>
   <div class="container">
     <table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event, dataSource)">

@@ -1,8 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Sort } from '@angular/material/sort';
-import { combineLatest, Subscription } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { combineLatest, merge, Observable, of } from 'rxjs';
+import { map, startWith, switchMap } from 'rxjs/operators';
 
 import { studentTableColumns } from '../../../common/constants';
 import { TableSortHelper } from '../../../common/helpers/table-sort.helper';
@@ -14,48 +14,42 @@ import { StudentsService } from '../../../common/services/students.service';
   templateUrl: './students-table.component.html',
   styleUrls: ['./students-table.component.scss'],
 })
-export class StudentsTableComponent implements OnInit, OnDestroy {
+export class StudentsTableComponent implements OnInit {
   public displayedColumns: string[];
-  public tableData: IStudent[];
-  public loaded: boolean;
+  public tableData$: Observable<IStudent[]>;
   public searchName: FormControl;
   public searchLastName: FormControl;
-  public studentSubscription: Subscription;
   constructor(private readonly studentsService: StudentsService) {}
 
   public ngOnInit(): void {
-    this.loaded = false;
     this.searchName = new FormControl();
     this.searchLastName = new FormControl();
-    this.studentSubscription = combineLatest([
-      this.studentsService.getStudents(),
-      this.searchName.valueChanges,
-      this.searchLastName.valueChanges,
-    ])
-      .pipe(
-        distinctUntilChanged(),
-        map(([students, name, lastname]) =>
-          students.filter((student) => student.name.toLowerCase().includes(name) && student.lastName.toLowerCase().includes(lastname)),
-        ),
-      )
-      .subscribe((students) => {
-        this.tableData = students;
-        this.loaded = true;
-      });
-    this.searchName.setValue('');
-    this.searchLastName.setValue('');
-    this.displayedColumns = [];
-    for (const column in studentTableColumns) {
-      this.displayedColumns.push(studentTableColumns[column]);
-    }
+    this.tableData$ = combineLatest([
+      this.searchName.valueChanges.pipe(startWith('')),
+      this.searchLastName.valueChanges.pipe(startWith('')),
+    ]).pipe(
+      switchMap(([name, lastName]) =>
+        this.studentsService
+          .getStudents()
+          .pipe(
+            map(students =>
+              students.filter(student => student.name.toLowerCase().includes(name) && student.lastName.toLowerCase().includes(lastName)),
+            ),
+          ),
+      ),
+    );
+
+    this.displayedColumns = [
+      studentTableColumns.index,
+      studentTableColumns.name,
+      studentTableColumns.lastName,
+      studentTableColumns.address,
+      studentTableColumns.description,
+    ];
   }
 
-  public sortData(sort: Sort): void {
-    this.tableData = TableSortHelper.sortData(sort, this.tableData);
-  }
-
-  public ngOnDestroy(): void {
-    this.studentSubscription.unsubscribe();
+  public sortData(sort: Sort, tableData: IStudent[]): void {
+    this.tableData$ = merge(this.tableData$, of(TableSortHelper.sortData(sort, tableData)));
   }
 
   public cancelEvent(event: MouseEvent): void {

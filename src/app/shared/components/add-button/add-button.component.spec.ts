@@ -8,7 +8,7 @@ describe('AddButtonComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddButtonComponent ]
+      declarations: [ AddButtonComponent ],
     })
     .compileComponents();
   }));

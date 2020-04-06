@@ -56,7 +56,7 @@ import { SubjectsRoutingModule } from './subjects-routing.module';
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
   ],
   exports: [
-    HighlightDirective
-  ]
+    HighlightDirective,
+  ],
 })
 export class SubjectsModule { }

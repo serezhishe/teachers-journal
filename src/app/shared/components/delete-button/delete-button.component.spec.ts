@@ -8,7 +8,7 @@ describe('DeleteButtonComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DeleteButtonComponent ]
+      declarations: [ DeleteButtonComponent ],
     })
     .compileComponents();
   }));
