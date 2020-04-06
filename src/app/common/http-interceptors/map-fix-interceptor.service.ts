@@ -4,56 +4,61 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { parseURL } from '../helpers/http.helper';
+import { ISubjectPage } from '../models/subject-page.model';
 
 @Injectable()
 export class MapFixInterceptorService implements HttpInterceptor {
+  private fixResponse(response: HttpResponse<ISubjectPage>): HttpResponse<ISubjectPage> {
+    const fixedResponse = response.clone({
+      body: {
+        ...response.body,
+        marks: new Map(Object.entries(response.body.marks)),
+      },
+    });
+
+    return fixedResponse;
+  }
+
+  private fixRequest(request: HttpRequest<any>): HttpRequest<any> {
+    const fixedRequest = request.clone({
+      body: {
+        ...request.body,
+        marks: Array.from(request.body.marks.entries()),
+      },
+    });
+
+    return fixedRequest;
+  }
+
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const { path, id }: { path: string; id: string } = parseURL(request.url);
 
-    if ((request.method === 'POST' || request.method === 'PATCH') && path === 'subjects') {
-      const fixedRequest = request.clone({
-        body: {
-          ...request.body,
-          marks: Array.from(request.body.marks.entries()),
-        },
-      });
+    if (path !== 'subjects' || (path === 'subjects' && !id)) {
+      return next.handle(request);
+    }
 
-      return next.handle(fixedRequest).pipe(
+    if (request.method === 'POST' || request.method === 'PATCH') {
+      return next.handle(this.fixRequest(request)).pipe(
         map(event => {
           if (event instanceof HttpResponse) {
-            const fixedResponse = event.clone({
-              body: {
-                ...event.body,
-                marks: new Map(Object.entries(event.body.marks)),
-              },
-            });
-
-            return fixedResponse;
+            return this.fixResponse(event);
           }
 
           return event;
-        })
+        }),
       );
     }
-    if (request.method === 'GET' && path === 'subjects' && id !== undefined) {
+
+    if (request.method === 'GET') {
       return next.handle(request).pipe(
         map(event => {
           if (event instanceof HttpResponse) {
-            const fixedResponse = event.clone({
-              body: {
-                ...event.body,
-                marks: new Map(Object.entries(event.body.marks)),
-              },
-            });
-
-            return fixedResponse;
+            return this.fixResponse(event);
           }
 
           return event;
-        })
+        }),
       );
     }
-
-    return next.handle(request);
   }
 }

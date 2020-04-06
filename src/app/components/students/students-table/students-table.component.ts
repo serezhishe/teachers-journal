@@ -44,7 +44,10 @@ export class StudentsTableComponent implements OnInit, OnDestroy {
       });
     this.searchName.setValue('');
     this.searchLastName.setValue('');
-    this.displayedColumns = studentTableColumns;
+    this.displayedColumns = [];
+    for (const column in studentTableColumns) {
+      this.displayedColumns.push(studentTableColumns[column]);
+    }
   }
 
   public sortData(sort: Sort): void {

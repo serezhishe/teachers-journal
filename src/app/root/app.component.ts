@@ -13,7 +13,7 @@ import { SubjectsService } from '../common/services/subjects.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  public loaded: boolean;
+  public isLoading: boolean;
   constructor(
     private readonly sessionStorageService: SessionStorageService,
     private readonly subjectsService: SubjectsService,
@@ -22,11 +22,6 @@ export class AppComponent implements OnInit {
   ) {
     this.translate.addLangs(['en', 'ru']);
     this.translate.setDefaultLang(this.translate.getBrowserLang());
-    this.translate.langs.forEach(el => {
-      if (this.translate.defaultLang !== el) {
-        this.translate.reloadLang(el);
-      }
-    });
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -36,8 +31,9 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.isLoading = true;
     combineLatest([this.subjectsService.getSubjectList(), this.studentsService.getStudents()])
       .pipe(first())
-      .subscribe(_ => (this.loaded = true));
+      .subscribe(_ => (this.isLoading = false));
   }
 }

@@ -20,13 +20,13 @@ export class StorageInterceptorService implements HttpInterceptor {
         if (event instanceof HttpResponse && event.ok) {
           this.sessionStorageService.setItem(`${path}/${id}`, event.body);
         }
-      })
+      }),
     );
   }
 
   private handleGetRequest(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const { path, id }: { path: string; id: string } = parseURL(request.url);
-    if (id === undefined) {
+    if (id === undefined || id === null) {
       if (this.sessionStorageService.getItem(path)) {
         return of(new HttpResponse({ status: 200, body: this.sessionStorageService.getItem(path) }));
       }
@@ -36,7 +36,7 @@ export class StorageInterceptorService implements HttpInterceptor {
           if (event instanceof HttpResponse && event.ok) {
             this.sessionStorageService.setItem(path, event.body);
           }
-        })
+        }),
       );
     }
 
@@ -49,7 +49,7 @@ export class StorageInterceptorService implements HttpInterceptor {
         if (event instanceof HttpResponse && event.ok) {
           this.sessionStorageService.setItem(`${path}/${id}`, event.body);
         }
-      })
+      }),
     );
   }
 
@@ -73,7 +73,7 @@ export class StorageInterceptorService implements HttpInterceptor {
             this.sessionStorageService.setItem(path, [...this.sessionStorageService.getItem<any[]>(path), event.body]);
           }
         }
-      })
+      }),
     );
   }
 
@@ -85,22 +85,22 @@ export class StorageInterceptorService implements HttpInterceptor {
         if (event instanceof HttpResponse && event.ok) {
           this.sessionStorageService.deleteItem(path, id);
         }
-      })
+      }),
     );
   }
 
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (req.method === 'PATCH') {
-      return this.handlePatchRequest(req, next);
-    }
-    if (req.method === 'GET') {
-      return this.handleGetRequest(req, next);
-    }
-    if (req.method === 'POST') {
-      return this.handlePostRequest(req, next);
-    }
-    if (req.method === 'DELETE') {
-      return this.handleDeleteRequest(req, next);
+    switch (req.method) {
+      case 'PATCH':
+        return this.handlePatchRequest(req, next);
+      case 'GET':
+        return this.handleGetRequest(req, next);
+      case 'POST':
+        return this.handlePostRequest(req, next);
+      case 'DELETE':
+        return this.handleDeleteRequest(req, next);
+      default:
+        return next.handle(req);
     }
   }
 }

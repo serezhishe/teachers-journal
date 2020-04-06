@@ -4,7 +4,18 @@ type NumberOrString = number | string;
 
 export class TableSortHelper {
   private static compare(a: NumberOrString, b: NumberOrString, isAsc: boolean): number {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+    if (a === undefined || a === null) {
+      return 1;
+    }
+    if (b === undefined || b === null) {
+      return -1;
+    }
+    if (typeof a === 'number' && typeof b === 'number') {
+      return (a - b) * (isAsc ? 1 : -1);
+    }
+    if (typeof a === 'string' && typeof b === 'string') {
+      return (a.toLowerCase() < b.toLowerCase() ? -1 : 1) * (isAsc ? 1 : -1);
+    }
   }
 
   private static sort<T>(a: T, b: T, params: { direction: string; active: string }): number {

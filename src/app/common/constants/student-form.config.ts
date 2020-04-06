@@ -21,5 +21,5 @@ export const studentConfig = [
       label: 'description',
       required: false,
       validators: [],
-    }
+    },
   ];

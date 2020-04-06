@@ -1,4 +1,4 @@
-<ng-container *ngIf="loaded; else loadingTemplate">
+<ng-container *ngIf="!isLoading; else loadingTemplate">
   <app-panel></app-panel>
   <app-breadcrumbs></app-breadcrumbs>
   <router-outlet></router-outlet>

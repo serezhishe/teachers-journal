@@ -22,7 +22,7 @@ export class StudentsService {
     this.http
       .get<IStudent[]>(`${BASE_URL}/students`)
       .pipe(take(1))
-      .subscribe(students =>
+      .subscribe((students: IStudent[]) =>
         this.students$.next(
           students.map((student, index) => ({
             ...student,
@@ -42,7 +42,7 @@ export class StudentsService {
     this.http
       .post<IStudent>(`${BASE_URL}/students`, newStudent)
       .pipe(take(1))
-      .subscribe(response => {
+      .subscribe((response: IStudent) => {
         this.students$.next([
           ...this.students$.value,
           {
