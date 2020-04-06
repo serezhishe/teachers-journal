@@ -33,7 +33,7 @@ export class MapFixInterceptorService implements HttpInterceptor {
   public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const { path, id }: { path: string; id: string } = parseURL(request.url);
 
-    if (path !== 'subjects' || (path === 'subjects' && !id)) {
+    if (request.method === 'DELETE' || path !== 'subjects') {
       return next.handle(request);
     }
 
@@ -49,7 +49,7 @@ export class MapFixInterceptorService implements HttpInterceptor {
       );
     }
 
-    if (request.method === 'GET') {
+    if (request.method === 'GET' && id) {
       return next.handle(request).pipe(
         map(event => {
           if (event instanceof HttpResponse) {
@@ -60,5 +60,7 @@ export class MapFixInterceptorService implements HttpInterceptor {
         }),
       );
     }
+
+    return next.handle(request);
   }
 }

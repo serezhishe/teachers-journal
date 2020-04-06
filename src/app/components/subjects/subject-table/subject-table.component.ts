@@ -62,7 +62,8 @@ export class SubjectTableComponent implements OnInit {
           subjectTableColumns.lastName,
           subjectTableColumns.averageMark,
         ];
-        this.displayedColumns.push(...this.datesHeaders);
+        const sortedDateHeaders = this.datesHeaders.concat().sort();
+        this.displayedColumns.push(...sortedDateHeaders);
         const dataSource = this.subjectsService.getDataSource();
         this.form = this.createFormGroup(subjectPage, dataSource);
 
@@ -95,6 +96,10 @@ export class SubjectTableComponent implements OnInit {
 
   public addDate(): void {
     this.subjectsService.createDate();
+  }
+
+  public cancelEvent(event: MouseEvent): void {
+    event.stopImmediatePropagation();
   }
 
   public deleteStudent(studentId: string): void {

@@ -34,7 +34,7 @@ export class SubjectsService {
   }
 
   private addSubjectToList(newSubject: ISubjectInfo): void {
-    this.subjectIdList.set(newSubject.name, newSubject._id);
+    this.subjectIdList.set(newSubject.subjectName, newSubject._id);
     this.subjectsList$.next([...this.subjectsList$.value, newSubject]);
   }
 
@@ -47,7 +47,7 @@ export class SubjectsService {
         this.currentSubject$.next(response);
       });
 
-    return this.currentSubject$.pipe(filter((subject: ISubjectPage) => subject?.name === subjectName));
+    return this.currentSubject$.pipe(filter((subject: ISubjectPage) => subject?.subjectName === subjectName));
   }
 
   public updateCurrentSubject(newData: Partial<ISubjectPage>): void {
@@ -63,13 +63,11 @@ export class SubjectsService {
   }
 
   public createDate(): moment.Moment {
-    const dates = this.currentSubject$.value.dates;
+    const dates = this.currentSubject$.value.dates.concat();
+    dates.sort();
     const date = moment(dates[dates.length - 1]).add(1, 'days');
-    dates.push(date.toISOString());
-    this.currentSubject$.next({
-      ...this.currentSubject$.value,
-      dates,
-    });
+    this.currentSubject$.value.dates.push(date.toISOString());
+    this.currentSubject$.next(this.currentSubject$.value);
 
     return date;
   }
@@ -102,21 +100,21 @@ export class SubjectsService {
       .get<ISubjectInfo[]>(`${BASE_URL}/subjects`)
       .pipe(take(1))
       .subscribe((response: ISubjectInfo[]) => {
-        response.forEach((subjectInfo: ISubjectInfo) => this.subjectIdList.set(subjectInfo.name, subjectInfo._id));
+        response.forEach((subjectInfo: ISubjectInfo) => this.subjectIdList.set(subjectInfo.subjectName, subjectInfo._id));
         this.subjectsList$.next(response);
       });
 
     return this.subjectsList$.pipe(filter((list: ISubjectInfo[]) => list !== undefined && list !== null));
   }
 
-  public addSubject({ name, teacher, cabinet, description }: ISubjectInfo): void {
-    if (this.subjectsList$.value.map((subject: ISubjectInfo) => subject.name.toLowerCase()).includes(name.toLowerCase())) {
+  public addSubject({ subjectName, teacher, cabinet, description }: ISubjectInfo): void {
+    if (this.subjectsList$.value.map((subject: ISubjectInfo) => subject.subjectName.toLowerCase()).includes(subjectName.toLowerCase())) {
       alert('duplicate subject');
 
       return;
     }
     const newSubject: ISubjectPage = {
-      name,
+      subjectName,
       dates: [moment().toISOString()],
       teacher,
       marks: new Map<string, number[]>(),
@@ -125,7 +123,7 @@ export class SubjectsService {
       students: [],
     };
     this.studentsService.getCurrentStudents().map((student: IStudent) => {
-      newSubject.marks.set(student._id, []);
+      newSubject.marks.set(student._id, [null]);
       newSubject.students.push(student._id);
     });
     this.http
@@ -141,7 +139,7 @@ export class SubjectsService {
       .delete(`${BASE_URL}/subjects/${subjectId}`)
       .pipe(take(1))
       .subscribe(() => {
-        this.subjectIdList.delete(this.subjectsList$.value.find((subject: ISubjectPage) => subject._id === subjectId).name);
+        this.subjectIdList.delete(this.subjectsList$.value.find((subject: ISubjectPage) => subject._id === subjectId).subjectName);
         this.subjectsList$.next([...this.subjectsList$.value.filter((subject: ISubjectPage) => subject._id !== subjectId)]);
       });
   }

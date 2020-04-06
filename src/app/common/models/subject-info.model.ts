@@ -1,5 +1,5 @@
 export interface ISubjectInfo {
-  name: string;
+  subjectName: string;
   teacher: string;
   cabinet?: number;
   _id?: string;

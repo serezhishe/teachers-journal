@@ -1,8 +1,8 @@
 <input type="search" [formControl]="searchSubjects" />
 <div *ngIf="subjects$ | async as subjects; else loadingTemplate" class="container">
   <div *ngFor="let subject of subjects" appHover class="subject">
-    <a mat-raised-button [routerLink]="['subject', subject.name]">
-      {{ subject.name | titlecase }}
+    <a mat-raised-button [routerLink]="['subject', subject.subjectName]">
+      {{ subject.subjectName | titlecase }}
     </a>
     <app-button type="delete" class="delete" (click)="delete(subject._id)"></app-button>
   </div>
