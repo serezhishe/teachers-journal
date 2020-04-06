@@ -4,10 +4,10 @@
     <a mat-raised-button [routerLink]="['subject', subject.name]">
       {{ subject.name | titlecase }}
     </a>
-    <app-delete-button (click)="delete(subject._id)"></app-delete-button>
+    <app-button type="delete" class="delete" (click)="delete(subject._id)"></app-button>
   </div>
 </div>
-<app-add-button></app-add-button>
+<app-button type="add"></app-button>
 <ng-template #loadingTemplate>
   <mat-spinner></mat-spinner>
   {{'app.loading' | translate}}

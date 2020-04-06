@@ -9,7 +9,7 @@
     <th mat-header-cell mat-sort-header="index" *matHeaderCellDef>id</th>
     <td mat-cell *matCellDef="let element" appHover>
       {{ element.index + 1 }}
-      <app-delete-button (click)="delete(element)"></app-delete-button>
+      <app-button type="delete" (click)="delete(element)"></app-button>
     </td>
   </ng-container>
 
@@ -47,4 +47,4 @@
   {{ 'app.loading' | translate }}
 </ng-template>
 
-<app-add-button></app-add-button>
+<app-button type="add"></app-button>

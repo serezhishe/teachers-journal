@@ -1,0 +1,11 @@
+<span [ngSwitch]="type">
+  <button *ngSwitchCase="'delete'" mat-raised-button class="delete" type="button">
+    <mat-icon>delete</mat-icon>
+  </button>
+  <button *ngSwitchCase="'add'" mat-fab color="white" routerLink="./form">
+    <mat-icon>add</mat-icon>
+  </button>
+  <button *ngSwitchCase="'go-back'" mat-raised-button routerLink="../" type="button">
+    {{ 'app.cancel' | translate }}
+  </button>
+</span>
