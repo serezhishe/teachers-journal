@@ -105,4 +105,8 @@ export class SubjectTableComponent implements OnInit {
   public deleteStudent(studentId: string): void {
     this.subjectsService.removeStudentFromSubject(studentId);
   }
+
+  public cancelChanges(): void {
+    this.subjectsService.loadSubject(this.subjectName);
+  }
 }

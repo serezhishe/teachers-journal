@@ -52,7 +52,8 @@
       {{ 'app.subjects.teacherFieldError' | translate }}
     </mat-error>
   </mat-toolbar>
-  <button mat-raised-button type="submit">{{ 'app.save' | translate }}</button>
+  <app-button type="save"></app-button>
+  <app-button type="cancel" (click)="cancelChanges()"></app-button>
 </form>
 
 <ng-template #loading>

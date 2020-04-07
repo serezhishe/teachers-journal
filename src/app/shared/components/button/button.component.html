@@ -1,4 +1,4 @@
-<span [ngSwitch]="type">
+<div [ngSwitch]="type">
   <button *ngSwitchCase="'delete'" mat-raised-button class="delete" type="button">
     <mat-icon>delete</mat-icon>
   </button>
@@ -8,4 +8,10 @@
   <button *ngSwitchCase="'go-back'" mat-raised-button routerLink="../" type="button">
     {{ 'app.cancel' | translate }}
   </button>
-</span>
+  <button *ngSwitchCase="'cancel'" mat-raised-button type="button">
+    {{ 'app.cancel' | translate }}
+  </button>
+  <button *ngSwitchCase="'save'" type="submit" mat-raised-button type="button">
+    {{ 'app.save' | translate }}
+  </button>
+</div>

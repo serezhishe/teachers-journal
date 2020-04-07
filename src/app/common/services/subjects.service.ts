@@ -17,7 +17,10 @@ export class SubjectsService {
   private readonly subjectsList$: BehaviorSubject<ISubjectInfo[]>;
   private readonly subjectIdList: Map<string, string>;
 
-  constructor(private readonly studentsService: StudentsService, private readonly http: HttpClient) {
+  constructor(
+    private readonly studentsService: StudentsService,
+    private readonly http: HttpClient,
+  ) {
     this.currentSubject$ = new BehaviorSubject({} as ISubjectPage);
     this.subjectsList$ = new BehaviorSubject(null);
     this.subjectIdList = new Map();
@@ -38,14 +41,18 @@ export class SubjectsService {
     this.subjectsList$.next([...this.subjectsList$.value, newSubject]);
   }
 
-  public getSubject(subjectName: string): Observable<ISubjectPage> {
+  public loadSubject(subjectName: string): void {
     const id = this.subjectIdList.get(subjectName);
     this.http
-      .get<ISubjectPage>(`${BASE_URL}/subjects/${id}`)
-      .pipe(take(1))
-      .subscribe((response: ISubjectPage) => {
-        this.currentSubject$.next(response);
-      });
+    .get<ISubjectPage>(`${BASE_URL}/subjects/${id}`)
+    .pipe(take(1))
+    .subscribe((response: ISubjectPage) => {
+      this.currentSubject$.next(response);
+    });
+  }
+
+  public getSubject(subjectName: string): Observable<ISubjectPage> {
+    this.loadSubject(subjectName);
 
     return this.currentSubject$.pipe(filter((subject: ISubjectPage) => subject?.subjectName === subjectName));
   }
