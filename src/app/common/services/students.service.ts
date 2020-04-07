@@ -15,7 +15,7 @@ export class StudentsService {
   private readonly students$: BehaviorSubject<IStudent[]>;
 
   constructor(private readonly http: HttpClient, private readonly sessionStorageService: SessionStorageService) {
-    this.students$ = new BehaviorSubject(undefined);
+    this.students$ = new BehaviorSubject(null);
   }
 
   public getStudents(): Observable<IStudent[]> {
@@ -31,7 +31,7 @@ export class StudentsService {
         ),
       );
 
-    return this.students$.pipe(filter(students => students !== undefined));
+    return this.students$.pipe(filter((students: IStudent[]) => students !== undefined && students !== null));
   }
 
   public getCurrentStudents(): IStudent[] {

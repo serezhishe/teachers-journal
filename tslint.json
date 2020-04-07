@@ -192,7 +192,8 @@
     "strict-boolean-expressions": false,
     "only-arrow-functions": false,
     "no-void-expression": false,
-    "prefer-conditional-expression": false
+    "prefer-conditional-expression": false,
+    "no-object-literal-type-assertion": false
   },
   "rulesDirectory": []
 }

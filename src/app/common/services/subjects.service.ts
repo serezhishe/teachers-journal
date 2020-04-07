@@ -18,8 +18,8 @@ export class SubjectsService {
   private readonly subjectIdList: Map<string, string>;
 
   constructor(private readonly studentsService: StudentsService, private readonly http: HttpClient) {
-    this.currentSubject$ = new BehaviorSubject(undefined);
-    this.subjectsList$ = new BehaviorSubject(undefined);
+    this.currentSubject$ = new BehaviorSubject({} as ISubjectPage);
+    this.subjectsList$ = new BehaviorSubject(null);
     this.subjectIdList = new Map();
   }
 
@@ -76,7 +76,10 @@ export class SubjectsService {
     const dates = this.currentSubject$.value.dates;
     dates.splice(index, 1);
     this.currentSubject$.value.marks.forEach((marks, id) => {
-      this.currentSubject$.value.marks.set(id, marks.filter((_, i) => i !== index));
+      this.currentSubject$.value.marks.set(
+        id,
+        marks.filter((_, i) => i !== index),
+      );
     });
     this.currentSubject$.next({
       ...this.currentSubject$.value,
