@@ -6,6 +6,7 @@ import { filter, take } from 'rxjs/operators';
 import { BASE_URL } from '../constants/base-url';
 import { IStudent } from '../models';
 
+import { PopUpService } from './pop-up.service';
 import { SessionStorageService } from './session-storage.service';
 
 @Injectable({
@@ -14,7 +15,11 @@ import { SessionStorageService } from './session-storage.service';
 export class StudentsService {
   private readonly students$: BehaviorSubject<IStudent[]>;
 
-  constructor(private readonly http: HttpClient, private readonly sessionStorageService: SessionStorageService) {
+  constructor(
+    private readonly http: HttpClient,
+    private readonly sessionStorageService: SessionStorageService,
+    private readonly popUpService: PopUpService,
+  ) {
     this.students$ = new BehaviorSubject(null);
   }
 
@@ -43,6 +48,7 @@ export class StudentsService {
       .post<IStudent>(`${BASE_URL}/students`, newStudent)
       .pipe(take(1))
       .subscribe((response: IStudent) => {
+        this.popUpService.successMessage(`Student ${response.name} ${response.lastName} added to journal`);
         this.students$.next([
           ...this.students$.value,
           {
@@ -58,6 +64,7 @@ export class StudentsService {
       .delete(`${BASE_URL}/students/${studentToDelete._id}`)
       .pipe(take(1))
       .subscribe(_ => {
+        this.popUpService.successMessage(`Student ${studentToDelete.name} ${studentToDelete.lastName} deleted from journal`);
         this.students$.next(this.sessionStorageService.getItem<IStudent[]>('students').map((elem, index) => ({ ...elem, index })));
       });
   }
