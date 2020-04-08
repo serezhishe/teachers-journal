@@ -154,7 +154,13 @@ export class SubjectsService {
       .delete(`${BASE_URL}/subjects/${subjectId}`)
       .pipe(take(1))
       .subscribe(() => {
-        this.popUpService.successMessage(`Subject ${this.subjectIdList.get(subjectId)} was deleted`);
+        let subjectName: string;
+        for (const [name, id] of this.subjectIdList) {
+          if (id === subjectId) {
+            subjectName = name;
+          }
+        }
+        this.popUpService.successMessage(`Subject ${subjectName} was deleted`);
         this.subjectIdList.delete(this.subjectsList$.value.find((subject: ISubjectPage) => subject._id === subjectId).subjectName);
         this.subjectsList$.next([...this.subjectsList$.value.filter((subject: ISubjectPage) => subject._id !== subjectId)]);
       });

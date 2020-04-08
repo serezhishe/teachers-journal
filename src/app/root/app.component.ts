@@ -1,6 +1,6 @@
 import { Component, ComponentFactoryResolver, ComponentRef, HostListener, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { combineLatest, Subscription } from 'rxjs';
+import { combineLatest, timer } from 'rxjs';
 import { first } from 'rxjs/operators';
 
 import { PopUpService } from '../common/services/pop-up.service';
@@ -16,13 +16,13 @@ import { SuccessComponent } from '../components/success/success.component';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  public errorComponentRef: ComponentRef<ErrorComponent>;
-  public successComponentRef: ComponentRef<SuccessComponent>;
   public isLoading: boolean;
-  public popupSubscription: Subscription;
 
-  @ViewChild('popupcontainer', { read: ViewContainerRef })
-  public entry: ViewContainerRef;
+  @ViewChild('errorContainer', { read: ViewContainerRef })
+  public errorEntry: ViewContainerRef;
+
+  @ViewChild('successContainer', { read: ViewContainerRef })
+  public successEntry: ViewContainerRef;
 
   constructor(
     private readonly sessionStorageService: SessionStorageService,
@@ -42,26 +42,22 @@ export class AppComponent implements OnInit {
     event.preventDefault();
   }
 
-  public createErrorComponent(errorMessage: string): void {
-    this.entry.clear();
+  public createErrorComponent(errorMessage: string): ComponentRef<ErrorComponent> {
+    // this.errorEntry.clear();
     const factory = this.resolver.resolveComponentFactory(ErrorComponent);
-    this.errorComponentRef = this.entry.createComponent(factory);
-    this.errorComponentRef.instance.error = errorMessage;
+    const errorComponentRef = this.errorEntry.createComponent(factory);
+    errorComponentRef.instance.error = errorMessage;
+
+    return errorComponentRef;
   }
 
-  public createSuccessComponent(successMessage: string): void {
-    this.entry.clear();
+  public createSuccessComponent(successMessage: string): ComponentRef<SuccessComponent> {
+    // this.successEntry.clear();
     const factory = this.resolver.resolveComponentFactory(SuccessComponent);
-    this.successComponentRef = this.entry.createComponent(factory);
-    this.successComponentRef.instance.success = successMessage;
-  }
+    const successComponentRef = this.successEntry.createComponent(factory);
+    successComponentRef.instance.success = successMessage;
 
-  public destroyErrorComponent(): void {
-    this.errorComponentRef.destroy();
-  }
-
-  public destroySuccessComponent(): void {
-    this.successComponentRef.destroy();
+    return successComponentRef;
   }
 
   public ngOnInit(): void {
@@ -70,22 +66,14 @@ export class AppComponent implements OnInit {
       .pipe(first())
       .subscribe(_ => (this.isLoading = false));
 
-    this.popUpService
-      .getErrorsStream()
-      .subscribe(message => {
-        this.createErrorComponent(message);
-        setTimeout(() => {
-          this.destroyErrorComponent();
-        }, 3000);
-      });
+    this.popUpService.getErrorsStream().subscribe((message: string) => {
+      const errorRef = this.createErrorComponent(message);
+      timer(3000).subscribe(_ => errorRef.destroy());
+    });
 
-    this.popUpService
-      .getSuccessActionsStream()
-      .subscribe(message => {
-        this.createSuccessComponent(message);
-        setTimeout(() => {
-          this.destroySuccessComponent();
-        }, 3000);
-      });
+    this.popUpService.getSuccessActionsStream().subscribe((message: string) => {
+      const successRef = this.createSuccessComponent(message);
+      timer(3000).subscribe(_ => successRef.destroy());
+    });
   }
 }
