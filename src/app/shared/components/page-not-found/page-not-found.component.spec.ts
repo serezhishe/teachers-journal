@@ -1,14 +1,16 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { TranslateMockPipe } from '../../pipes/translate-mock-pipe.pipe';
+
 import { PageNotFoundComponent } from './page-not-found.component';
 
-describe('PageNotFoundComponent', () => {
+fdescribe('PageNotFoundComponent', () => {
   let component: PageNotFoundComponent;
   let fixture: ComponentFixture<PageNotFoundComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PageNotFoundComponent ],
+      declarations: [ PageNotFoundComponent, TranslateMockPipe ],
     })
     .compileComponents();
   }));
@@ -21,5 +23,14 @@ describe('PageNotFoundComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should contain status code and message', () => {
+    expect(fixture.nativeElement.querySelector('.container h2').innerText).toEqual('404');
+    expect(fixture.nativeElement.querySelector('.container h3').innerText).toEqual('app.pageNotFound.message');
+  });
+
+  it('should contain link to start page', () => {
+    expect(fixture.nativeElement.querySelector('.container a').innerText).toEqual('app.pageNotFound.navigation');
   });
 });

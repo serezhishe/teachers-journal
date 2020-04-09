@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ErrorComponent } from './error.component';
 
-describe('ErrorComponent', () => {
+fdescribe('ErrorComponent', () => {
   let component: ErrorComponent;
   let fixture: ComponentFixture<ErrorComponent>;
 
@@ -21,5 +21,12 @@ describe('ErrorComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should contain errorMessage', () => {
+    const testMessage = 'test error';
+    component.error = testMessage;
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('div h2').innerText).toEqual(testMessage);
   });
 });
