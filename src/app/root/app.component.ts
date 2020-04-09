@@ -68,7 +68,7 @@ export class AppComponent implements OnInit {
 
     this.popUpService.getErrorsStream().subscribe((message: string) => {
       const errorRef = this.createErrorComponent(message);
-      timer(3000).subscribe(_ => errorRef.destroy());
+      timer(10000).subscribe(_ => errorRef.destroy());
     });
 
     this.popUpService.getSuccessActionsStream().subscribe((message: string) => {

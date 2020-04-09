@@ -1,3 +1,11 @@
-h2 {
-  color: red;
+.error {
+  display: inline-block;
+  margin: auto;
+  width: min-content;
+  position: relative;
+  bottom: 0;
+  background-color: rgba(245, 176, 176, 0.589);
+  h2 {
+    color: red;
+  }
 }
