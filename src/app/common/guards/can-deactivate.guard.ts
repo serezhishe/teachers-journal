@@ -7,7 +7,7 @@ export interface ICanComponentDeactivate {
  }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CanDeactivateGuard implements CanDeactivate<ICanComponentDeactivate> {
   public canDeactivate(component: ICanComponentDeactivate): Observable<boolean> | Promise<boolean> | boolean {

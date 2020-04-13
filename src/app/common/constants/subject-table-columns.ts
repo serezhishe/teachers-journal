@@ -1,5 +1,5 @@
-export const subjectTableColumns = [
-  'name',
-  'lastName',
-  'averageMark'
-];
+export enum subjectTableColumns {
+  'name' = 'name',
+  'lastName' = 'lastName',
+  'averageMark' = 'averageMark',
+}

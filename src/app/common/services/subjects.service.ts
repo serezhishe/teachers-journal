@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 
 import { BASE_URL } from '../constants';
-import { IStudentMarks, ISubjectInfo, ISubjectPage } from '../models';
+import { IStudent, IStudentMarks, ISubjectInfo, ISubjectPage } from '../models';
 
 import { StudentsService } from './students.service';
 
@@ -13,74 +13,68 @@ import { StudentsService } from './students.service';
   providedIn: 'root',
 })
 export class SubjectsService {
-  private readonly currentSubject$: BehaviorSubject<ISubjectPage & ISubjectInfo>;
+  private readonly currentSubject$: BehaviorSubject<ISubjectPage>;
   private readonly subjectsList$: BehaviorSubject<ISubjectInfo[]>;
   private readonly subjectIdList: Map<string, string>;
 
-  constructor(private readonly studentsService: StudentsService, private readonly http: HttpClient) {
-    this.currentSubject$ = new BehaviorSubject(undefined);
-    this.subjectsList$ = new BehaviorSubject(undefined);
+  constructor(
+    private readonly studentsService: StudentsService,
+    private readonly http: HttpClient,
+  ) {
+    this.currentSubject$ = new BehaviorSubject({} as ISubjectPage);
+    this.subjectsList$ = new BehaviorSubject(null);
     this.subjectIdList = new Map();
   }
 
   private getAverageMark(marks: number[]): number {
-    let tmp = marks.filter(value => value || value === 0);
-    if (tmp.length === 0) {
-      tmp = [0];
+    let definedMarks = marks.filter(value => value || value === 0);
+    if (definedMarks.length === 0) {
+      definedMarks = [0];
     }
+    const result = +(definedMarks.reduce((sum, mark) => sum + mark, 0) / definedMarks.length).toFixed(1);
 
-    return +(tmp.reduce((sum, mark) => sum + mark, 0) / tmp.length).toFixed(1);
+    return result;
   }
 
   private addSubjectToList(newSubject: ISubjectInfo): void {
-    this.subjectIdList.set(newSubject.name, newSubject._id);
+    this.subjectIdList.set(newSubject.subjectName, newSubject._id);
     this.subjectsList$.next([...this.subjectsList$.value, newSubject]);
   }
 
-  public getSubject(subjectName: string): Observable<ISubjectPage & ISubjectInfo> {
+  public loadSubject(subjectName: string): void {
     const id = this.subjectIdList.get(subjectName);
     this.http
-      .get<ISubjectPage & ISubjectInfo>(`${BASE_URL}/subjects/${id}`)
-      .pipe(take(1))
-      .subscribe(response => {
-        this.currentSubject$.next(response);
-      });
-
-    return this.currentSubject$.pipe(filter(subject => subject?.name === subjectName));
+    .get<ISubjectPage>(`${BASE_URL}/subjects/${id}`)
+    .pipe(take(1))
+    .subscribe((response: ISubjectPage) => {
+      this.currentSubject$.next(response);
+    });
   }
 
-  public updateCurrentSubject(newData: Partial<ISubjectPage & ISubjectInfo>): void {
+  public getSubject(subjectName: string): Observable<ISubjectPage> {
+    this.loadSubject(subjectName);
+
+    return this.currentSubject$.pipe(filter((subject: ISubjectPage) => subject?.subjectName === subjectName));
+  }
+
+  public updateCurrentSubject(newData: Partial<ISubjectPage>): void {
     const id = this.currentSubject$.value.subjectId;
     newData.marks = new Map(Object.entries(newData.marks));
 
-    // if (
-    //   JSON.stringify({
-    //     ...this.currentSubject$.value,
-    //     ...newData,
-    //   }) === JSON.stringify(this.currentSubject$.value)
-    // ) {
-    //   return;
-    // }
     this.http
-      .patch<ISubjectPage & ISubjectInfo>(
-        `${BASE_URL}/subjects/${id}`,
-        { ...this.currentSubject$.value, ...newData },
-        { observe: 'response' },
-      )
+      .patch<ISubjectPage>(`${BASE_URL}/subjects/${id}`, { ...this.currentSubject$.value, ...newData }, { observe: 'response' })
       .pipe(take(1))
-      .subscribe((response: HttpResponse<ISubjectPage & ISubjectInfo>) => {
+      .subscribe((response: HttpResponse<ISubjectPage>) => {
         this.currentSubject$.next(response.body);
       });
   }
 
   public createDate(): moment.Moment {
-    const dates = this.currentSubject$.value.dates;
+    const dates = this.currentSubject$.value.dates.concat();
+    dates.sort();
     const date = moment(dates[dates.length - 1]).add(1, 'days');
-    dates.push(date.toISOString());
-    this.currentSubject$.next({
-      ...this.currentSubject$.value,
-      dates,
-    });
+    this.currentSubject$.value.dates.push(date.toISOString());
+    this.currentSubject$.next(this.currentSubject$.value);
 
     return date;
   }
@@ -88,7 +82,12 @@ export class SubjectsService {
   public deleteDate(index: number): void {
     const dates = this.currentSubject$.value.dates;
     dates.splice(index, 1);
-
+    this.currentSubject$.value.marks.forEach((marks, id) => {
+      this.currentSubject$.value.marks.set(
+        id,
+        marks.filter((_, i) => i !== index),
+      );
+    });
     this.currentSubject$.next({
       ...this.currentSubject$.value,
       dates,
@@ -100,8 +99,8 @@ export class SubjectsService {
     const students = this.studentsService.getCurrentStudents();
 
     return students
-      .filter(student => currentSubject.students.includes(student._id))
-      .map(student => ({
+      .filter((student: IStudent) => currentSubject.students.includes(student._id))
+      .map((student: IStudent) => ({
         marks: currentSubject.marks.get(student._id),
         averageMark: this.getAverageMark(currentSubject.marks.get(student._id)),
         student,
@@ -112,37 +111,37 @@ export class SubjectsService {
     this.http
       .get<ISubjectInfo[]>(`${BASE_URL}/subjects`)
       .pipe(take(1))
-      .subscribe(response => {
-        response.forEach(subjectInfo => this.subjectIdList.set(subjectInfo.name, subjectInfo._id));
+      .subscribe((response: ISubjectInfo[]) => {
+        response.forEach((subjectInfo: ISubjectInfo) => this.subjectIdList.set(subjectInfo.subjectName, subjectInfo._id));
         this.subjectsList$.next(response);
       });
 
-    return this.subjectsList$.pipe(filter(list => list !== undefined));
+    return this.subjectsList$.pipe(filter((list: ISubjectInfo[]) => list !== undefined && list !== null));
   }
 
-  public addSubject({ name, teacher, cabinet, description }: ISubjectInfo): void {
-    if (this.subjectsList$.value.map(subject => subject.name.toLowerCase()).includes(name.toLowerCase())) {
+  public addSubject({ subjectName, teacher, cabinet, description }: ISubjectInfo): void {
+    if (this.subjectsList$.value.map((subject: ISubjectInfo) => subject.subjectName.toLowerCase()).includes(subjectName.toLowerCase())) {
       alert('duplicate subject');
 
       return;
     }
-    const tmp = {
-      name,
-      dates: [moment()],
+    const newSubject: ISubjectPage = {
+      subjectName,
+      dates: [moment().toISOString()],
       teacher,
       marks: new Map<string, number[]>(),
       cabinet,
       description,
       students: [],
     };
-    this.studentsService.getCurrentStudents().map(student => {
-      tmp.marks.set(student._id, []);
-      tmp.students.push(student._id);
+    this.studentsService.getCurrentStudents().map((student: IStudent) => {
+      newSubject.marks.set(student._id, [null]);
+      newSubject.students.push(student._id);
     });
     this.http
-      .post<ISubjectInfo>(`${BASE_URL}/subjects`, tmp)
+      .post<ISubjectInfo>(`${BASE_URL}/subjects`, newSubject)
       .pipe(take(1))
-      .subscribe(response => {
+      .subscribe((response: ISubjectInfo) => {
         this.addSubjectToList(response);
       });
   }
@@ -152,15 +151,15 @@ export class SubjectsService {
       .delete(`${BASE_URL}/subjects/${subjectId}`)
       .pipe(take(1))
       .subscribe(() => {
-        this.subjectIdList.delete(this.subjectsList$.value.find(subject => subject._id === subjectId).name);
-        this.subjectsList$.next([...this.subjectsList$.value.filter(subject => subject._id !== subjectId)]);
+        this.subjectIdList.delete(this.subjectsList$.value.find((subject: ISubjectPage) => subject._id === subjectId).subjectName);
+        this.subjectsList$.next([...this.subjectsList$.value.filter((subject: ISubjectPage) => subject._id !== subjectId)]);
       });
   }
 
   public removeStudentFromSubject(id: string): void {
     this.currentSubject$.next({
       ...this.currentSubject$.value,
-      students: this.currentSubject$.value.students.filter(studentId => studentId !== id),
+      students: this.currentSubject$.value.students.filter((studentId: string) => studentId !== id),
     });
   }
 }

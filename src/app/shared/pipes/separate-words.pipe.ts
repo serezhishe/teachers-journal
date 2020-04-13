@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'separateWords'
+  name: 'separateWords',
 })
 export class SeparateWordsPipe implements PipeTransform {
 

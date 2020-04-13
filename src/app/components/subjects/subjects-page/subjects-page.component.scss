@@ -11,10 +11,9 @@
     width: 100%;
 }
 
-app-delete-button {
-    color: red;
+app-button[type="delete"] {
     display: none;
 }
-.shown app-delete-button {
+.shown app-button[type="delete"] {
    display: inline-block;  
 }
