@@ -65,7 +65,7 @@ export class SubjectsService {
       .patch<ISubjectPage & ISubjectInfo>(
         `${BASE_URL}/subjects/${id}`,
         { ...this.currentSubject$.value, ...newData },
-        { observe: 'response' }
+        { observe: 'response' },
       )
       .pipe(take(1))
       .subscribe((response: HttpResponse<ISubjectPage & ISubjectInfo>) => {

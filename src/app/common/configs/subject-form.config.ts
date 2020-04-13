@@ -3,7 +3,7 @@ import { Validators } from '@angular/forms';
 export const subjectConfig = [
     {
       type: 'text',
-      label: 'name',
+      label: 'subjectName',
       required: true,
       validators: [Validators.pattern(/^[A-Za-zА-яа-я\s]+$/), Validators.required],
     }, {
@@ -21,5 +21,5 @@ export const subjectConfig = [
       label: 'description',
       required: false,
       validators: [],
-    }
+    },
   ];

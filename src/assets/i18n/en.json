@@ -1,0 +1,50 @@
+{
+  "app": {
+    "loading": "LOADING...",
+    "title": "Teacher's Journal",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "save": "Save",
+    "languages": {
+      "ru": "Russian",
+      "en": "English"
+    },
+    "tabs": {
+      "students": "students",
+      "subjects": "subjects",
+      "statistics": "statistics",
+      "export": "export"
+    },
+    "form": {
+      "add": "Add",
+      "required": "is required",
+      "incorrectSymbols": "includes incorrect symbols",
+      "description": "Description",
+      "name": "Name",
+      "subjectName": "Name",
+      "lastName": "Last Name",
+      "teacher": "Teacher",
+      "address": "Address",
+      "cabinet": "Cabinet"
+    },
+    "pageNotFound": {
+      "message": "Sorry! Page Not Found",
+      "navigation": "Go back at students page"
+    },
+    "students": {
+      "name": "Name",
+      "lastName": "Last Name",
+      "address": "Address",
+      "description": "Description"
+    },
+    "subjects": {
+      "markRangeError": "Mark must be between 0 and 10",
+      "averageMark": "Average mark",
+      "addDate": "Add date",
+      "date": "Date",
+      "duplicateDates": "No duplicate dates",
+      "teacher": "Teacher",
+      "teacherFieldError": "Teacher's field cannot contain numbers and special symbols"
+    }
+  }
+}

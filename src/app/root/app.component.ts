@@ -1,4 +1,5 @@
 import { Component, HostListener, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { combineLatest } from 'rxjs';
 import { first } from 'rxjs/operators';
 
@@ -12,13 +13,21 @@ import { SubjectsService } from '../common/services/subjects.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  public title: string;
   public loaded: boolean;
   constructor(
     private readonly sessionStorageService: SessionStorageService,
     private readonly subjectsService: SubjectsService,
-    private readonly studentsService: StudentsService
-  ) {}
+    private readonly studentsService: StudentsService,
+    private readonly translate: TranslateService,
+  ) {
+    this.translate.addLangs(['en', 'ru']);
+    this.translate.setDefaultLang(this.translate.getBrowserLang());
+    this.translate.langs.forEach(el => {
+      if (this.translate.defaultLang !== el) {
+        this.translate.reloadLang(el);
+      }
+    });
+  }
 
   @HostListener('window:beforeunload', ['$event'])
   public unloadHandler(event: Event): void {
@@ -27,7 +36,6 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.title = "Teacher's Journal";
     combineLatest([this.subjectsService.getSubjectList(), this.studentsService.getStudents()])
       .pipe(first())
       .subscribe(_ => (this.loaded = true));

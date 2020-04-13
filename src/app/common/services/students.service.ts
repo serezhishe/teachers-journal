@@ -27,8 +27,8 @@ export class StudentsService {
           students.map((student, index) => ({
             ...student,
             index,
-          }))
-        )
+          })),
+        ),
       );
 
     return this.students$.pipe(filter(students => students !== undefined));

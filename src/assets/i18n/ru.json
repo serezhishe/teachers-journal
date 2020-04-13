@@ -1,0 +1,50 @@
+{
+  "app": {
+    "loading": "ЗАГРУЗКА...",
+    "title": "Учительский журнал",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "save": "Сохранить",
+    "languages": {
+      "ru": "Русский",
+      "en": "Английский"
+    },
+    "tabs": {
+      "students": "студениы",
+      "subjects": "предметы",
+      "statistics": "статистика",
+      "export": "экспорт"
+    },
+    "form": {
+      "add": "Добавить",
+      "required": "необходимо",
+      "incorrectSymbols": "содержит некорректные символы",
+      "description": "Описание",
+      "name": "Имя",
+      "subjectName": "Название",
+      "lastName": "Фамилия",
+      "teacher": "Учитель",
+      "address": "Адресс",
+      "cabinet": "Кабинет"
+    },
+    "pageNotFound": {
+      "message": "Извините! Страница не найдена",
+      "navigation": "Вернуться на страницу студентов"
+    },
+    "students": {
+      "name": "Имя",
+      "lastName": "Фамилия",
+      "address": "Адресс",
+      "description": "Описание"
+    },
+    "subjects": {
+      "markRangeError": "Оценка должна быть от 0 до 10",
+      "averageMark": "Средняя оценка",
+      "addDate": "Добавить дату",
+      "date": "Дата",
+      "duplicateDates": "Нельзя повторять даты",
+      "teacher": "Учитель",
+      "teacherFieldError": "Поле учителя не может содержать числа и специальные символы"
+    }
+  }
+}
