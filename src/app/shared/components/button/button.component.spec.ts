@@ -1,9 +1,6 @@
-import { Location } from '@angular/common';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
 import { Component } from '@angular/core';
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { TranslateMockPipe } from '../../pipes/translate-mock-pipe.pipe';
@@ -15,7 +12,6 @@ import { ButtonComponent } from './button.component';
 })
 class TestHostComponent {
   public type: string;
-  constructor(public readonly location: Location) {}
 }
 // tslint:disable-next-line: max-classes-per-file
 @Component({
@@ -26,33 +22,21 @@ class DummyComponent {}
 fdescribe('ButtonComponent', () => {
   let testHost: TestHostComponent;
   let testHostFixture: ComponentFixture<TestHostComponent>;
-  let router: Router;
-  let location: Location;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ButtonComponent, TestHostComponent, TranslateMockPipe, DummyComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      imports: [
-        RouterTestingModule.withRoutes([
-          { path: 'form', component: DummyComponent },
-          { path: 'prefix', component: DummyComponent },
-          { path: 'prefix/test', component: TestHostComponent },
-          { path: 'prefix/test/form', component: DummyComponent },
-         ]),
-      ],
+      imports: [RouterTestingModule.withRoutes([{ path: 'form', component: DummyComponent }])],
     }).compileComponents();
-    router = TestBed.inject(Router);
-    location = TestBed.inject(Location);
-    router.initialNavigation();
-    router.navigateByUrl('prefix/test');
   }));
 
   beforeEach(() => {
     testHostFixture = TestBed.createComponent(TestHostComponent);
     testHost = testHostFixture.componentInstance;
+    testHostFixture.detectChanges();
   });
 
-  describe('should have a proper type', () => {
+  fdescribe('should have a proper type', () => {
     it('save', () => {
       testHost.type = 'save';
       testHostFixture.detectChanges();
@@ -66,26 +50,21 @@ fdescribe('ButtonComponent', () => {
       expect(testHostFixture.nativeElement.querySelector('div button').innerText).toEqual('delete');
     });
 
-    fdescribe('add', () => {
+    describe('add', () => {
       it('contain proper text', () => {
         testHost.type = 'add';
         testHostFixture.detectChanges();
-        expect(testHostFixture.nativeElement.querySelector('div button').innerText).toEqual('add');
+        expect(testHostFixture.nativeElement.querySelector('div a').innerText).toEqual('add');
       });
 
-      it('contain rel link to form', fakeAsync(() => {
+      it('contain rel link to form', () => {
         testHost.type = 'add';
         testHostFixture.detectChanges();
 
-        const button = testHostFixture.debugElement.query(By.css('div button'));
-        button.nativeElement.click();
-        tick();
+        const href = testHostFixture.nativeElement.querySelector('div a').getAttribute('href');
 
-        testHostFixture.whenStable().then(() => {
-          expect(location.path()).toBe('prefix/test/form'); // actually '/form'
-        });
-        expect(true).toBeTruthy();
-      }));
+        expect(href).toBe('/form');
+      });
     });
 
     it('cancel', () => {
@@ -94,16 +73,20 @@ fdescribe('ButtonComponent', () => {
       expect(testHostFixture.nativeElement.querySelector('div button').innerText).toEqual('app.cancel');
     });
 
-    fdescribe('go-back', () => {
+    describe('go-back', () => {
       it('contain proper text', () => {
         testHost.type = 'go-back';
         testHostFixture.detectChanges();
-        expect(testHostFixture.nativeElement.querySelector('div button').innerText).toEqual('app.cancel');
+
+        expect(testHostFixture.nativeElement.querySelector('div a').innerText).toEqual('app.cancel');
       });
       it('contain rel link to form', () => {
         testHost.type = 'go-back';
         testHostFixture.detectChanges();
-        expect(true).toBeTruthy();
+
+        const href = testHostFixture.nativeElement.querySelector('div a').getAttribute('href');
+
+        expect(href).toBe('/');
       });
     });
   });
