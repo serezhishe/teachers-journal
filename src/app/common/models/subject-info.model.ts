@@ -1,8 +1,7 @@
-import * as moment from 'moment';
-
 export interface ISubjectInfo {
-  subject: string;
-  dates: moment.Moment[];
+  name: string;
   teacher: string;
-  marks: number[][];
+  cabinet?: number;
+  _id: string;
+  description: string;
 }

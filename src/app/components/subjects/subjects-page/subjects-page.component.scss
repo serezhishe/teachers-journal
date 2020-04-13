@@ -1,8 +1,20 @@
-div {
+.container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 30px 10vw;
     width: 70%;
     margin-left: auto;
     margin-right: auto;
+}
+
+.subject {
+    width: 100%;
+}
+
+app-delete-button {
+    color: red;
+    display: none;
+}
+.shown app-delete-button {
+   display: inline-block;  
 }

@@ -1,3 +1,22 @@
 table {
     width: 100%;
   }
+
+app-delete-button {
+    display: none;
+}
+.shown app-delete-button {
+   display: inline-block;  
+}
+
+th {
+  width: 20%;
+}
+
+.search {
+  display: none;
+}
+
+.shown .search {
+  display: inline-block;
+}

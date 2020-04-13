@@ -1,2 +1,9 @@
-<app-panel [title]="title"></app-panel>
-<router-outlet></router-outlet>
+<ng-container *ngIf="loaded; else loadingTemplate">
+  <app-panel [title]="title"></app-panel>
+  <app-breadcrumbs></app-breadcrumbs>
+  <router-outlet></router-outlet>
+</ng-container>
+<ng-template #loadingTemplate>
+  <mat-spinner></mat-spinner>
+  LOADING...
+</ng-template>
