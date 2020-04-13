@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { TranslateMockPipe } from '../../pipes/translate-mock-pipe.pipe';
+import { TranslateMockPipe } from '../../pipes/translate-mock.pipe';
 
 import { PageNotFoundComponent } from './page-not-found.component';
 
