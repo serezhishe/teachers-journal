@@ -33,7 +33,11 @@ export class AppComponent implements OnInit {
     private readonly popUpService: PopUpService,
   ) {
     this.translate.addLangs(['en', 'ru']);
-    this.translate.setDefaultLang(this.translate.getBrowserLang());
+    let defaultLang = this.translate.getBrowserLang();
+    if (defaultLang !== 'en' && defaultLang !== 'ru') {
+      defaultLang = 'en';
+    }
+    this.translate.setDefaultLang(defaultLang);
   }
 
   @HostListener('window:beforeunload', ['$event'])
