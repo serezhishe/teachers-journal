@@ -15,11 +15,7 @@ input:focus {
   outline: none;
 }
 
-.datepicker{
-  width: fit-content;
-}
-
-.sticky{
+.sticky {
   min-width: 100px;
 }
 
@@ -27,11 +23,12 @@ mat-error {
   font-size: smaller;
 }
 
-app-button[type="delete"] {
+app-button[type='delete'] {
   color: red;
   display: none;
-  width: 50%;
+  width: 30%;
 }
-.shown app-button[type="delete"] {
- display: inline-block;  
+
+.shown app-button[type='delete'] {
+  display: inline-block;
 }
