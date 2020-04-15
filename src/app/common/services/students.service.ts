@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 
 import { BASE_URL } from '../constants/base-url';
 import { IStudent } from '../models';
@@ -15,14 +15,14 @@ export class StudentsService {
   private readonly students$: BehaviorSubject<IStudent[]>;
 
   constructor(private readonly http: HttpClient, private readonly sessionStorageService: SessionStorageService) {
-    this.students$ = new BehaviorSubject(undefined);
+    this.students$ = new BehaviorSubject(null);
   }
 
   public getStudents(): Observable<IStudent[]> {
     this.http
       .get<IStudent[]>(`${BASE_URL}/students`)
       .pipe(take(1))
-      .subscribe(students =>
+      .subscribe((students: IStudent[]) =>
         this.students$.next(
           students.map((student, index) => ({
             ...student,
@@ -31,7 +31,7 @@ export class StudentsService {
         ),
       );
 
-    return this.students$.pipe(filter(students => students !== undefined));
+    return this.students$.pipe(filter((students: IStudent[]) => students !== undefined && students !== null));
   }
 
   public getCurrentStudents(): IStudent[] {
@@ -42,7 +42,7 @@ export class StudentsService {
     this.http
       .post<IStudent>(`${BASE_URL}/students`, newStudent)
       .pipe(take(1))
-      .subscribe(response => {
+      .subscribe((response: IStudent) => {
         this.students$.next([
           ...this.students$.value,
           {

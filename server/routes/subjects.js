@@ -31,7 +31,7 @@ api.get('/:id', asyncHandler(async (req, res) => {
 }));
 
 api.post('/', asyncHandler(async (req, res) => {
-  const { id, type, name, marks, dates, teacher, cabinet, description } = req.body;
+  const { id, type, subjectName, marks, dates, teacher, cabinet, description } = req.body;
 
   if (type === 'get') {
     if (id) {
@@ -39,36 +39,23 @@ api.post('/', asyncHandler(async (req, res) => {
     
       res.send(subject);
     } else {
-      res.send((await getAll()).map(elem => ({name: elem.name, _id: elem._id})))
+      res.send((await getAll()).map(elem => ({subjectName: elem.subjectName, _id: elem._id})))
     }
   } else {
-    if ( !name || !marks || !dates || !teacher ) {
+    if ( !subjectName || !marks || !dates || !teacher ) {
       return res.sendStatus(400);
     }
 
-    res.send(await createSubject({ name, marks, dates, teacher, cabinet, description }));
+    res.send(await createSubject({ subjectName, marks, dates, teacher, cabinet, description }));
   
   }
 }));
 
-// api.put('/:id', validateIdParam, asyncHandler(async (req, res) => {
-//   const { id } = req.params;
-//   const { name, marks, dates, teacher, cabinet } = req.body;
-
-//   if ( !name || !marks || !dates || !teacher ) {
-//     return res.sendStatus(400);
-//   }
-
-//   await updateSubject({ id, name, marks, dates, teacher, cabinet });
-
-//   res.send(200);
-// }));
-
 api.patch('/:id', validateIdParam, asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name, marks, dates, teacher, cabinet, description, students } = req.body;
+  const { subjectName, marks, dates, teacher, cabinet, description, students } = req.body;
 
-  res.status(200).send(await updateSubject({ id, name, marks, dates, teacher, cabinet, description, students }));
+  res.status(200).send(await updateSubject({ id, subjectName, marks, dates, teacher, cabinet, description, students }));
 }));
 
 api.delete('/:id', validateIdParam, asyncHandler(async (req, res) => {

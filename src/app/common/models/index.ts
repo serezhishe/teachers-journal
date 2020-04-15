@@ -3,3 +3,4 @@ export { IStudent } from './student.model';
 export { ISubjectInfo } from './subject-info.model';
 export { IFormConfig } from './form-config.model';
 export { ISubjectPage } from './subject-page.model';
+export { ISubjectFormGroup } from './subject-group.model';

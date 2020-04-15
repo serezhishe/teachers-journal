@@ -8,7 +8,7 @@ describe('PanelComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PanelComponent ]
+      declarations: [ PanelComponent ],
     })
     .compileComponents();
   }));

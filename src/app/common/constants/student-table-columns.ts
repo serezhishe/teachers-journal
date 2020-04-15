@@ -1,7 +1,7 @@
-export const studentTableColumns = [
-    'index',
-    'name',
-    'lastName',
-    'address',
-    'description',
-];
+export enum studentTableColumns {
+    'index' = 'index',
+    'name' = 'name',
+    'lastName' = 'lastName',
+    'address' = 'address',
+    'description' = 'description',
+}

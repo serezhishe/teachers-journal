@@ -6,14 +6,14 @@ import { PageNotFoundComponent } from './shared/components/page-not-found/page-n
 
 const routes: Routes = [
   { path: '', redirectTo: 'students', pathMatch: 'full'},
-  { path: '**', component: PageNotFoundComponent }
+  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
   providers: [
-    CanDeactivateGuard
-  ]
+    CanDeactivateGuard,
+  ],
 })
 export class AppRoutingModule { }

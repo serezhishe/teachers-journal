@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { studentConfig } from '../../../common/configs';
+import { studentConfig } from '../../../common/constants';
 import { IFormConfig, IStudent } from '../../../common/models';
 import { StudentsService } from '../../../common/services/students.service';
 import { FormComponent } from '../../../shared/components/form/form.component';

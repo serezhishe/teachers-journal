@@ -21,14 +21,14 @@ export class BreadcrumbsComponent implements OnInit {
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
-        distinctUntilChanged()
+        distinctUntilChanged(),
       )
       .subscribe(() => {
-        this.breadcrumbs = this.buildBreadCrumb(this.activatedRoute.root);
+        this.breadcrumbs = this.buildBreadCrumbs(this.activatedRoute.root);
       });
   }
 
-  public buildBreadCrumb(route: ActivatedRoute): IBreadCrumb[] {
+  public buildBreadCrumbs(route: ActivatedRoute): IBreadCrumb[] {
     let url: string = '';
     const breadcrumbs: IBreadCrumb[] = [];
     while (route) {

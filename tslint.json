@@ -24,7 +24,7 @@
     ],
     "curly": true,
     "eofline": true,
-    "forin": true,
+    "forin": false,
     "indent": [
       true,
       "spaces"
@@ -191,7 +191,9 @@
     "no-unnecessary-class": false,
     "strict-boolean-expressions": false,
     "only-arrow-functions": false,
-    "no-void-expression": false
+    "no-void-expression": false,
+    "prefer-conditional-expression": false,
+    "no-object-literal-type-assertion": false
   },
   "rulesDirectory": []
 }

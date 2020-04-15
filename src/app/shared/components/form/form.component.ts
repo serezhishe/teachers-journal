@@ -2,14 +2,14 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, switchMap, switchMapTo, tap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 
 import { IFormConfig } from '../../../common/models';
 
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
-  styleUrls: ['./form.component.scss']
+  styleUrls: ['./form.component.scss'],
 })
 export class FormComponent implements OnInit {
   @Input()
@@ -49,7 +49,7 @@ export class FormComponent implements OnInit {
             }
 
             return of(window.confirm('Do you want to leave the page?'));
-          })
+          }),
         );
       }
 

@@ -8,7 +8,7 @@ describe('MarkInputComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MarkInputComponent ]
+      declarations: [ MarkInputComponent ],
     })
     .compileComponents();
   }));
