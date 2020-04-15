@@ -1,5 +1,5 @@
 <div class="container">
-    <h2>404</h2>
-    <h3>Sorry! Page Not Found</h3>
-    <a mat-button [routerLink]="['/students']">Go back at students page</a>
+  <h2>404</h2>
+  <h3>{{ 'app.pageNotFound.message' | translate }}</h3>
+  <a mat-button [routerLink]="['/students']">{{ 'app.pageNotFound.navigation' | translate }}</a>
 </div>

@@ -13,12 +13,12 @@ const routes: Routes = [
     children: [
       {path: '', component: StudentsTableComponent },
       {path: 'form', component: StudentFormComponent, canDeactivate: [CanDeactivateGuard], data: {breadcrumb: 'form'}},
-    ]
+    ],
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class StudentsRoutingModule { }

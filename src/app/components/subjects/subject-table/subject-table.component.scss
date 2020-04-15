@@ -27,11 +27,11 @@ mat-error {
   font-size: smaller;
 }
 
-app-delete-button {
+app-button[type="delete"] {
   color: red;
   display: none;
   width: 50%;
 }
-.shown app-delete-button {
+.shown app-button[type="delete"] {
  display: inline-block;  
 }

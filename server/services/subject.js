@@ -3,8 +3,8 @@ const SubjectPage = require('../models/subject-page');
 const Student = require('../models/student');
 
 
-exports.createSubject = async function ({ name, marks, dates, teacher, description, cabinet } = {}) {
-  const subject = new Subject({ name, teacher, description, cabinet });
+exports.createSubject = async function ({ subjectName, marks, dates, teacher, description, cabinet } = {}) {
+  const subject = new Subject({ subjectName, teacher, description, cabinet });
   const studentsList = (await Student.find()).map(elem => elem._id);
   const subjectPage = new SubjectPage({ marks, dates, subjectId: subject._id, students: studentsList });
 
@@ -14,9 +14,9 @@ exports.createSubject = async function ({ name, marks, dates, teacher, descripti
   };
 }
 
-exports.updateSubject = async function ({ id, name, marks, dates, teacher, description, cabinet, students, _deletedAt }) {
+exports.updateSubject = async function ({ id, subjectName, marks, dates, teacher, description, cabinet, students, _deletedAt }) {
   const subjectValuesToUpdate = {
-    name,
+    subjectName,
     teacher,
     _deletedAt,
     description,
