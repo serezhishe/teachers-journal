@@ -7,6 +7,7 @@ import { filter, take } from 'rxjs/operators';
 import { BASE_URL } from '../constants';
 import { IStudent, IStudentMarks, ISubjectInfo, ISubjectPage } from '../models';
 
+import { PopUpService } from './pop-up.service';
 import { StudentsService } from './students.service';
 
 @Injectable({
@@ -20,6 +21,7 @@ export class SubjectsService {
   constructor(
     private readonly studentsService: StudentsService,
     private readonly http: HttpClient,
+    private readonly popUpService: PopUpService,
   ) {
     this.currentSubject$ = new BehaviorSubject({} as ISubjectPage);
     this.subjectsList$ = new BehaviorSubject(null);
@@ -121,7 +123,7 @@ export class SubjectsService {
 
   public addSubject({ subjectName, teacher, cabinet, description }: ISubjectInfo): void {
     if (this.subjectsList$.value.map((subject: ISubjectInfo) => subject.subjectName.toLowerCase()).includes(subjectName.toLowerCase())) {
-      alert('duplicate subject');
+      this.popUpService.errorMessage(`Subject ${subjectName} already exists`);
 
       return;
     }
@@ -142,6 +144,7 @@ export class SubjectsService {
       .post<ISubjectInfo>(`${BASE_URL}/subjects`, newSubject)
       .pipe(take(1))
       .subscribe((response: ISubjectInfo) => {
+        this.popUpService.successMessage(`Subject ${newSubject.subjectName} was created`);
         this.addSubjectToList(response);
       });
   }
@@ -151,6 +154,13 @@ export class SubjectsService {
       .delete(`${BASE_URL}/subjects/${subjectId}`)
       .pipe(take(1))
       .subscribe(() => {
+        let subjectName: string;
+        for (const [name, id] of this.subjectIdList) {
+          if (id === subjectId) {
+            subjectName = name;
+          }
+        }
+        this.popUpService.successMessage(`Subject ${subjectName} was deleted`);
         this.subjectIdList.delete(this.subjectsList$.value.find((subject: ISubjectPage) => subject._id === subjectId).subjectName);
         this.subjectsList$.next([...this.subjectsList$.value.filter((subject: ISubjectPage) => subject._id !== subjectId)]);
       });

@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const mongoose = require('mongoose');
 const asyncHandler = require('express-async-handler')
 
 const {
@@ -24,10 +25,17 @@ api.get('/', asyncHandler(async (req, res) => {
 
 api.get('/:id', asyncHandler(async (req, res) => {
   const { id } = req.params;
-
-  const subject = await getSubjectById(id);
-
-  res.send(subject);
+  console.log(id)
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(400).send()
+  } else {
+    const subject = await getSubjectById(id);
+    if (Object.keys(subject).length == 0) {
+      res.status(404).send()
+    } else {
+      res.send(subject);
+    }
+  }
 }));
 
 api.post('/', asyncHandler(async (req, res) => {
