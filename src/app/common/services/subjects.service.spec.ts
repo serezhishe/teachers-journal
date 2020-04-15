@@ -9,6 +9,8 @@ import { ISubjectPage } from '../models/subject-page.model';
 
 import { SubjectsService } from './subjects.service';
 
+// tslint:disable: no-string-literal
+
 fdescribe('SubjectsService', () => {
   let service: SubjectsService;
   const mockSubjects: ISubjectInfo[] = [
@@ -81,7 +83,6 @@ fdescribe('SubjectsService', () => {
       const req = httpMock.expectOne(`${BASE_URL}/subjects`);
       req.flush(mockSubjects);
 
-      // tslint:disable-next-line: no-string-literal
       service['addSubjectToList'](mockSubjToAdd);
       subjects$.subscribe(subjects => {
         expect(subjects.length).toEqual(3);
@@ -96,11 +97,8 @@ fdescribe('SubjectsService', () => {
   ));
 
   it('getAverageMark calculate average of array', () => {
-    // tslint:disable-next-line: no-string-literal
     expect(service['getAverageMark']([6, 4, 5, null, 5, null])).toEqual(5);
-    // tslint:disable-next-line: no-string-literal
     expect(service['getAverageMark']([2, 3, 3])).toEqual(2.7);
-    // tslint:disable-next-line: no-string-literal
     expect(service['getAverageMark']([null])).toEqual(0);
   });
 
