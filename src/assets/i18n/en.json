@@ -16,6 +16,7 @@
       "export": "export"
     },
     "form": {
+      "breadcrumb": "Form",
       "add": "Add",
       "required": "is required",
       "incorrectSymbols": "includes incorrect symbols",
@@ -32,6 +33,7 @@
       "navigation": "Go back at students page"
     },
     "students": {
+      "breadcrumb": "Students",
       "name": "Name",
       "lastName": "Last Name",
       "address": "Address",
@@ -40,6 +42,7 @@
       "studentDeleted": "Student {{name}} {{lastName}} deleted from journal"
     },
     "subjects": {
+      "breadcrumb": "Subjects",
       "markRangeError": "Mark must be between 0 and 10",
       "averageMark": "Average mark",
       "addDate": "Add date",

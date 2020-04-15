@@ -16,6 +16,7 @@
       "export": "экспорт"
     },
     "form": {
+      "breadcrumb": "Форма",
       "add": "Добавить",
       "required": "необходимо",
       "incorrectSymbols": "содержит некорректные символы",
@@ -32,6 +33,7 @@
       "navigation": "Вернуться на страницу студентов"
     },
     "students": {
+      "breadcrumb": "Студенты",
       "name": "Имя",
       "lastName": "Фамилия",
       "address": "Адресс",
@@ -40,6 +42,7 @@
       "studentDeleted": "Студент {{name}} {{lastName}} удалён из журнала"
     },
     "subjects": {
+      "breadcrumb": "Предметы",
       "markRangeError": "Оценка должна быть от 0 до 10",
       "averageMark": "Средняя оценка",
       "addDate": "Добавить дату",
