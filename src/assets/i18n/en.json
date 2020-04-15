@@ -6,8 +6,8 @@
     "delete": "Delete",
     "save": "Save",
     "languages": {
-      "ru": "Russian",
-      "en": "English"
+      "ru": "rus",
+      "en": "eng"
     },
     "tabs": {
       "students": "students",
@@ -35,13 +35,18 @@
       "name": "Name",
       "lastName": "Last Name",
       "address": "Address",
-      "description": "Description"
+      "description": "Description",
+      "studentAdded": "Student {{name}} {{lastName}} added to journal",
+      "studentDeleted": "Student {{name}} {{lastName}} deleted from journal"
     },
     "subjects": {
       "markRangeError": "Mark must be between 0 and 10",
       "averageMark": "Average mark",
       "addDate": "Add date",
       "date": "Date",
+      "duplicateSubjects": "Subject {{subjectName}} already exists",
+      "subjectDeleted": "Subject {{subjectName}} was deleted",
+      "subjectCreated": "Subject {{subjectName}} was created",
       "duplicateDates": "No duplicate dates",
       "teacher": "Teacher",
       "teacherFieldError": "Teacher's field cannot contain numbers and special symbols"

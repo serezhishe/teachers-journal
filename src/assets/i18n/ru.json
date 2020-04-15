@@ -6,8 +6,8 @@
     "delete": "Удалить",
     "save": "Сохранить",
     "languages": {
-      "ru": "Русский",
-      "en": "Английский"
+      "ru": "рус",
+      "en": "анг"
     },
     "tabs": {
       "students": "студенты",
@@ -35,13 +35,18 @@
       "name": "Имя",
       "lastName": "Фамилия",
       "address": "Адресс",
-      "description": "Описание"
+      "description": "Описание",
+      "studentAdded": "Студент {{name}} {{lastName}} добавлен в журнал",
+      "studentDeleted": "Студент {{name}} {{lastName}} удалён из журнала"
     },
     "subjects": {
       "markRangeError": "Оценка должна быть от 0 до 10",
       "averageMark": "Средняя оценка",
       "addDate": "Добавить дату",
       "date": "Дата",
+      "duplicateSubjects": "Предмет {{subjectName}} уже существует",
+      "subjectDeleted": "Предмет {{subjectName}} удалён",
+      "subjectCreated": "Предмет {{subjectName}} добавлен",
       "duplicateDates": "Нельзя повторять даты",
       "teacher": "Учитель",
       "teacherFieldError": "Поле учителя не может содержать числа и специальные символы"
