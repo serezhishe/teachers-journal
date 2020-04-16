@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Sort } from '@angular/material/sort';
 import { ActivatedRoute } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { merge, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,6 +11,7 @@ import { dateInputFormat, subjectTableColumns } from '../../../common/constants'
 import { TableSortHelper } from '../../../common/helpers/table-sort.helper';
 import { duplicateDateValidator } from '../../../common/helpers/validators';
 import { IStudentMarks, ISubjectFormGroup, ISubjectPage } from '../../../common/models';
+import { PopUpService } from '../../../common/services/pop-up.service';
 import { SubjectsService } from '../../../common/services/subjects.service';
 
 @Component({
@@ -30,6 +32,8 @@ export class SubjectTableComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly formBuilder: FormBuilder,
     private readonly subjectsService: SubjectsService,
+    private readonly translate: TranslateService,
+    private readonly popUpService: PopUpService,
   ) {}
 
   private createFormGroup(subjectPage: ISubjectPage, dataSource: IStudentMarks[]): FormGroup {
@@ -57,11 +61,7 @@ export class SubjectTableComponent implements OnInit {
       map((subjectPage: ISubjectPage) => {
         this.teacher = subjectPage.teacher;
         this.datesHeaders = subjectPage.dates.map(date => moment(date).format(dateInputFormat));
-        this.displayedColumns = [
-          subjectTableColumns.name,
-          subjectTableColumns.lastName,
-          subjectTableColumns.averageMark,
-        ];
+        this.displayedColumns = [subjectTableColumns.name, subjectTableColumns.lastName, subjectTableColumns.averageMark];
         const sortedDateHeaders = this.datesHeaders.concat().sort();
         this.displayedColumns.push(...sortedDateHeaders);
         const dataSource = this.subjectsService.getDataSource();
@@ -83,7 +83,9 @@ export class SubjectTableComponent implements OnInit {
 
   public onSubmit(newData: Partial<ISubjectPage>): void {
     if (this.form.invalid) {
-      alert('There are some mistakes. Check again, please.');
+      this.translate.get('app.subjects.tableError').subscribe(translation => {
+        this.popUpService.errorMessage(translation);
+      });
 
       return;
     }

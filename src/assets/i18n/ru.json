@@ -50,6 +50,7 @@
       "duplicateSubjects": "Предмет {{subjectName}} уже существует",
       "subjectDeleted": "Предмет {{subjectName}} удалён",
       "subjectCreated": "Предмет {{subjectName}} добавлен",
+      "tableError": "Допущены ошибки. Перепроверьте, пожалуйста.",
       "duplicateDates": "Нельзя повторять даты",
       "teacher": "Учитель",
       "teacherFieldError": "Поле учителя не может содержать числа и специальные символы"

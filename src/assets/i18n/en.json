@@ -50,6 +50,7 @@
       "duplicateSubjects": "Subject {{subjectName}} already exists",
       "subjectDeleted": "Subject {{subjectName}} was deleted",
       "subjectCreated": "Subject {{subjectName}} was created",
+      "tableError": "There are some mistakes. Check again, please.",
       "duplicateDates": "No duplicate dates",
       "teacher": "Teacher",
       "teacherFieldError": "Teacher's field cannot contain numbers and special symbols"
