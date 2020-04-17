@@ -26,7 +26,10 @@
       "lastName": "Last Name",
       "teacher": "Teacher",
       "address": "Address",
-      "cabinet": "Cabinet"
+      "cabinet": "Cabinet",
+      "askForSubmit": "Do you want to submit the form?",
+      "askForLeave": "Do you want to leave the page?",
+      "invalidForm": "Form is invalid, are you sure want to leave the page?"
     },
     "pageNotFound": {
       "message": "Sorry! Page Not Found",
