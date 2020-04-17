@@ -20,11 +20,9 @@ app.all('*', (req, res) => {
   res.sendStatus(404);
 })
 
-app.listen(3001, function () {
-  console.log('Example app listening on port 3001!');
-});
+app.listen(3001);
 
-const connection = mongoose.connect(process.env.MONGO_CONNECTION, {
+mongoose.connect(process.env.MONGO_CONNECTION, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
