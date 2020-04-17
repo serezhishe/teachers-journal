@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, startWith } from 'rxjs/operators';
 
 import { IBreadCrumb } from './breadcrumb.interface';
@@ -20,11 +21,13 @@ export class BreadcrumbsComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.router.events
+    combineLatest([
+      this.translate.onLangChange.pipe(startWith({} as LangChangeEvent)),
+      this.router.events.pipe(startWith(new NavigationEnd(undefined, undefined, undefined))),
+    ])
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter(([_, event]) => event instanceof NavigationEnd),
         distinctUntilChanged(),
-        startWith({}),
       )
       .subscribe(() => {
         this.breadcrumbs = this.buildBreadCrumbs(this.activatedRoute.root);
