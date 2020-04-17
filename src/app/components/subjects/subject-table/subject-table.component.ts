@@ -25,7 +25,6 @@ export class SubjectTableComponent implements OnInit {
   public tableData$: Observable<IStudentMarks[]>;
   public datesHeaders: string[];
   public teacher: string;
-  public subjectFormGroup: ISubjectFormGroup;
   public form: any;
 
   constructor(
@@ -36,23 +35,23 @@ export class SubjectTableComponent implements OnInit {
     private readonly popUpService: PopUpService,
   ) {}
 
-  private createFormGroup(subjectPage: ISubjectPage, dataSource: IStudentMarks[]): FormGroup {
-    this.subjectFormGroup = {
+  private createFormGroup(subjectPage: ISubjectPage, studentMarks: IStudentMarks[]): FormGroup {
+    const subjectFormGroup: ISubjectFormGroup = {
       marks: undefined,
       dates: undefined,
       teacher: undefined,
     };
-    this.subjectFormGroup.teacher = new FormControl(this.teacher, [Validators.required, Validators.pattern(/^[A-Za-zА-Яа-я\s]+$/)]);
-    this.subjectFormGroup.dates = this.formBuilder.array(
+    subjectFormGroup.teacher = new FormControl(this.teacher, [Validators.required, Validators.pattern(/^[A-Za-zА-Яа-я\s]+$/)]);
+    subjectFormGroup.dates = this.formBuilder.array(
       subjectPage.dates.map(elem => new FormControl(moment(elem), [duplicateDateValidator()])),
     );
     const markGroup = {};
-    dataSource.forEach(element => {
+    studentMarks.forEach(element => {
       markGroup[element.student._id] = this.formBuilder.array(this.datesHeaders.map((_, i) => new FormControl(element.marks[i])));
     });
-    this.subjectFormGroup.marks = this.formBuilder.group(markGroup);
+    subjectFormGroup.marks = this.formBuilder.group(markGroup);
 
-    return this.formBuilder.group(this.subjectFormGroup);
+    return this.formBuilder.group(subjectFormGroup);
   }
 
   public ngOnInit(): void {
@@ -72,13 +71,13 @@ export class SubjectTableComponent implements OnInit {
     );
   }
 
-  public sortData(sort: Sort, data: IStudentMarks[]): void {
+  public sortData(sort: Sort, tableData: IStudentMarks[]): void {
     if (this.datesHeaders.includes(sort.active)) {
       sort.active = `marks.${this.datesHeaders.indexOf(sort.active)}`;
     } else {
       sort.active = sort.active === 'averageMark' ? sort.active : `student.${sort.active}`;
     }
-    this.tableData$ = merge(this.tableData$, of(TableSortHelper.sortData(sort, data)));
+    this.tableData$ = merge(this.tableData$, of(TableSortHelper.sortData(sort, tableData)));
   }
 
   public onSubmit(newData: Partial<ISubjectPage>): void {
