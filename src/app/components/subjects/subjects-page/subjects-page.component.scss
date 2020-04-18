@@ -17,3 +17,17 @@ app-button[type="delete"] {
 .shown app-button[type="delete"] {
    display: inline-block;  
 }
+
+.search {
+    margin: 0 auto 10vh auto;
+    width: max-content;
+    label {
+        display: block;
+        font-weight: 500;
+        font-size: 1.5em;
+        font-family: "Helvetica Neue", sans-serif;
+    }
+    input {
+        width: 100%;
+    }
+}

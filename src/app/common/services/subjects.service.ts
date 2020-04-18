@@ -1,5 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
@@ -22,6 +23,7 @@ export class SubjectsService {
     private readonly studentsService: StudentsService,
     private readonly http: HttpClient,
     private readonly popUpService: PopUpService,
+    private readonly translate: TranslateService,
   ) {
     this.currentSubject$ = new BehaviorSubject({} as ISubjectPage);
     this.subjectsList$ = new BehaviorSubject(null);
@@ -46,11 +48,11 @@ export class SubjectsService {
   public loadSubject(subjectName: string): void {
     const id = this.subjectIdList.get(subjectName);
     this.http
-    .get<ISubjectPage>(`${BASE_URL}/subjects/${id}`)
-    .pipe(take(1))
-    .subscribe((response: ISubjectPage) => {
-      this.currentSubject$.next(response);
-    });
+      .get<ISubjectPage>(`${BASE_URL}/subjects/${id}`)
+      .pipe(take(1))
+      .subscribe((response: ISubjectPage) => {
+        this.currentSubject$.next(response);
+      });
   }
 
   public getSubject(subjectName: string): Observable<ISubjectPage> {
@@ -123,7 +125,9 @@ export class SubjectsService {
 
   public addSubject({ subjectName, teacher, cabinet, description }: ISubjectInfo): void {
     if (this.subjectsList$.value.map((subject: ISubjectInfo) => subject.subjectName.toLowerCase()).includes(subjectName.toLowerCase())) {
-      this.popUpService.errorMessage(`Subject ${subjectName} already exists`);
+      this.translate.get('app.subjects.duplicateSubjects', { subjectName }).subscribe(translation => {
+        this.popUpService.errorMessage(translation);
+      });
 
       return;
     }
@@ -144,7 +148,9 @@ export class SubjectsService {
       .post<ISubjectInfo>(`${BASE_URL}/subjects`, newSubject)
       .pipe(take(1))
       .subscribe((response: ISubjectInfo) => {
-        this.popUpService.successMessage(`Subject ${newSubject.subjectName} was created`);
+        this.translate.get('app.subjects.subjectCreated', { subjectName: newSubject.subjectName }).subscribe(translation => {
+          this.popUpService.successMessage(translation);
+        });
         this.addSubjectToList(response);
       });
   }
@@ -160,7 +166,9 @@ export class SubjectsService {
             subjectName = name;
           }
         }
-        this.popUpService.successMessage(`Subject ${subjectName} was deleted`);
+        this.translate.get('app.subjects.subjectDeleted', { subjectName }).subscribe(translation => {
+          this.popUpService.successMessage(translation);
+        });
         this.subjectIdList.delete(this.subjectsList$.value.find((subject: ISubjectPage) => subject._id === subjectId).subjectName);
         this.subjectsList$.next([...this.subjectsList$.value.filter((subject: ISubjectPage) => subject._id !== subjectId)]);
       });

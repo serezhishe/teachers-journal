@@ -47,10 +47,19 @@
   </div>
   <mat-toolbar>
     {{ 'app.subjects.teacher' | translate }}:
-    <input value="{{ teacher | titlecase }}" placeholder="Enter teacher's name" formControlName="teacher" />
-    <mat-error *ngIf="form.controls.teacher.errors">
-      {{ 'app.subjects.teacherFieldError' | translate }}
-    </mat-error>
+    <input value="{{ teacher | titlecase }}" placeholder="{{ 'app.subjects.teacherPlaceholder' | translate }}" formControlName="teacher" />
+    <ng-container *ngIf="form.controls.teacher.errors">
+      <ng-container *ngIf="form.controls.teacher.errors.required else patternError">
+        <mat-error *ngIf="form.controls.teacher.errors">
+          {{ 'app.subjects.teacherRequiredError' | translate }}
+        </mat-error>
+      </ng-container>
+      <ng-template #patternError>
+        <mat-error *ngIf="form.controls.teacher.errors">
+          {{ 'app.subjects.teacherPatternError' | translate }}
+        </mat-error>
+      </ng-template>
+    </ng-container>
   </mat-toolbar>
   <app-button type="save"></app-button>
   <app-button type="cancel" (click)="cancelChanges()"></app-button>

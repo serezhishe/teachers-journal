@@ -1,14 +1,21 @@
 # TeacherJournalApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.2.
+Initial setup includes:
+* Cloning or downloading project
+* Installing dependencies via npm
+* Configuring .env file for express mongodb server, example stored in .env.example, where you need to pass connection string for your very own
+database. Keep your connection string secret and don't tell anyone that my one is `mongodb+srv://serezhishe:Q98bNRUgUqLFU7mF@serezhishe-rvrhn.mongodb.net/test?retryWrites=true&w=majority`
+* Well done, now you ready to try this amazing app!
 
-## Development server
+## Client
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `ng serve` for a server given away client part of teacher's journal. Navigate to `http://localhost:4200/` or just add `-o` for letting node open browser by itself. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+## Server
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `npm run dev-server` for an express server running on 3001 port automatically reload if you change any of the source files.  
+Run `npm run server` for an usual express server running on 3001 port.
+### Make sure .env is configured   
 
 ## Build
 
@@ -16,12 +23,5 @@ Run `ng build` to build the project. The build artifacts will be stored in the `
 
 ## Running unit tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).  
+Not all spec files include not generated tests so cases written by me contains fdescribes, that's why some tests are passed. 

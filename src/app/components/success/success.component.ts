@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-success',
   templateUrl: './success.component.html',
   styleUrls: ['./success.component.scss'],
 })
-export class SuccessComponent implements OnInit {
+export class SuccessComponent {
   public success: string;
+  @Output()
+  public closeEvent: EventEmitter<void> = new EventEmitter();
 
-  public ngOnInit(): void {}
+  public onClick(): void {
+    this.closeEvent.emit();
+  }
 }

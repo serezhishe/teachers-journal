@@ -1,4 +1,4 @@
-<div [ngSwitch]="type">
+<ng-container [ngSwitch]="type">
   <button *ngSwitchCase="'delete'" mat-raised-button class="delete" type="button">
     <mat-icon>delete</mat-icon>
   </button>
@@ -14,4 +14,4 @@
   <button *ngSwitchCase="'save'" type="submit" mat-raised-button>
     {{ 'app.save' | translate }}
   </button>
-</div>
+</ng-container>

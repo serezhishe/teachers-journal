@@ -47,19 +47,23 @@ export class AppComponent implements OnInit {
   }
 
   public createErrorComponent(errorMessage: string): ComponentRef<ErrorComponent> {
-    // this.errorEntry.clear();
     const factory = this.resolver.resolveComponentFactory(ErrorComponent);
     const errorComponentRef = this.errorEntry.createComponent(factory);
     errorComponentRef.instance.error = errorMessage;
+    errorComponentRef.instance.closeEvent.subscribe(() => {
+      this.errorEntry.clear();
+    });
 
     return errorComponentRef;
   }
 
   public createSuccessComponent(successMessage: string): ComponentRef<SuccessComponent> {
-    // this.successEntry.clear();
     const factory = this.resolver.resolveComponentFactory(SuccessComponent);
     const successComponentRef = this.successEntry.createComponent(factory);
     successComponentRef.instance.success = successMessage;
+    successComponentRef.instance.closeEvent.subscribe(() => {
+      this.successEntry.clear();
+    });
 
     return successComponentRef;
   }

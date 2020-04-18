@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
@@ -18,11 +19,16 @@ export class FormComponent implements OnInit {
   public add: EventEmitter<any> = new EventEmitter();
   public controlGroup: any;
   public addingForm: FormGroup;
-  constructor(private readonly formBuilder: FormBuilder, private readonly router: Router, private readonly route: ActivatedRoute) {}
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly translate: TranslateService,
+  ) {}
 
   public ngOnInit(): void {
     this.controlGroup = {};
-    this.configs.forEach((elem) => {
+    this.configs.forEach(elem => {
       const defaultValue = elem.type === 'number' ? 0 : '';
       this.controlGroup[elem.label] = new FormControl(defaultValue, elem.validators);
     });
@@ -35,25 +41,29 @@ export class FormComponent implements OnInit {
     }
     this.add.emit(value);
     this.addingForm.markAsUntouched();
-    this.router.navigate(['../'], {relativeTo: this.route});
+    this.router.navigate(['../'], { relativeTo: this.route });
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
     if (this.addingForm.dirty && this.addingForm.touched) {
       if (this.addingForm.valid) {
-        return of(window.confirm('Do you want to submit the information?')).pipe(
-          switchMap((submit) => {
-            if (submit) {
-              this.add.emit(this.addingForm.value);
-              this.addingForm.reset();
-            }
+        return this.translate.get('app.form.askForSubmit').pipe(
+          switchMap(askForSubmit =>
+            of(window.confirm(askForSubmit)).pipe(
+              switchMap(submit => {
+                if (submit) {
+                  this.add.emit(this.addingForm.value);
+                  this.addingForm.reset();
+                }
 
-            return of(window.confirm('Do you want to leave the page?'));
-          }),
+                return this.translate.get('app.form.askForLeave').pipe(switchMap(askForLeave => of(window.confirm(askForLeave))));
+              }),
+            ),
+          ),
         );
       }
 
-      return of(window.confirm('Information is invalid, are you sure want to leave the page?'));
+      return this.translate.get('app.form.invalidForm').pipe(switchMap(invalidForm => of(window.confirm(invalidForm))));
     }
 
     return true;

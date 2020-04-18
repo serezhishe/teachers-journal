@@ -25,7 +25,6 @@ api.get('/', asyncHandler(async (req, res) => {
 
 api.get('/:id', asyncHandler(async (req, res) => {
   const { id } = req.params;
-  console.log(id)
   if (!mongoose.Types.ObjectId.isValid(id)) {
     res.status(400).send()
   } else {
@@ -39,23 +38,12 @@ api.get('/:id', asyncHandler(async (req, res) => {
 }));
 
 api.post('/', asyncHandler(async (req, res) => {
-  const { id, type, subjectName, marks, dates, teacher, cabinet, description } = req.body;
+  const { subjectName, marks, dates, teacher, cabinet, description } = req.body;
 
-  if (type === 'get') {
-    if (id) {
-      const subject = await getSubjectById(id);
-    
-      res.send(subject);
-    } else {
-      res.send((await getAll()).map(elem => ({subjectName: elem.subjectName, _id: elem._id})))
-    }
+  if (!subjectName || !marks || !dates || !teacher) {
+    res.sendStatus(400);
   } else {
-    if ( !subjectName || !marks || !dates || !teacher ) {
-      return res.sendStatus(400);
-    }
-
     res.send(await createSubject({ subjectName, marks, dates, teacher, cabinet, description }));
-  
   }
 }));
 

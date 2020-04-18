@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { combineLatest } from 'rxjs';
+import { distinctUntilChanged, filter, startWith } from 'rxjs/operators';
 
 import { IBreadCrumb } from './breadcrumb.interface';
 
@@ -15,12 +17,16 @@ export class BreadcrumbsComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
+    private readonly translate: TranslateService,
   ) {}
 
   public ngOnInit(): void {
-    this.router.events
+    combineLatest([
+      this.translate.onLangChange.pipe(startWith({} as LangChangeEvent)),
+      this.router.events.pipe(startWith(new NavigationEnd(undefined, undefined, undefined))),
+    ])
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter(([_, event]) => event instanceof NavigationEnd),
         distinctUntilChanged(),
       )
       .subscribe(() => {
@@ -39,16 +45,25 @@ export class BreadcrumbsComponent implements OnInit {
         const paramName = lastRoutePart.split(':')[1];
         path = path.replace(lastRoutePart, route.snapshot.params[paramName]);
         label = route.snapshot.params[paramName];
-      }
-
-      url = path ? `${url}/${path}` : url;
-
-      if (label) {
-        breadcrumbs.push({
-          label,
-          url,
+        url = path ? `${url}/${path}` : url;
+        if (label) {
+          breadcrumbs.push({
+            label,
+            url,
+          });
+        }
+      } else {
+        this.translate.get(`app.${label}.breadcrumb`).subscribe((translation: string) => {
+          url = path ? `${url}/${path}` : url;
+          if (label) {
+            breadcrumbs.push({
+              label: translation,
+              url,
+            });
+          }
         });
       }
+
       route = route.firstChild;
     }
 

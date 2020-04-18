@@ -22,7 +22,7 @@ exports.updateSubject = async function ({ id, subjectName, marks, dates, teacher
     description,
     cabinet,
   }
-  
+
   const pageValuesToUpdate = {
     marks,
     dates,
@@ -42,11 +42,13 @@ exports.updateSubject = async function ({ id, subjectName, marks, dates, teacher
     if (pageValuesToUpdate[keys] !== undefined) {
       result[keys] = pageValuesToUpdate[keys];
     }
+
     return result;
   }, {});
 
   await Subject.updateOne({ _id: id }, subjectOmited);
   await SubjectPage.updateOne({ subjectId: id }, pageOmited);
+
   return {
     ...JSON.parse(JSON.stringify(await Subject.findOne({ _id: id }))),
     ...JSON.parse(JSON.stringify(await SubjectPage.findOne({ subjectId: id }))),
@@ -55,6 +57,7 @@ exports.updateSubject = async function ({ id, subjectName, marks, dates, teacher
 
 exports.deleteSubject = async function (id) {
   await SubjectPage.deleteOne({ subjectId: id });
+
   return await Subject.deleteOne({ _id: id })
 };
 

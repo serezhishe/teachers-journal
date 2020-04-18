@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 
@@ -14,7 +15,11 @@ import { PopUpService } from './pop-up.service';
 export class StudentsService {
   private readonly students$: BehaviorSubject<IStudent[]>;
 
-  constructor(private readonly http: HttpClient, private readonly popUpService: PopUpService) {
+  constructor(
+    private readonly http: HttpClient,
+    private readonly popUpService: PopUpService,
+    private readonly translate: TranslateService,
+  ) {
     this.students$ = new BehaviorSubject(null);
   }
 
@@ -58,7 +63,9 @@ export class StudentsService {
       .post<IStudent>(`${BASE_URL}/students`, newStudent)
       .pipe(take(1))
       .subscribe((response: IStudent) => {
-        this.popUpService.successMessage(`Student ${response.name} ${response.lastName} added to journal`);
+        this.translate.get('app.students.studentAdded', response).subscribe(translation => {
+          this.popUpService.successMessage(translation);
+        });
         this.students$.next([
           ...this.students$.value.filter(student => student._id !== tempId),
           {
@@ -75,7 +82,9 @@ export class StudentsService {
       .delete(`${BASE_URL}/students/${studentToDelete._id}`)
       .pipe(take(1))
       .subscribe(_ => {
-        this.popUpService.successMessage(`Student ${studentToDelete.name} ${studentToDelete.lastName} deleted from journal`);
+        this.translate.get('app.students.studentDeleted', studentToDelete).subscribe(translation => {
+          this.popUpService.successMessage(translation);
+        });
       });
   }
 }

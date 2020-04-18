@@ -1,12 +1,12 @@
 table {
-    width: 100%;
-  }
-
-app-button[type="delete"] {
-    display: none;
+  width: 100%;
 }
-.shown app-button[type="delete"] {
-   display: inline-block;  
+
+app-button[type='delete'] {
+  display: none;
+}
+.shown app-button[type='delete'] {
+  display: inline-block;
 }
 
 th {
@@ -14,9 +14,22 @@ th {
 }
 
 .search {
-  display: none;
+  display: inline-block;
+  width: 100%;
 }
 
-.shown .search {
-  display: inline-block;
+.name {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
 }
+
+.lastName {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+// .shown .search {
+//   display: inline-block;
+// }
