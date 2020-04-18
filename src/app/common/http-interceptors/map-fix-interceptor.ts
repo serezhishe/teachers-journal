@@ -7,7 +7,7 @@ import { parseURL } from '../helpers/http.helper';
 import { ISubjectPage } from '../models/subject-page.model';
 
 @Injectable()
-export class MapFixInterceptorService implements HttpInterceptor {
+export class MapFixInterceptor implements HttpInterceptor {
   private fixResponse(response: HttpResponse<ISubjectPage>): HttpResponse<ISubjectPage> {
     const fixedResponse = response.clone({
       body: {

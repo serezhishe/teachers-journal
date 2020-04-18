@@ -7,14 +7,17 @@ const {
 
 exports.createStudent = async function ({ name, lastName, address, description } = {}) {
   const student = new Student({ name, lastName, address, description });
-  (await SubjectPage.find()).forEach(async elem => {
-    elem.students.push('' + student._id);
-    elem.marks.set('' + student._id, []);
-    await updateSubject({
-      ...JSON.parse(JSON.stringify(elem)),
-      id: elem.subjectId,
+
+  (await SubjectPage.find())
+    .forEach(async elem => {
+      elem.students.push('' + student._id);
+      elem.marks.set('' + student._id, []);
+      await updateSubject({
+        ...JSON.parse(JSON.stringify(elem)),
+        id: elem.subjectId,
+      });
     });
-  });
+
   return await student.save();
 }
 
@@ -48,8 +51,8 @@ exports.deleteStudent = async function (id) {
       id: elem.subjectId,
     });
   })
-  return await Student.deleteOne({ _id: id})
-  // return await exports.updateStudent({ id, _deletedAt: Date.now() });
+
+  return await Student.deleteOne({ _id: id });
 };
 
 exports.getStudentById = async function (id) {

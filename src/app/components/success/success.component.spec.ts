@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SuccessComponent } from './success.component';
 
-describe('SuccessComponent', () => {
+fdescribe('SuccessComponent', () => {
   let component: SuccessComponent;
   let fixture: ComponentFixture<SuccessComponent>;
 
@@ -21,5 +21,12 @@ describe('SuccessComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should contain successMessage', () => {
+    const testMessage = 'test success';
+    component.success = testMessage;
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('div h2').innerText).toEqual(testMessage);
   });
 });

@@ -6,7 +6,6 @@ const {
   createStudent,
   updateStudent,
   deleteStudent,
-  getStudentById,
 } = require('../services/student');
 
 const {
@@ -23,46 +22,28 @@ api.get('/', asyncHandler(async (req, res) => {
   res.send(students)
 }));
 
-// api.get('/:id', asyncHandler(async (req, res) => {
-//   const { id } = req.params;
-
-//   const subject = await getStudentById(id);
-
-//   res.send(subject);
-// }));
-
 api.post('/', asyncHandler(async (req, res) => {
   const { type, name, lastName, address, description } = req.body;
+
   if (type === 'get') {
     const students = await getAll();
-  
+
     res.status(200).send(students);
   } else {
     if (!name || !lastName) {
-      return res.sendStatus(400);
+      res.sendStatus(400);
+    } else {
+      res.status(200).send(await createStudent({ name, lastName, address, description }));
     }
-    res.status(200).send(await createStudent({ name, lastName, address, description }));
   }
 }));
-
-// api.put('/:id', validateIdParam, asyncHandler(async (req, res) => {
-//   const { id } = req.params;
-//   const { name, lastName, address, description } = req.body;
-
-//   if (!name || !lastName) {
-//     return res.sendStatus(400);
-//   }
-
-//   await updateStudent({ id, name, lastName, address, description });
-
-//   res.send(200);
-// }));
 
 api.patch('/:id', validateIdParam, asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { name, lastName, address, description } = req.body;
 
   await updateStudent({ id, name, lastName, address, description });
+
   res.sendStatus(200);
 }));
 

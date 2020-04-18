@@ -6,8 +6,8 @@
     "delete": "Delete",
     "save": "Save",
     "languages": {
-      "ru": "Russian",
-      "en": "English"
+      "ru": "rus",
+      "en": "eng"
     },
     "tabs": {
       "students": "students",
@@ -16,6 +16,7 @@
       "export": "export"
     },
     "form": {
+      "breadcrumb": "Form",
       "add": "Add",
       "required": "is required",
       "incorrectSymbols": "includes incorrect symbols",
@@ -25,26 +26,39 @@
       "lastName": "Last Name",
       "teacher": "Teacher",
       "address": "Address",
-      "cabinet": "Cabinet"
+      "cabinet": "Cabinet",
+      "askForSubmit": "Do you want to submit the form?",
+      "askForLeave": "Do you want to leave the page?",
+      "invalidForm": "Form is invalid, are you sure want to leave the page?"
     },
     "pageNotFound": {
       "message": "Sorry! Page Not Found",
       "navigation": "Go back at students page"
     },
     "students": {
+      "breadcrumb": "Students",
       "name": "Name",
       "lastName": "Last Name",
       "address": "Address",
-      "description": "Description"
+      "description": "Description",
+      "studentAdded": "Student {{name}} {{lastName}} added to journal",
+      "studentDeleted": "Student {{name}} {{lastName}} deleted from journal"
     },
     "subjects": {
+      "breadcrumb": "Subjects",
       "markRangeError": "Mark must be between 0 and 10",
       "averageMark": "Average mark",
       "addDate": "Add date",
       "date": "Date",
+      "duplicateSubjects": "Subject {{subjectName}} already exists",
+      "subjectDeleted": "Subject {{subjectName}} was deleted",
+      "subjectCreated": "Subject {{subjectName}} was created",
+      "tableError": "There are some mistakes. Check again, please.",
       "duplicateDates": "No duplicate dates",
       "teacher": "Teacher",
-      "teacherFieldError": "Teacher's field cannot contain numbers and special symbols"
+      "teacherPlaceholder": "Enter teacher's name",
+      "teacherRequiredError": "Teacher's name is required",
+      "teacherPatternError": "Teacher's field cannot contain numbers and special symbols"
     }
   }
 }

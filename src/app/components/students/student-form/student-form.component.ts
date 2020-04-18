@@ -11,7 +11,8 @@ import { FormComponent } from '../../../shared/components/form/form.component';
   styleUrls: ['./student-form.component.scss'],
 })
 export class StudentFormComponent implements OnInit {
-  @ViewChild(FormComponent) public form: { canDeactivate(): Observable<boolean> | Promise<boolean> | boolean };
+  @ViewChild(FormComponent)
+  public form: { canDeactivate(): Observable<boolean> | boolean };
   public formConfigs: IFormConfig[];
   constructor(private readonly studentsService: StudentsService) {}
 
@@ -19,7 +20,7 @@ export class StudentFormComponent implements OnInit {
     this.formConfigs = studentConfig;
   }
 
-  public canDeactivate(): Observable<boolean> | Promise<boolean> | boolean {
+  public canDeactivate(): Observable<boolean> | boolean {
     return this.form.canDeactivate();
   }
 

@@ -9,7 +9,7 @@ import { SessionStorageService } from '../services/session-storage.service';
 const subjectPageKeys = ['subjectId', 'dates', 'marks', 'students'];
 
 @Injectable()
-export class StorageInterceptorService implements HttpInterceptor {
+export class StorageInterceptor implements HttpInterceptor {
   constructor(private readonly sessionStorageService: SessionStorageService) {}
 
   private handlePatchRequest(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

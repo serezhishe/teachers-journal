@@ -1,7 +1,17 @@
-mat-button-toggle-group {
+.tabs {
     margin-bottom: 5vh;
     width: max-content;
     margin-left: auto;
     margin-right: auto;
     display: flex;
+}
+.languages {
+    width: max-content;
+    position: absolute;
+    right: 0;
+    display: flex;
+    mat-button-toggle {
+        width: 5vw;
+        height: 5vh;
+    }
 }

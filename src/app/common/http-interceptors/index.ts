@@ -1,11 +1,11 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { DelayInterceptorService } from './delay-interceptor.service';
-import { MapFixInterceptorService } from './map-fix-interceptor.service';
-import { StorageInterceptorService } from './storage-interceptor.service';
+import { MapFixInterceptor } from './map-fix-interceptor';
+import { PopUpInterceptor } from './pop-up-interceptor';
+import { StorageInterceptor } from './storage-interceptor';
 
 export const httpInterceptorProviders = [
-  { provide: HTTP_INTERCEPTORS, useClass: MapFixInterceptorService, multi: true },
-  { provide: HTTP_INTERCEPTORS, useClass: StorageInterceptorService, multi: true },
-  { provide: HTTP_INTERCEPTORS, useClass: DelayInterceptorService, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: MapFixInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: StorageInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: PopUpInterceptor, multi: true },
 ];

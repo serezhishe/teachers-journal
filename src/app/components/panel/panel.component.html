@@ -2,11 +2,11 @@
   <span>
     {{ 'app.title' | translate }}
   </span>
-  <mat-button-toggle-group>
+  <mat-button-toggle-group class="languages">
     <mat-button-toggle (click)="useLanguage('en')">{{ 'app.languages.en' | translate }}</mat-button-toggle>
     <mat-button-toggle (click)="useLanguage('ru')">{{ 'app.languages.ru' | translate }}</mat-button-toggle>
   </mat-button-toggle-group>
 </mat-toolbar>
-<mat-button-toggle-group>
+<mat-button-toggle-group class="tabs">
   <mat-button-toggle *ngFor="let tab of tabs" [routerLink]="tab">{{ 'app.tabs.' + tab | translate | titlecase }}</mat-button-toggle>
 </mat-button-toggle-group>

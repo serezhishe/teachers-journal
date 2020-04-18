@@ -6,8 +6,8 @@
     "delete": "Удалить",
     "save": "Сохранить",
     "languages": {
-      "ru": "Русский",
-      "en": "Английский"
+      "ru": "рус",
+      "en": "анг"
     },
     "tabs": {
       "students": "студенты",
@@ -16,6 +16,7 @@
       "export": "экспорт"
     },
     "form": {
+      "breadcrumb": "Форма",
       "add": "Добавить",
       "required": "необходимо",
       "incorrectSymbols": "содержит некорректные символы",
@@ -25,26 +26,39 @@
       "lastName": "Фамилия",
       "teacher": "Учитель",
       "address": "Адресс",
-      "cabinet": "Кабинет"
+      "cabinet": "Кабинет",
+      "askForSubmit": "Хотите сохранить информафию?",
+      "askForLeave": "Хотите покинуть эту страницу?",
+      "invalidForm": "Форма содержит ошибки, хотите покинуть страницу?"
     },
     "pageNotFound": {
       "message": "Извините! Страница не найдена",
       "navigation": "Вернуться на страницу студентов"
     },
     "students": {
+      "breadcrumb": "Студенты",
       "name": "Имя",
       "lastName": "Фамилия",
       "address": "Адресс",
-      "description": "Описание"
+      "description": "Описание",
+      "studentAdded": "Студент {{name}} {{lastName}} добавлен в журнал",
+      "studentDeleted": "Студент {{name}} {{lastName}} удалён из журнала"
     },
     "subjects": {
+      "breadcrumb": "Предметы",
       "markRangeError": "Оценка должна быть от 0 до 10",
       "averageMark": "Средняя оценка",
       "addDate": "Добавить дату",
       "date": "Дата",
+      "duplicateSubjects": "Предмет {{subjectName}} уже существует",
+      "subjectDeleted": "Предмет {{subjectName}} удалён",
+      "subjectCreated": "Предмет {{subjectName}} добавлен",
+      "tableError": "Допущены ошибки. Перепроверьте, пожалуйста.",
       "duplicateDates": "Нельзя повторять даты",
       "teacher": "Учитель",
-      "teacherFieldError": "Поле учителя не может содержать числа и специальные символы"
+      "teacherPlaceholder": "Введите имя учителя",
+      "teacherRequiredError": "Необходимо имя учителя",
+      "teacherPatternError": "Поле учителя не может содержать числа и специальные символы"
     }
   }
 }

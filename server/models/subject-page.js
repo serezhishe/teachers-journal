@@ -1,4 +1,5 @@
 const { Schema, model } = require('mongoose');
+
 const subjectPageSchema = new Schema({
   subjectId: {
     type: String,
