@@ -5,7 +5,7 @@
   <a *ngSwitchCase="'add'" mat-fab color="white" routerLink="./form">
     <mat-icon>add</mat-icon>
   </a>
-  <a *ngSwitchCase="'go-back'" mat-raised-button routerLink="../" type="button">
+  <a *ngSwitchCase="'goBack'" mat-raised-button routerLink="../" type="button">
     {{ 'app.cancel' | translate }}
   </a>
   <button *ngSwitchCase="'cancel'" mat-raised-button type="button">
@@ -13,5 +13,8 @@
   </button>
   <button *ngSwitchCase="'save'" type="submit" mat-raised-button>
     {{ 'app.save' | translate }}
+  </button>
+  <button *ngSwitchCase="'addDate'" type="button" mat-raised-button>
+    {{ 'app.subjects.addDate' | translate }}
   </button>
 </ng-container>
