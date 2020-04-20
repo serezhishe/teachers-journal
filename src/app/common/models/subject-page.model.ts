@@ -5,4 +5,5 @@ export interface ISubjectPage extends ISubjectInfo {
   dates: string[];
   marks: Map<string, number[]>;
   students: string[];
+  error?: string;
 }

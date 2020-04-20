@@ -1,5 +1,35 @@
 .container {
-  overflow: auto;
+  height: 100%;
+}
+
+form {
+  display: grid;
+  grid-template-rows: 10% 5% 80%;
+  .teacher {
+    height: 100%;
+    font-family: 'BirchCTT', arial;
+    font-size: 1.5rem;
+  }
+  .buttons {
+    height: 100%;
+  }
+  .table-container {
+    display: inline-block;
+    height: 80%;
+    overflow: auto;
+  }
+}
+
+.date-error {
+  position: absolute;
+  top: 35px;
+}
+
+td,
+th {
+  border-right: 1px rgba(0,0,0,.12) solid;
+  text-align: center;
+  font-family: 'BirchCTT', arial;
 }
 
 input {
@@ -16,7 +46,9 @@ input:focus {
 }
 
 .sticky {
-  min-width: 100px;
+  min-width: 150px;
+  text-align: left;
+  font-size: 1rem;
 }
 
 mat-error {
@@ -24,11 +56,10 @@ mat-error {
 }
 
 app-button[type='delete'] {
-  color: red;
   display: none;
   width: 30%;
 }
 
 .shown app-button[type='delete'] {
-  display: inline-block;
+  display: inline;
 }

@@ -1,9 +1,9 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, filter, take } from 'rxjs/operators';
 
 import { BASE_URL } from '../constants';
 import { IStudent, IStudentMarks, ISubjectInfo, ISubjectPage } from '../models';
@@ -49,7 +49,10 @@ export class SubjectsService {
     const id = this.subjectIdList.get(subjectName);
     this.http
       .get<ISubjectPage>(`${BASE_URL}/subjects/${id}`)
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        catchError((error: HttpErrorResponse) => of({subjectName, error: error.statusText} as ISubjectPage)),
+      )
       .subscribe((response: ISubjectPage) => {
         this.currentSubject$.next(response);
       });

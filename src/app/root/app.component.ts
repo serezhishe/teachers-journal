@@ -10,6 +10,11 @@ import { SubjectsService } from '../common/services/subjects.service';
 import { ErrorComponent } from '../components/error/error.component';
 import { SuccessComponent } from '../components/success/success.component';
 
+enum Timers {
+  successTimer = 10000,
+  errorTimer = 10000,
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -76,12 +81,12 @@ export class AppComponent implements OnInit {
 
     this.popUpService.getErrorsStream().subscribe((message: string) => {
       const errorRef = this.createErrorComponent(message);
-      timer(10000).subscribe(_ => errorRef.destroy());
+      timer(Timers.errorTimer).subscribe(_ => errorRef.destroy());
     });
 
     this.popUpService.getSuccessActionsStream().subscribe((message: string) => {
       const successRef = this.createSuccessComponent(message);
-      timer(3000).subscribe(_ => successRef.destroy());
+      timer(Timers.successTimer).subscribe(_ => successRef.destroy());
     });
   }
 }

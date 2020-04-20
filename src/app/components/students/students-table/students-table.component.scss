@@ -1,5 +1,18 @@
 table {
   width: 100%;
+  font-family: 'BirchCTT', arial !important;
+}
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.table-container {
+  height: 75%;
+  overflow: auto;
 }
 
 app-button[type='delete'] {
@@ -13,9 +26,16 @@ th {
   width: 20%;
 }
 
+th,
+td {
+  font-size: 1.2rem !important;
+}
+
 .search {
   display: inline-block;
   width: 100%;
+  font-family: 'BirchCTT', arial !important;
+  font-size: 1rem !important;
 }
 
 .name {
@@ -29,7 +49,3 @@ th {
   width: 100%;
   flex-wrap: wrap;
 }
-
-// .shown .search {
-//   display: inline-block;
-// }

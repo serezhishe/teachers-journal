@@ -1,11 +1,12 @@
-<ng-container *ngIf="!isLoading; else loadingTemplate">
-  <app-panel></app-panel>
-  <app-breadcrumbs></app-breadcrumbs>
-  <router-outlet></router-outlet>
-</ng-container>
-<ng-template #loadingTemplate>
-  <mat-spinner></mat-spinner>
-  {{ 'app.loading' | translate }}
+<main *ngIf="!isLoading; else loadingTemplate" class="root">
+    <app-panel></app-panel>
+    <app-breadcrumbs></app-breadcrumbs>
+    <router-outlet></router-outlet>
+</main>
+<ng-template #loadingTemplate class="loading">
+  <div class="loading">
+    <mat-spinner></mat-spinner>
+  </div>
 </ng-template>
 <template #errorContainer>
 </template>
