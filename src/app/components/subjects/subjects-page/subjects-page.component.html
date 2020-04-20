@@ -1,5 +1,7 @@
 <div class="search">
-  <label for="searchSubjects">Search for subject by name</label>
+  <label for="searchSubjects">
+    {{ 'app.subjects.search' | translate }}
+  </label>
   <input id="searchSubjects" type="search" [formControl]="searchSubjects" />
 </div>
 <div *ngIf="subjects$ | async as subjects; else loadingTemplate" class="container">

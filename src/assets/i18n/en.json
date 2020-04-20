@@ -58,7 +58,8 @@
       "teacher": "Teacher",
       "teacherPlaceholder": "Enter teacher's name",
       "teacherRequiredError": "Teacher's name is required",
-      "teacherPatternError": "Teacher's field cannot contain numbers and special symbols"
+      "teacherPatternError": "Teacher's field cannot contain numbers and special symbols",
+      "search": "Search subject by name"
     }
   }
 }
