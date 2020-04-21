@@ -1,0 +1,12 @@
+.container {
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  h3 {
+    font-family: 'BirchCTT', arial !important;
+    width: max-content;
+    margin: auto;
+    font-size: 1.5rem;
+  }
+}

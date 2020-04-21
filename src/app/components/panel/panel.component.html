@@ -1,14 +1,14 @@
 <mat-toolbar class="toolbar">
-  <a href="https://github.com/serezhishe/teachers-journal">
+  <a href="../">
     {{ 'app.title' | translate }}
   </a>
-  <mat-button-toggle-group class="languages">
-    <mat-button-toggle (click)="useLanguage('en')">{{ 'app.languages.en' | translate }}</mat-button-toggle>
-    <mat-button-toggle (click)="useLanguage('ru')">{{ 'app.languages.ru' | translate }}</mat-button-toggle>
+  <mat-button-toggle-group class="languages" [value]="currentLang | async">
+    <mat-button-toggle value="en" (click)="useLanguage('en')">{{ 'app.languages.en' | translate }}</mat-button-toggle>
+    <mat-button-toggle value="ru" (click)="useLanguage('ru')">{{ 'app.languages.ru' | translate }}</mat-button-toggle>
   </mat-button-toggle-group>
 </mat-toolbar>
-<mat-button-toggle-group class="tabs">
-  <mat-button-toggle *ngFor="let tab of tabs" [routerLink]="tab" class="tab">{{
-    'app.tabs.' + tab | translate | titlecase
-  }}</mat-button-toggle>
+<mat-button-toggle-group class="tabs" [value]="currentTab | async">
+  <mat-button-toggle *ngFor="let tab of tabs" [routerLink]="tab" class="tab" [value]="tab">
+    {{ 'app.tabs.' + tab | translate | titlecase }}
+  </mat-button-toggle>
 </mat-button-toggle-group>

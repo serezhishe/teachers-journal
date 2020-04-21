@@ -1,1 +1,4 @@
-<app-form [configs]="formConfigs" (add)="onAdd($event)"></app-form>
+<div class="container">
+  <h3>{{ 'app.subjects.addSubject' | translate }}</h3>
+  <app-form [configs]="formConfigs" (add)="onAdd($event)"></app-form>
+</div>

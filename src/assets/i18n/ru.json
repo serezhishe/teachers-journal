@@ -18,7 +18,7 @@
     "form": {
       "breadcrumb": "Форма",
       "add": "Добавить",
-      "required": "необходимо",
+      "required": "отсутствует",
       "incorrectSymbols": "содержит некорректные символы",
       "description": "Описание",
       "name": "Имя",
@@ -36,6 +36,7 @@
       "navigation": "Вернуться на страницу студентов"
     },
     "students": {
+      "addStudent": "Добавить студента",
       "breadcrumb": "Студенты",
       "name": "Имя",
       "lastName": "Фамилия",
@@ -48,7 +49,8 @@
       "breadcrumb": "Предметы",
       "markRangeError": "Оценка должна быть от 0 до 10",
       "averageMark": "Средняя оценка",
-      "addDate": "Добавить дату",
+      "addColumn": "Добавить колонку",
+      "addSubject": "Добавить предмет",
       "date": "Дата",
       "duplicateSubjects": "Предмет {{subjectName}} уже существует",
       "subjectDeleted": "Предмет {{subjectName}} удалён",
@@ -57,7 +59,7 @@
       "duplicateDates": "Нельзя повторять даты",
       "teacher": "Учитель",
       "teacherPlaceholder": "Введите имя учителя",
-      "teacherRequiredError": "Необходимо имя учителя",
+      "teacherRequiredError": "Отсутствует имя учителя",
       "teacherPatternError": "Поле учителя не может содержать числа и специальные символы",
       "search": "Поиск предмета по названию"
     }

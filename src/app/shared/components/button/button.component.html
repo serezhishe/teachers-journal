@@ -15,6 +15,9 @@
     {{ 'app.save' | translate }}
   </button>
   <button *ngSwitchCase="'addDate'" type="button" mat-raised-button>
-    {{ 'app.subjects.addDate' | translate }}
+    {{ 'app.subjects.addColumn' | translate }}
+  </button>
+  <button *ngSwitchCase="'submit'" type="submit" mat-raised-button>
+    {{ 'app.form.add' | translate }}
   </button>
 </ng-container>

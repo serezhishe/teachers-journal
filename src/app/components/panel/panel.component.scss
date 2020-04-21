@@ -5,26 +5,28 @@
   margin-right: auto;
   display: flex;
   height: 40%;
+  border: none;
 }
 
 .tab {
   font-family: 'BirchCTT', arial !important;
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 .toolbar {
   height: 60%;
+  background-color: #5411a7;
   font-size: 2rem;
   font-family: 'BirchCTT', arial !important;
   a, a:visited {
-    color: inherit;
+    color: #716c6b;
     text-decoration: none;
   }
   a:hover {
       text-decoration: underline;
   }
   a:active {
-      color: rgb(112, 47, 218);
+      color: #ec7f22;
   }
 }
 

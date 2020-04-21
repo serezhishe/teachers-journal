@@ -36,6 +36,7 @@
       "navigation": "Go back at students page"
     },
     "students": {
+      "addStudent": "Add student",
       "breadcrumb": "Students",
       "name": "Name",
       "lastName": "Last Name",
@@ -48,7 +49,8 @@
       "breadcrumb": "Subjects",
       "markRangeError": "Mark must be between 0 and 10",
       "averageMark": "Average mark",
-      "addDate": "Add date",
+      "addColumn": "Add column",
+      "addSubject": "Add subject",
       "date": "Date",
       "duplicateSubjects": "Subject {{subjectName}} already exists",
       "subjectDeleted": "Subject {{subjectName}} was deleted",

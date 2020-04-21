@@ -13,6 +13,7 @@ html {
 body {
   height: 100%;
   margin: 0;
+  font-family: 'birchctt', arial !important;
 }
 
 app-button[type='add'] {
@@ -27,7 +28,6 @@ app-button[type='add'] {
   margin: auto;
   width: 20vw;
   top: 20vh;
-  font-family: 'BirchCTT', arial !important;
   font-size: 1rem !important;
 }
 
@@ -42,12 +42,15 @@ app-button[type='add'] {
 
 @media screen and (max-width: 640px) {
   html {
-    font-size: 14px;
+    font-size: 13px;
   }
 }
 
 @media screen and (max-width: 400px) {
   html {
-    font-size: 12px;
+    font-size: 10px;
+  }
+  * {
+    padding: 0 !important;
   }
 }

@@ -1,7 +1,6 @@
 .breadcrumb {
   background: none;
   margin: 0;
-  font-family: 'BirchCTT', arial !important;
   font-size: 1rem;
   a, span {
       color: rgb(36, 32, 32);
@@ -22,7 +21,7 @@
   }
   li::after {
       content: '->';
-      color: darkgrey;
+      color: rgb(36, 32, 32);
   }
   li:last-child::after {
       content: ''
