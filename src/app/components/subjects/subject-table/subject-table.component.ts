@@ -20,9 +20,10 @@ import { SubjectsService } from '../../../common/services/subjects.service';
   styleUrls: ['./subject-table.component.scss'],
 })
 export class SubjectTableComponent implements OnInit {
+  public error$: Observable<string>;
   public displayedColumns: string[];
   public subjectName: string;
-  public tableData$: Observable<IStudentMarks[] | {error: string}>;
+  public tableData$: Observable<IStudentMarks[]>;
   public datesHeaders: string[];
   public teacher: string;
   public form: any;
@@ -55,12 +56,10 @@ export class SubjectTableComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.error$ = this.subjectsService.error$;
     this.subjectName = this.route.snapshot.params.subject;
     this.tableData$ = this.subjectsService.getSubject(this.subjectName).pipe(
       map((subjectPage: ISubjectPage & {error: string}) => {
-        if (subjectPage.error) {
-          return {error: subjectPage.error};
-        }
         this.teacher = subjectPage.teacher;
         this.datesHeaders = subjectPage.dates.map(date => moment(date).format(dateInputFormat));
         this.displayedColumns = [subjectTableColumns.name, subjectTableColumns.lastName, subjectTableColumns.averageMark];

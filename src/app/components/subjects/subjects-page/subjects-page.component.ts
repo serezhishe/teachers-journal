@@ -12,12 +12,14 @@ import { SubjectsService } from '../../../common/services/subjects.service';
   styleUrls: ['./subjects-page.component.scss'],
 })
 export class SubjectsPageComponent implements OnInit {
+  public error$: Observable<string>;
   public subjects$: Observable<ISubjectInfo[]>;
   public searchSubjects: FormControl;
 
   constructor(private readonly subjectsService: SubjectsService) { }
 
   public ngOnInit(): void {
+    this.error$ = this.subjectsService.error$;
     this.searchSubjects = new FormControl();
     this.subjects$ = this.searchSubjects.valueChanges.pipe(
       startWith(''),

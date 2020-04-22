@@ -18,6 +18,7 @@ export class SubjectsService {
   private readonly currentSubject$: BehaviorSubject<ISubjectPage>;
   private readonly subjectsList$: BehaviorSubject<ISubjectInfo[]>;
   private readonly subjectIdList: Map<string, string>;
+  public error$: BehaviorSubject<string>;
 
   constructor(
     private readonly studentsService: StudentsService,
@@ -28,6 +29,7 @@ export class SubjectsService {
     this.currentSubject$ = new BehaviorSubject({} as ISubjectPage);
     this.subjectsList$ = new BehaviorSubject(null);
     this.subjectIdList = new Map();
+    this.error$ = new BehaviorSubject(null);
   }
 
   private getAverageMark(marks: number[]): number {
@@ -46,12 +48,17 @@ export class SubjectsService {
   }
 
   public loadSubject(subjectName: string): void {
+    this.error$.next(null);
     const id = this.subjectIdList.get(subjectName);
     this.http
       .get<ISubjectPage>(`${BASE_URL}/subjects/${id}`)
       .pipe(
         take(1),
-        catchError((error: HttpErrorResponse) => of({subjectName, error: error.statusText} as ISubjectPage)),
+        catchError((error: HttpErrorResponse) => {
+          this.error$.next(error.statusText);
+
+          return of(error);
+        }),
       )
       .subscribe((response: ISubjectPage) => {
         this.currentSubject$.next(response);
@@ -117,8 +124,20 @@ export class SubjectsService {
   public getSubjectList(): Observable<ISubjectInfo[]> {
     this.http
       .get<ISubjectInfo[]>(`${BASE_URL}/subjects`)
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        catchError((error: HttpErrorResponse) => {
+          this.error$.next(error.statusText);
+
+          return of(null);
+        }),
+      )
       .subscribe((response: ISubjectInfo[]) => {
+        if (!response) {
+          this.subjectsList$.next([]);
+
+          return;
+        }
         response.forEach((subjectInfo: ISubjectInfo) => this.subjectIdList.set(subjectInfo.subjectName, subjectInfo._id));
         this.subjectsList$.next(response);
       });

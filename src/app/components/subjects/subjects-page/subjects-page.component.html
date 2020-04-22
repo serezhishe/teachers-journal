@@ -4,7 +4,7 @@
   </label>
   <input id="searchSubjects" type="search" [formControl]="searchSubjects" />
 </div>
-<div *ngIf="subjects$ | async as subjects; else loadingTemplate" class="container">
+<div *ngIf="subjects$ | async as subjects; else notLoaded" class="container">
   <div *ngFor="let subject of subjects" appHover class="subject">
     <a mat-raised-button [routerLink]="['subject', subject.subjectName]">
       {{ subject.subjectName | titlecase }}
@@ -13,6 +13,14 @@
   </div>
 </div>
 <app-button type="add"></app-button>
-<ng-template #loadingTemplate>
-  <app-loading></app-loading>
+<ng-template #notLoaded>
+  <ng-container *ngIf="error$ | async as error; else loadingTemplate">
+    <mat-error class="loading-error">
+      {{ error }}
+    </mat-error>
+  </ng-container>
+
+  <ng-template #loadingTemplate>
+    <app-loading></app-loading>
+  </ng-template>
 </ng-template>
