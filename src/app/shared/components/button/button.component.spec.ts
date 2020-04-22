@@ -89,15 +89,15 @@ fdescribe('ButtonComponent', () => {
       expect(testHostFixture.nativeElement.querySelector('div button').innerText).toEqual('app.cancel');
     });
 
-    describe('go-back', () => {
+    describe('goBack', () => {
       it('contain proper text', () => {
-        testHost.type = 'go-back';
+        testHost.type = 'goBack';
         testHostFixture.detectChanges();
 
         expect(testHostFixture.nativeElement.querySelector('div a').innerText).toEqual('app.cancel');
       });
       it('contain rel link to form', () => {
-        testHost.type = 'go-back';
+        testHost.type = 'goBack';
         testHostFixture.detectChanges();
 
         const href = testHostFixture.nativeElement.querySelector('div a').getAttribute('href');
@@ -124,8 +124,8 @@ fdescribe('ButtonComponent', () => {
       expect(testHostFixture.nativeElement.querySelector('div button').innerText).toEqual('Cancel');
     });
 
-    it('go-back', () => {
-      testHost.type = 'go-back';
+    it('goBack', () => {
+      testHost.type = 'goBack';
       testHostFixture.detectChanges();
       expect(testHostFixture.nativeElement.querySelector('div a').innerText).toEqual('Cancel');
     });
@@ -148,8 +148,8 @@ fdescribe('ButtonComponent', () => {
       expect(testHostFixture.nativeElement.querySelector('div button').innerText).toEqual('Отмена');
     });
 
-    it('go-back', () => {
-      testHost.type = 'go-back';
+    it('goBack', () => {
+      testHost.type = 'goBack';
       testHostFixture.detectChanges();
       expect(testHostFixture.nativeElement.querySelector('div a').innerText).toEqual('Отмена');
     });

@@ -21,6 +21,7 @@ export class SubjectsPageComponent implements OnInit {
     this.searchSubjects = new FormControl();
     this.subjects$ = this.searchSubjects.valueChanges.pipe(
       startWith(''),
+      map((searchValue: string) => searchValue.toLowerCase()),
       switchMap(searchValue =>
         this.subjectsService.getSubjectList().pipe(
           map(subjectList => subjectList.filter(subject => subject.subjectName.toLowerCase().includes(searchValue))),

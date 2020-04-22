@@ -1,7 +1,8 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { fakeAsync, inject, TestBed } from '@angular/core/testing';
+import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { BASE_URL } from '../constants';
 import { ISubjectInfo } from '../models/subject-info.model';
@@ -10,6 +11,7 @@ import { ISubjectPage } from '../models/subject-page.model';
 import { SubjectsService } from './subjects.service';
 
 // tslint:disable: no-string-literal
+// tslint:disable: no-magic-numbers
 
 fdescribe('SubjectsService', () => {
   let service: SubjectsService;
@@ -48,11 +50,17 @@ fdescribe('SubjectsService', () => {
     teacher: 'Teacher',
   };
 
+  let translateSpy: jasmine.SpyObj<TranslateService>;
+
   beforeEach(() => {
+    const spy = jasmine.createSpyObj('TranslateService', ['get']);
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
+      providers: [{ provide: TranslateService, useValue: spy }],
     });
     service = TestBed.inject(SubjectsService);
+    translateSpy = TestBed.inject(TranslateService) as jasmine.SpyObj<TranslateService>;
+    translateSpy.get.and.returnValue(of('Mock string'));
   });
 
   it('should be created', () => {

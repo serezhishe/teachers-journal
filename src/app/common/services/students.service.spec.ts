@@ -1,10 +1,11 @@
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { fakeAsync, inject, TestBed } from '@angular/core/testing';
-import { Observable } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { Observable, of } from 'rxjs';
 
 import { BASE_URL } from '../constants';
+import { IStudent } from '../models/student.model';
 
-import { IStudent } from './../models/student.model';
 import { StudentsService } from './students.service';
 
 fdescribe('StudentsService', () => {
@@ -25,12 +26,19 @@ fdescribe('StudentsService', () => {
       lastName: 'Smith',
     },
   ];
+  let translateSpy: jasmine.SpyObj<TranslateService>;
 
   beforeEach(() => {
+    const spy = jasmine.createSpyObj('TranslateService', ['get']);
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
+      providers: [
+        { provide: TranslateService, useValue: spy },
+      ],
     });
     service = TestBed.inject(StudentsService);
+    translateSpy = TestBed.inject(TranslateService) as jasmine.SpyObj<TranslateService>;
+    translateSpy.get.and.returnValue(of('Mock string'));
   });
 
   it('should be created', () => {
