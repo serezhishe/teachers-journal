@@ -1,8 +1,52 @@
 /* You can add global styles to this file, and also import other style files */
 
 @font-face {
-  font-family: 'birchctt';
-  src: url('./assets/fonts/birchctt.ttf');
+  font-family: 'Source Sans Pro';
+  src: url('./assets/fonts/SourceSansPro-Regular.otf');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('./assets/fonts/SourceSansPro-Bold.otf');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('./assets/fonts/SourceSansPro-Light.otf');
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('./assets/fonts/SourceSansPro-It.otf');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Hiragino Sans GB';
+  src: url('./assets/fonts/HiraginoSansGB.ttf');
+}
+
+@font-face {
+  font-family: 'Microsoft JhengHei';
+  src: url('./assets/fonts/msjh_0.ttf');
+}
+
+:root {
+  --primary-font: Source Sans Pro;
+  --secondary-font: Hiragino Sans GB;
+  --tertiary-font: Microsoft JhengHei;
+  --primary-color: #39c2d7;
+  --secondary-color: #a3c644;
+  --background-color: #F5F5F5;
+  --header-color: #231F20;
+  --border-color: #464547;
+  --table-background-color: #F5F5F5;
+  --font-primary-color: #FFFFFF;
+  --breadcrumb-color: #b22746;
+  // #b22746 #8e244d #231F20 #263852
 }
 
 html {
@@ -13,7 +57,7 @@ html {
 body {
   height: 100%;
   margin: 0;
-  font-family: 'birchctt', arial !important;
+  font-family: var(--primary-font), var(--secondary-font) !important;
 }
 
 app-button[type='add'] {

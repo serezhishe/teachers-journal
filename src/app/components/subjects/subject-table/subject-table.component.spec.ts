@@ -1,16 +1,14 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/compiler';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { of } from 'rxjs';
 
-import { IStudent, ISubjectInfo, ISubjectPage } from '../../../common/models';
+import { IStudent, ISubjectPage } from '../../../common/models';
 import { PopUpService } from '../../../common/services/pop-up.service';
 import { SubjectsService } from '../../../common/services/subjects.service';
 import { TranslateMockPipe } from '../../../shared/pipes/translate-mock.pipe';
-import { HttpLoaderFactory } from '../../../shared/shared.module';
 
 import { SubjectTableComponent } from './subject-table.component';
 
@@ -65,16 +63,6 @@ fdescribe('SubjectTableComponent', () => {
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [SubjectTableComponent, TranslateMockPipe],
-      imports: [
-        HttpClientModule,
-        // TranslateModule.forRoot({
-        //   loader: {
-        //     provide: TranslateLoader,
-        //     useFactory: HttpLoaderFactory,
-        //     deps: [HttpClient],
-        //   },
-        // }),
-      ],
       providers: [
         FormBuilder,
         { provide: SubjectsService, useValue: subjectsSpy },
@@ -101,10 +89,10 @@ fdescribe('SubjectTableComponent', () => {
       },
     }));
     subjectsServiceSpy.getDataSource.and.returnValue(dataSource);
+    fixture.detectChanges();
   });
 
   it('should create', () => {
-    fixture.detectChanges();
     expect(component).toBeTruthy();
     expect(component.subjectName).toEqual('Some Subject');
     expect(component.teacher).toEqual('Elena');

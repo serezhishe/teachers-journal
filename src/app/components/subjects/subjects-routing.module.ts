@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CanDeactivateGuard } from 'src/app/common/guards/can-deactivate.guard';
+
+import { CanDeactivateGuard } from '../../common/guards/can-deactivate.guard';
 
 import { SubjectFormComponent } from './subject-form/subject-form.component';
 import { SubjectRootComponent } from './subject-root/subject-root.component';

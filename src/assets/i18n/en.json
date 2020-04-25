@@ -6,6 +6,7 @@
     "delete": "Delete",
     "save": "Save",
     "languages": {
+      "notSupported": "Sorry, {{lang}} language is not supported",
       "ru": "rus",
       "en": "eng"
     },

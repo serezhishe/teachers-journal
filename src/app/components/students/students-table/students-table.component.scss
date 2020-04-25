@@ -1,6 +1,6 @@
 table {
   width: 100%;
-  font-family: 'BirchCTT', arial !important;
+  font-family: var(--primary-font), var(--secondary-font) !important;
 }
 
 .container {
@@ -11,12 +11,15 @@ table {
 }
 
 .table-container {
+  width: 75%;
   height: 75%;
+  margin: auto;
   overflow: auto;
-  border: #716c6b 5px solid;
-  background-color: #e4e0ee;
+  border: var(--border-color) 2px solid;
+  border-radius: 10px;
+  background-color: var(--table-background-color);
   table {
-    background-color: #e4e0ee;
+    background-color: var(--table-background-color);
   }
 }
 
@@ -35,12 +38,13 @@ th,
 td {
   font-size: 1.2rem !important;
   border-right: 1px rgba(0, 0, 0, 0.12) solid;
+  text-align: center;
 }
 
 .search {
   display: inline-block;
   width: 100%;
-  font-family: 'BirchCTT', arial !important;
+  font-family: var(--primary-font), var(--secondary-font) !important;
   font-size: 1rem !important;
   background-color: #eeeeee;
   border: 2px solid #bbb8b8;

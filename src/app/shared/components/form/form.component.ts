@@ -41,7 +41,7 @@ export class FormComponent implements OnInit {
     }
     this.add.emit(value);
     this.addingForm.markAsUntouched();
-    this.router.navigate(['../'], { relativeTo: this.route });
+    this.router.navigate(['../'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
   }
 
   public canDeactivate(): Observable<boolean> | boolean {

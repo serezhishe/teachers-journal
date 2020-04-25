@@ -6,7 +6,7 @@
 </div>
 <div *ngIf="subjects$ | async as subjects; else notLoaded" class="container">
   <div *ngFor="let subject of subjects" appHover class="subject">
-    <a mat-raised-button [routerLink]="['subject', subject.subjectName]">
+    <a mat-raised-button [routerLink]="['subject', subject.subjectName]" queryParamsHandling="preserve">
       {{ subject.subjectName | titlecase }}
     </a>
     <app-button type="delete" class="delete" (click)="delete(subject._id)"></app-button>

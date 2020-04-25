@@ -2,10 +2,10 @@
   <button *ngSwitchCase="'delete'" mat-raised-button class="delete" type="button">
     <mat-icon>delete</mat-icon>
   </button>
-  <a *ngSwitchCase="'add'" mat-fab color="white" routerLink="./form">
+  <a *ngSwitchCase="'add'" mat-fab color="white" routerLink="./form" queryParamsHandling="preserve">
     <mat-icon>add</mat-icon>
   </a>
-  <a *ngSwitchCase="'goBack'" mat-raised-button routerLink="../" type="button">
+  <a *ngSwitchCase="'goBack'" mat-raised-button routerLink="../" queryParamsHandling="preserve" type="button">
     {{ 'app.cancel' | translate }}
   </a>
   <button *ngSwitchCase="'cancel'" mat-raised-button type="button">

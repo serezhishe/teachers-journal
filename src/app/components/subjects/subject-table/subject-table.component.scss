@@ -6,14 +6,14 @@ form {
   display: grid;
   grid-template-rows: 10% 5% 80%;
   .teacher {
-    background-color: #b6acd1;
+    background-color: var(--background-color);
     height: 100%;
-    font-family: 'BirchCTT', arial;
+    font-family: var(--primary-font), var(--secondary-font);
     font-size: 1.5rem;
     input {
       width: 50%;
       padding-left: 10px;
-      border: #716c6b 3px solid;
+      border: var(--border-color) 3px solid;
     }
   }
   .buttons {
@@ -23,10 +23,10 @@ form {
     display: inline-block;
     height: 80%;
     overflow: auto;
-    border: #716c6b 5px solid;
-    background-color: #e4e0ee;
+    border: var(--border-color) 5px solid;
+    background-color: var(--table-background-color);
     table {
-      background-color: #e4e0ee;
+      background-color: var(--table-background-color);
     }
   }
 }
@@ -40,7 +40,7 @@ td,
 th {
   border-right: 1px rgba(0, 0, 0, 0.12) solid;
   text-align: center;
-  font-family: 'BirchCTT', arial;
+  font-family: var(--primary-font), var(--secondary-font);
 }
 
 input {

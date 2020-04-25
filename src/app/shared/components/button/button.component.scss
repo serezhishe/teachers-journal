@@ -1,5 +1,9 @@
 button, a {
-  font-family: 'BirchCTT', arial !important;
+  font-family: var(--primary-font), var(--secondary-font) !important;
   font-size: 1rem;
-  background-color: #d8d6d6;
+  background-color: var(--primary-color);
+  color: var(--font-primary-color);
+  &:active {
+    background-color: var(--secondary-color);
+  }
 }

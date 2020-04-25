@@ -5,7 +5,7 @@ import { CanDeactivateGuard } from './common/guards/can-deactivate.guard';
 import { PageNotFoundComponent } from './shared/components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'students', pathMatch: 'full'},
+  { path: '', redirectTo: 'students', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent },
 ];
 
