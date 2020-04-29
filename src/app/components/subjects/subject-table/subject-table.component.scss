@@ -1,29 +1,35 @@
 .container {
   height: 100%;
+  overflow: hidden;
 }
 
 form {
+  height: 100%;
   display: grid;
-  grid-template-rows: 10% 5% 80%;
+  grid-template-rows: 15% 80%;
   .teacher {
     background-color: var(--background-color);
     height: 100%;
     font-family: var(--primary-font), var(--secondary-font);
     font-size: 1.5rem;
     input {
-      width: 50%;
+      width: 20rem;
       padding-left: 10px;
-      border: var(--border-color) 3px solid;
+      border: var(--border-color) 1px solid;
+      border-radius: 20px;
     }
-  }
-  .buttons {
-    height: 100%;
+    .buttons {
+      position: absolute;
+      right: 0;
+    }
   }
   .table-container {
     display: inline-block;
-    height: 80%;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
     overflow: auto;
-    border: var(--border-color) 5px solid;
+    border: var(--border-color) 2px solid;
     background-color: var(--table-background-color);
     table {
       background-color: var(--table-background-color);

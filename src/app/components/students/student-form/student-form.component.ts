@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 import { studentConfig } from '../../../common/constants';
@@ -14,7 +15,7 @@ export class StudentFormComponent implements OnInit {
   @ViewChild(FormComponent)
   public form: { canDeactivate(): Observable<boolean> | boolean };
   public formConfigs: IFormConfig[];
-  constructor(private readonly studentsService: StudentsService) {}
+  constructor(private readonly studentsService: StudentsService, private readonly router: Router, private readonly route: ActivatedRoute) {}
 
   public ngOnInit(): void {
     this.formConfigs = studentConfig;
@@ -26,5 +27,6 @@ export class StudentFormComponent implements OnInit {
 
   public onAdd(student: IStudent): void {
     this.studentsService.addStudent(student);
+    this.router.navigate(['../'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
   }
 }

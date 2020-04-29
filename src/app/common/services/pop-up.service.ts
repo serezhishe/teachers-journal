@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, pluck } from 'rxjs/operators';
 
-enum eventTypes {
-  success = 'success',
-  error = 'error',
-}
+import { popUpTypes } from '../constants';
 
 interface IAction {
-  type: eventTypes;
+  type: popUpTypes;
   message: string;
 }
 
@@ -17,36 +14,52 @@ interface IAction {
 })
 export class PopUpService {
   private readonly events$: BehaviorSubject<IAction>;
+  public confirmation$: Subject<boolean>;
 
   constructor() {
     this.events$ = new BehaviorSubject(null);
+    this.confirmation$ = new Subject();
   }
 
   public getErrorsStream(): Observable<string> {
     return this.events$.pipe(
-      filter(event => event?.type === eventTypes.error),
+      filter(event => event?.type === popUpTypes.error),
       pluck('message'),
     );
   }
 
   public getSuccessActionsStream(): Observable<string> {
     return this.events$.pipe(
-      filter(event => event?.type === eventTypes.success),
+      filter(event => event?.type === popUpTypes.success),
+      pluck('message'),
+    );
+  }
+
+  public getConfirmActionsStream(): Observable<string> {
+    return this.events$.pipe(
+      filter(event => event?.type === popUpTypes.confirm),
       pluck('message'),
     );
   }
 
   public errorMessage(errorMessage: string): void {
     this.events$.next({
-      type: eventTypes.error,
+      type: popUpTypes.error,
       message: errorMessage,
     });
   }
 
   public successMessage(actionMessage: string): void {
     this.events$.next({
-      type: eventTypes.success,
+      type: popUpTypes.success,
       message: actionMessage,
+    });
+  }
+
+  public confirmMessage(confirmMessage: string): void {
+    this.events$.next({
+      type: popUpTypes.confirm,
+      message: confirmMessage,
     });
   }
 }

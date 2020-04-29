@@ -20,4 +20,7 @@
   <button *ngSwitchCase="'submit'" type="submit" mat-raised-button>
     {{ 'app.form.add' | translate }}
   </button>
+  <button *ngSwitchCase="'close'" mat-raised-button class="close">
+    <mat-icon>close</mat-icon>
+  </button>
 </ng-container>

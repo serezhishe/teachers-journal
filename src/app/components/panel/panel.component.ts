@@ -39,12 +39,10 @@ export class PanelComponent implements OnInit {
     this.tabs = [TABS.students, TABS.subjects, TABS.statistics, TABS.export];
   }
 
-  public useLanguage(language: string): void {
-    this.translate.use(language);
-    const currentLang = this.translate.currentLang;
+  public useLanguage(lang: string): void {
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
-      queryParams: { lang: currentLang },
+      queryParams: { lang },
       queryParamsHandling: 'merge',
     });
   }

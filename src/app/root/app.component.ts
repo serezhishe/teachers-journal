@@ -1,20 +1,23 @@
-import { Component, ComponentFactoryResolver, ComponentRef, HostListener, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import {
+  Component,
+  ComponentFactory,
+  ComponentFactoryResolver,
+  HostListener,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { combineLatest, timer } from 'rxjs';
+import { combineLatest } from 'rxjs';
 import { filter, first, map, pluck } from 'rxjs/operators';
 
+import { popUpTypes } from '../common/constants/pop-up-types';
 import { PopUpService } from '../common/services/pop-up.service';
 import { SessionStorageService } from '../common/services/session-storage.service';
 import { StudentsService } from '../common/services/students.service';
 import { SubjectsService } from '../common/services/subjects.service';
-import { ErrorComponent } from '../components/error/error.component';
-import { SuccessComponent } from '../components/success/success.component';
-
-enum Timers {
-  successTimer = 10000,
-  errorTimer = 10000,
-}
+import { PopUpComponent } from '../components/pop-up/pop-up.component';
 
 enum supportedLangs {
   en = 'en',
@@ -27,14 +30,12 @@ enum supportedLangs {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  private readonly langs: string[];
+  private langs: string[];
+  private readonly popUpFactory: ComponentFactory<PopUpComponent>;
   public isLoading: boolean;
 
-  @ViewChild('errorContainer', { read: ViewContainerRef })
-  public errorEntry: ViewContainerRef;
-
-  @ViewChild('successContainer', { read: ViewContainerRef })
-  public successEntry: ViewContainerRef;
+  @ViewChild('popUpContainer', { read: ViewContainerRef })
+  public popUpEntry: ViewContainerRef;
 
   constructor(
     private readonly sessionStorageService: SessionStorageService,
@@ -46,14 +47,7 @@ export class AppComponent implements OnInit {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
   ) {
-    this.langs = [supportedLangs.ru, supportedLangs.en];
-    this.translate.addLangs(this.langs);
-    const defaultLang = this.translate.getBrowserLang();
-    if (this.langs.includes(defaultLang)) {
-      this.translate.setDefaultLang(defaultLang);
-    } else {
-      this.translate.setDefaultLang(supportedLangs.en);
-    }
+    this.popUpFactory = this.resolver.resolveComponentFactory(PopUpComponent);
   }
 
   @HostListener('window:beforeunload', ['$event'])
@@ -62,30 +56,43 @@ export class AppComponent implements OnInit {
     event.preventDefault();
   }
 
-  public createErrorComponent(errorMessage: string): ComponentRef<ErrorComponent> {
-    const factory = this.resolver.resolveComponentFactory(ErrorComponent);
-    const errorComponentRef = this.errorEntry.createComponent(factory);
-    errorComponentRef.instance.error = errorMessage;
+  public createErrorComponent(errorMessage: string): void {
+    const errorComponentRef = this.popUpEntry.createComponent(this.popUpFactory);
+    errorComponentRef.instance.type = popUpTypes.error;
+    errorComponentRef.instance.message = errorMessage;
     errorComponentRef.instance.closeEvent.subscribe(() => {
-      this.errorEntry.clear();
+      this.popUpEntry.clear();
     });
-
-    return errorComponentRef;
   }
 
-  public createSuccessComponent(successMessage: string): ComponentRef<SuccessComponent> {
-    const factory = this.resolver.resolveComponentFactory(SuccessComponent);
-    const successComponentRef = this.successEntry.createComponent(factory);
-    successComponentRef.instance.success = successMessage;
+  public createSuccessComponent(successMessage: string): void {
+    const successComponentRef = this.popUpEntry.createComponent(this.popUpFactory);
+    successComponentRef.instance.type = popUpTypes.success;
+    successComponentRef.instance.message = successMessage;
     successComponentRef.instance.closeEvent.subscribe(() => {
-      this.successEntry.clear();
+      this.popUpEntry.clear();
     });
+  }
 
-    return successComponentRef;
+  public createConfirmComponent(confirmMessage: string): void {
+    const successComponentRef = this.popUpEntry.createComponent(this.popUpFactory);
+    successComponentRef.instance.type = popUpTypes.confirm;
+    successComponentRef.instance.message = confirmMessage;
+    successComponentRef.instance.closeEvent.subscribe(() => {
+      this.popUpEntry.clear();
+    });
   }
 
   public ngOnInit(): void {
     this.isLoading = true;
+    this.langs = [supportedLangs.ru, supportedLangs.en];
+    this.translate.addLangs(this.langs);
+    const defaultLang = this.translate.getBrowserLang();
+    if (this.langs.includes(defaultLang)) {
+      this.translate.setDefaultLang(defaultLang);
+    } else {
+      this.translate.setDefaultLang(supportedLangs.en);
+    }
     this.route.queryParams
       .pipe(
         pluck('lang'),
@@ -107,19 +114,21 @@ export class AppComponent implements OnInit {
           return redirectedLang;
         }),
       )
-      .subscribe((lang: string) => this.translate.setDefaultLang(lang));
+      .subscribe((lang: supportedLangs) => this.translate.setDefaultLang(lang));
     combineLatest([this.subjectsService.getSubjectList(), this.studentsService.getStudents()])
       .pipe(first())
       .subscribe(() => (this.isLoading = false));
 
     this.popUpService.getErrorsStream().subscribe((message: string) => {
-      const errorRef = this.createErrorComponent(message);
-      timer(Timers.errorTimer).subscribe(() => errorRef.destroy());
+      this.createErrorComponent(message);
     });
 
     this.popUpService.getSuccessActionsStream().subscribe((message: string) => {
-      const successRef = this.createSuccessComponent(message);
-      timer(Timers.successTimer).subscribe(() => successRef.destroy());
+      this.createSuccessComponent(message);
+    });
+
+    this.popUpService.getConfirmActionsStream().subscribe((message: string) => {
+      this.createConfirmComponent(message);
     });
   }
 }

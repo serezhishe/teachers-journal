@@ -40,6 +40,7 @@ export class StudentsTableComponent implements OnInit {
     );
 
     this.displayedColumns = [
+      studentTableColumns.delete,
       studentTableColumns.index,
       studentTableColumns.name,
       studentTableColumns.lastName,

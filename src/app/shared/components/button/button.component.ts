@@ -7,6 +7,7 @@ const enum types {
   cancel = 'cancel',
   save  = 'save',
   addDate = 'addDate',
+  close = 'close',
 }
 
 @Component({

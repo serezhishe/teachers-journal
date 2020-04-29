@@ -31,8 +31,7 @@ export class SubjectsPageComponent implements OnInit {
     );
   }
 
-  public delete(subjectId: string): void {
+  public deleteSubject(subjectId: string): void {
     this.subjectsService.deleteSubject(subjectId);
   }
-
 }

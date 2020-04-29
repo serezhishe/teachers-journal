@@ -1,18 +1,18 @@
 <div class="search">
-  <label for="searchSubjects">
-    {{ 'app.subjects.search' | translate }}
-  </label>
   <input id="searchSubjects" type="search" [formControl]="searchSubjects" />
-</div>
-<div *ngIf="subjects$ | async as subjects; else notLoaded" class="container">
-  <div *ngFor="let subject of subjects" appHover class="subject">
-    <a mat-raised-button [routerLink]="['subject', subject.subjectName]" queryParamsHandling="preserve">
-      {{ subject.subjectName | titlecase }}
-    </a>
-    <app-button type="delete" class="delete" (click)="delete(subject._id)"></app-button>
-  </div>
+  <label for="searchSubjects">
+    <mat-icon>search</mat-icon>
+  </label>
 </div>
 <app-button type="add"></app-button>
+<div *ngIf="subjects$ | async as subjects; else notLoaded" class="container">
+  <div *ngFor="let subject of subjects" class="subject" appHover>
+    <a [routerLink]="['subject', subject.subjectName]" queryParamsHandling="preserve">
+      {{ subject.subjectName | titlecase }}
+    </a>
+    <app-button type="delete" class="delete" (click)="deleteSubject(subject._id)"></app-button>
+  </div>
+</div>
 <ng-template #notLoaded>
   <ng-container *ngIf="error$ | async as error; else loadingTemplate">
     <mat-error class="loading-error">

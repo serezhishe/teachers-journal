@@ -5,6 +5,9 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "save": "Save",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
     "languages": {
       "notSupported": "Sorry, {{lang}} language is not supported",
       "ru": "rus",

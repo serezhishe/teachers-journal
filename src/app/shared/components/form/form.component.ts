@@ -3,9 +3,11 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 import { IFormConfig } from '../../../common/models';
+
+import { PopUpService } from './../../../common/services/pop-up.service';
 
 @Component({
   selector: 'app-form',
@@ -21,9 +23,8 @@ export class FormComponent implements OnInit {
   public addingForm: FormGroup;
   constructor(
     private readonly formBuilder: FormBuilder,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
     private readonly translate: TranslateService,
+    private readonly popUp: PopUpService,
   ) {}
 
   public ngOnInit(): void {
@@ -41,29 +42,43 @@ export class FormComponent implements OnInit {
     }
     this.add.emit(value);
     this.addingForm.markAsUntouched();
-    this.router.navigate(['../'], { relativeTo: this.route, queryParamsHandling: 'preserve' });
   }
 
   public canDeactivate(): Observable<boolean> | boolean {
     if (this.addingForm.dirty && this.addingForm.touched) {
       if (this.addingForm.valid) {
         return this.translate.get('app.form.askForSubmit').pipe(
-          switchMap(askForSubmit =>
-            of(window.confirm(askForSubmit)).pipe(
-              switchMap(submit => {
+          switchMap(askForSubmit => {
+            this.popUp.confirmMessage(askForSubmit);
+
+            return this.popUp.confirmation$.pipe(
+              map(submit => {
                 if (submit) {
                   this.add.emit(this.addingForm.value);
                   this.addingForm.reset();
                 }
 
-                return this.translate.get('app.form.askForLeave').pipe(switchMap(askForLeave => of(window.confirm(askForLeave))));
+                return true;
               }),
-            ),
-          ),
+            );
+          }),
         );
       }
 
-      return this.translate.get('app.form.invalidForm').pipe(switchMap(invalidForm => of(window.confirm(invalidForm))));
+      return this.translate.get('app.form.invalidForm').pipe(switchMap(invalidForm => {
+        this.popUp.confirmMessage(invalidForm);
+
+        return this.popUp.confirmation$.pipe(
+          map(submit => {
+            if (submit) {
+              this.add.emit(this.addingForm.value);
+              this.addingForm.reset();
+            }
+
+            return true;
+          }),
+        );
+      }));
     }
 
     return true;

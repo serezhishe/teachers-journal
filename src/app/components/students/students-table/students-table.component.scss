@@ -7,13 +7,14 @@ table {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .table-container {
   width: 75%;
   height: 75%;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
   overflow: auto;
   border: var(--border-color) 2px solid;
   border-radius: 10px;
@@ -23,11 +24,9 @@ table {
   }
 }
 
-app-button[type='delete'] {
-  display: none;
-}
-.shown app-button[type='delete'] {
-  display: inline-block;
+.delete,
+.index {
+  width: 10%;
 }
 
 th {

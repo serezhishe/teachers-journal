@@ -1,0 +1,27 @@
+<div class="popup">
+  <ng-container [ngSwitch]="type">
+    <div class="error" *ngSwitchCase="'error'">
+      <div class="status-line">
+        {{ 'app.error' | translate }}
+        <app-button type="close" (click)="close()"></app-button>
+      </div>
+      <h2>{{ message }}</h2>
+    </div>
+    <div class="success" *ngSwitchCase="'success'">
+      <div class="status-line">
+        {{ 'app.success' | translate }}
+        <app-button type="close" (click)="close()"></app-button>
+      </div>
+      <h2>{{ message }}</h2>
+    </div>
+    <div class="confirm" *ngSwitchCase="'confirm'">
+      <div class="status-line">
+        {{ 'app.confirm' | translate }}
+        <app-button type="close" (click)="close()"></app-button>
+      </div>
+      <h2>{{ message }}</h2>
+      <app-button type="save" (click)="confirm()"></app-button>
+      <app-button type="cancel" (click)="discard()"></app-button>
+    </div>
+  </ng-container>
+</div>

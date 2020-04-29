@@ -19,12 +19,12 @@
           </mat-error>
         </ng-template>
       </ng-container>
+      <div class="buttons">
+        <app-button type="save"></app-button>
+        <app-button type="cancel" (click)="cancelChanges()"></app-button>
+        <app-button type="addDate" (click)="addDate()"></app-button>
+      </div>
     </mat-toolbar>
-    <div class="buttons">
-      <app-button type="save"></app-button>
-      <app-button type="cancel" (click)="cancelChanges()"></app-button>
-      <app-button type="addDate" (click)="addDate()"></app-button>
-    </div>
     <div class="table-container">
       <table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event, dataSource)">
         <ng-container matColumnDef="name" sticky>
@@ -80,6 +80,7 @@
       <mat-error class="loading-error">
         {{ error }}
       </mat-error>
+      <app-page-not-found></app-page-not-found>
     </ng-container>
 
     <ng-template #loadingTemplate>
