@@ -37,7 +37,7 @@ export class MapFixInterceptor implements HttpInterceptor {
       return next.handle(request);
     }
 
-    if (request.method === 'POST' || request.method === 'PATCH') {
+    if (request.method === 'POST' || (request.method === 'PATCH' && request.body.marks)) {
       return next.handle(this.fixRequest(request)).pipe(
         map(event => {
           if (event instanceof HttpResponse) {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatAnchor } from '@angular/material/button';
 import { Observable } from 'rxjs';
 import { map, startWith, switchMap } from 'rxjs/operators';
 
@@ -31,14 +32,21 @@ export class SubjectsPageComponent implements OnInit {
     );
   }
 
-  public deleteSubject(event: Event, subjectId: string): void {
+  public cancelEvent(event: Event): void {
     event.stopImmediatePropagation();
     event.preventDefault();
-    this.subjectsService.deleteSubject(subjectId);
   }
 
-  public editSubject(event: Event, subjectId: string): void {
-    event.stopImmediatePropagation();
-    event.preventDefault();
+  public deleteSubject(event: Event, subjectId: string): void {
+    this.subjectsService.deleteSubject(subjectId);
+    this.cancelEvent(event);
+  }
+
+  public changeEditState(event: Event, subject: any, id: string): void {
+    subject.disabled = !subject.disabled;
+    if (subject.disabled) {
+      this.subjectsService.changeSubjectName(id, subject.value);
+    }
+    this.cancelEvent(event);
   }
 }

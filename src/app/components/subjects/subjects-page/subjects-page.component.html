@@ -6,11 +6,25 @@
 </div>
 <app-button type="add" routerLink="./form"></app-button>
 <div *ngIf="subjects$ | async as subjects; else notLoaded" class="container">
-  <a mat-raised-button *ngFor="let subject of subjects" class="subject" appHover [routerLink]="['subject', subject.subjectName]" queryParamsHandling="preserve">
-    {{ subject.subjectName | titlecase }}
+  <a
+    mat-raised-button
+    *ngFor="let subject of subjects"
+    class="subject"
+    appHover
+    [routerLink]="['subject', subject.subjectName]"
+    queryParamsHandling="preserve"
+  >
+    <input
+      type="text"
+      disabled
+      value="{{ subject.subjectName | titlecase }}"
+      #subj
+      (click)="cancelEvent($event)"
+      (blur)="changeEditState($event, subj, subject._id)"
+    />
     <div class="subject-buttons">
       <app-button type="delete" class="delete" (click)="deleteSubject($event, subject._id)"></app-button>
-      <app-button type="edit" class="edit" (click)="editSubject($event, subject._id)"></app-button>
+      <app-button type="edit" class="edit" (click)="changeEditState($event, subj, subject._id)"></app-button>
     </div>
   </a>
 </div>
