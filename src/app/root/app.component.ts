@@ -101,7 +101,7 @@ export class AppComponent implements OnInit {
           if (this.langs.includes(lang)) {
             return lang;
           }
-          this.translate.get('app.languages.notSupported', { lang }).subscribe(translation => {
+          this.translate.get('app.languages.notSupported', { lang }).subscribe((translation: string) => {
             this.popUpService.errorMessage(translation);
           });
           const redirectedLang = this.translate.defaultLang;

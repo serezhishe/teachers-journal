@@ -1,17 +1,18 @@
 <div class="search">
-  <input id="searchSubjects" type="search" [formControl]="searchSubjects" />
   <label for="searchSubjects">
     <mat-icon>search</mat-icon>
   </label>
+  <input id="searchSubjects" type="search" [formControl]="searchSubjects" />
 </div>
-<app-button type="add"></app-button>
+<app-button type="add" routerLink="./form"></app-button>
 <div *ngIf="subjects$ | async as subjects; else notLoaded" class="container">
-  <div *ngFor="let subject of subjects" class="subject" appHover>
-    <a [routerLink]="['subject', subject.subjectName]" queryParamsHandling="preserve">
-      {{ subject.subjectName | titlecase }}
-    </a>
-    <app-button type="delete" class="delete" (click)="deleteSubject(subject._id)"></app-button>
-  </div>
+  <a mat-raised-button *ngFor="let subject of subjects" class="subject" appHover [routerLink]="['subject', subject.subjectName]" queryParamsHandling="preserve">
+    {{ subject.subjectName | titlecase }}
+    <div class="subject-buttons">
+      <app-button type="delete" class="delete" (click)="deleteSubject($event, subject._id)"></app-button>
+      <app-button type="edit" class="edit" (click)="editSubject($event, subject._id)"></app-button>
+    </div>
+  </a>
 </div>
 <ng-template #notLoaded>
   <ng-container *ngIf="error$ | async as error; else loadingTemplate">

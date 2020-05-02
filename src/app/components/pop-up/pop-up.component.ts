@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 import { popUpTypes } from '../../common/constants';
-
-import { PopUpService } from './../../common/services/pop-up.service';
+import { PopUpService } from '../../common/services/pop-up.service';
 
 @Component({
   selector: 'app-pop-up',

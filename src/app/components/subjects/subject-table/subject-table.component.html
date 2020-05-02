@@ -19,12 +19,11 @@
           </mat-error>
         </ng-template>
       </ng-container>
-      <div class="buttons">
-        <app-button type="save"></app-button>
-        <app-button type="cancel" (click)="cancelChanges()"></app-button>
-        <app-button type="addDate" (click)="addDate()"></app-button>
-      </div>
     </mat-toolbar>
+    <div class="buttons">
+      <app-button type="save"></app-button>
+      <app-button type="cancel" (click)="cancelChanges()"></app-button>
+    </div>
     <div class="table-container">
       <table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event, dataSource)">
         <ng-container matColumnDef="name" sticky>
@@ -73,6 +72,7 @@
         <tr mat-row appHighlight *matRowDef="let row; columns: displayedColumns" [mark]="row.averageMark"></tr>
       </table>
     </div>
+    <app-button type="add" (click)="addDate()" class="add-date"></app-button>
   </form>
 
   <ng-template #notLoaded>

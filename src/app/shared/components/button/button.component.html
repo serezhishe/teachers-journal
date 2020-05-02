@@ -2,25 +2,25 @@
   <button *ngSwitchCase="'delete'" mat-raised-button class="delete" type="button">
     <mat-icon>delete</mat-icon>
   </button>
-  <a *ngSwitchCase="'add'" mat-fab color="white" routerLink="./form" queryParamsHandling="preserve">
+  <a *ngSwitchCase="'add'" mat-fab color="white" queryParamsHandling="preserve">
     <mat-icon>add</mat-icon>
   </a>
   <a *ngSwitchCase="'goBack'" mat-raised-button routerLink="../" queryParamsHandling="preserve" type="button">
     {{ 'app.cancel' | translate }}
   </a>
   <button *ngSwitchCase="'cancel'" mat-raised-button type="button">
-    {{ 'app.cancel' | translate }}
+    <mat-icon>cancel</mat-icon>
   </button>
   <button *ngSwitchCase="'save'" type="submit" mat-raised-button>
-    {{ 'app.save' | translate }}
-  </button>
-  <button *ngSwitchCase="'addDate'" type="button" mat-raised-button>
-    {{ 'app.subjects.addColumn' | translate }}
+    <mat-icon>check</mat-icon>
   </button>
   <button *ngSwitchCase="'submit'" type="submit" mat-raised-button>
     {{ 'app.form.add' | translate }}
   </button>
   <button *ngSwitchCase="'close'" mat-raised-button class="close">
     <mat-icon>close</mat-icon>
+  </button>
+  <button *ngSwitchCase="'edit'" mat-raised-button>
+    <mat-icon>edit</mat-icon>
   </button>
 </ng-container>

@@ -6,8 +6,13 @@
 form {
   height: 100%;
   display: grid;
+  width: 90%;
+  margin: auto;
   grid-template-rows: 15% 80%;
+  grid-template-columns: 90% 10%;
   .teacher {
+    grid-column: 1 / 2;
+    grid-row: 1;
     background-color: var(--background-color);
     height: 100%;
     font-family: var(--primary-font), var(--secondary-font);
@@ -18,22 +23,28 @@ form {
       border: var(--border-color) 1px solid;
       border-radius: 20px;
     }
-    .buttons {
-      position: absolute;
-      right: 0;
-    }
+  }
+  .buttons {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: auto;
+    margin-bottom: auto;
   }
   .table-container {
+    grid-column: 1;
+    grid-row: 2;
     display: inline-block;
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
     overflow: auto;
     border: var(--border-color) 2px solid;
     background-color: var(--table-background-color);
     table {
       background-color: var(--table-background-color);
     }
+  }
+  .add-date {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0;
   }
 }
 
@@ -77,4 +88,6 @@ app-button[type='delete'] {
 
 .shown app-button[type='delete'] {
   display: inline;
+  position: absolute;
+  right: 20%;
 }

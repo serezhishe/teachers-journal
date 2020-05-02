@@ -1,13 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
 import { IFormConfig } from '../../../common/models';
-
-import { PopUpService } from './../../../common/services/pop-up.service';
+import { PopUpService } from '../../../common/services/pop-up.service';
 
 @Component({
   selector: 'app-form',
@@ -65,20 +63,13 @@ export class FormComponent implements OnInit {
         );
       }
 
-      return this.translate.get('app.form.invalidForm').pipe(switchMap(invalidForm => {
-        this.popUp.confirmMessage(invalidForm);
+      return this.translate.get('app.form.invalidForm').pipe(
+        switchMap(invalidForm => {
+          this.popUp.confirmMessage(invalidForm);
 
-        return this.popUp.confirmation$.pipe(
-          map(submit => {
-            if (submit) {
-              this.add.emit(this.addingForm.value);
-              this.addingForm.reset();
-            }
-
-            return true;
-          }),
-        );
-      }));
+          return this.popUp.confirmation$.pipe(map(() => true));
+        }),
+      );
     }
 
     return true;

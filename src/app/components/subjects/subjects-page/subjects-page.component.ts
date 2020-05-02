@@ -31,7 +31,14 @@ export class SubjectsPageComponent implements OnInit {
     );
   }
 
-  public deleteSubject(subjectId: string): void {
+  public deleteSubject(event: Event, subjectId: string): void {
+    event.stopImmediatePropagation();
+    event.preventDefault();
     this.subjectsService.deleteSubject(subjectId);
+  }
+
+  public editSubject(event: Event, subjectId: string): void {
+    event.stopImmediatePropagation();
+    event.preventDefault();
   }
 }
