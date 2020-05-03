@@ -18,13 +18,13 @@
       type="text"
       disabled
       value="{{ subject.subjectName | titlecase }}"
-      #subj
+      #subjInput
       (click)="cancelEvent($event)"
-      (blur)="changeEditState($event, subj, subject._id)"
+      (blur)="changeEditState($event, subjInput, subject)"
     />
     <div class="subject-buttons">
       <app-button type="delete" class="delete" (click)="deleteSubject($event, subject._id)"></app-button>
-      <app-button type="edit" class="edit" (click)="changeEditState($event, subj, subject._id)"></app-button>
+      <app-button type="edit" class="edit" (click)="changeEditState($event, subjInput, subject)"></app-button>
     </div>
   </a>
 </div>

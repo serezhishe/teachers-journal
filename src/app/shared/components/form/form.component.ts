@@ -34,7 +34,7 @@ export class FormComponent implements OnInit {
     this.addingForm = this.formBuilder.group(this.controlGroup);
   }
 
-  public onSubmit(value: Record<string, unknown>): void {
+  public onSubmit(value: any): void {
     if (this.addingForm.invalid) {
       return;
     }

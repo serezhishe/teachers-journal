@@ -16,6 +16,17 @@
     color: var(--font-primary-color);
     font-size: 2rem;
     font-family: var(--primary-font), var(--secondary-font) !important;
+    input {
+      background-color: inherit;
+      border: none;
+      text-align: center;
+      font-size: 1.5rem;
+      color: inherit;
+      font-family: inherit;
+      &:focus {
+        outline: none;
+      }
+    }
     .subject-buttons {
       display: block;
     }

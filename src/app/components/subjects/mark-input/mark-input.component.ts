@@ -1,6 +1,7 @@
 import { Component, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator } from '@angular/forms';
 
+// tslint:disable: ban-types
 const MAX_MARK = 10;
 @Component({
   selector: 'app-mark-input',
@@ -24,8 +25,8 @@ export class MarkInputComponent implements ControlValueAccessor, Validator {
   @Input()
   public value: number;
   public errors: ValidationErrors | null;
-  public onChanged: any = () => {};
-  public onTouched: any = () => {};
+  public onChanged: Function = () => {};
+  public onTouched: Function = () => {};
 
   public writeValue(val: number): void {
     this.value = val;
@@ -35,10 +36,11 @@ export class MarkInputComponent implements ControlValueAccessor, Validator {
     return this.errors ? this.errors : null;
   }
 
-  public registerOnChange(fn: any): void {
+  public registerOnChange(fn: Function): void {
     this.onChanged = fn;
   }
-  public registerOnTouched(fn: any): void {
+
+  public registerOnTouched(fn: Function): void {
     this.onTouched = fn;
   }
 

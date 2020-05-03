@@ -22,13 +22,13 @@ export class SessionStorageService {
     return JSON.parse(this.storage.getItem(key));
   }
 
-  public setItem(key: string, value: any): any {
+  public setItem<T>(key: string, value: T): void {
     this.storage.setItem(key, JSON.stringify(value));
   }
 
-  public deleteItem(array: string, id: string): any {
+  public deleteItem<T extends {_id: string}>(array: string, id: string): void {
     this.storage.removeItem(`${array}/${id}`);
-    const tmp: any[] = JSON.parse(this.storage.getItem(array));
-    this.storage.setItem(array, JSON.stringify(tmp.filter(element => element._id !== id)));
+    const tmp: T[] = JSON.parse(this.storage.getItem(array));
+    this.storage.setItem(array, JSON.stringify(tmp.filter((element: T) => element._id !== id)));
   }
 }

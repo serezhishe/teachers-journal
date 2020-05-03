@@ -17,7 +17,7 @@ export class SubjectsPageComponent implements OnInit {
   public subjects$: Observable<ISubjectInfo[]>;
   public searchSubjects: FormControl;
 
-  constructor(private readonly subjectsService: SubjectsService) { }
+  constructor(private readonly subjectsService: SubjectsService) {}
 
   public ngOnInit(): void {
     this.error$ = this.subjectsService.error$;
@@ -26,9 +26,12 @@ export class SubjectsPageComponent implements OnInit {
       startWith(''),
       map((searchValue: string) => searchValue.toLowerCase()),
       switchMap(searchValue =>
-        this.subjectsService.getSubjectList().pipe(
-          map(subjectList => subjectList.filter(subject => subject.subjectName.toLowerCase().includes(searchValue))),
-        )),
+        this.subjectsService
+          .getSubjectList()
+          .pipe(
+            map((subjectList: ISubjectInfo[]) => subjectList.filter(subject => subject.subjectName.toLowerCase().includes(searchValue))),
+          ),
+      ),
     );
   }
 
@@ -42,10 +45,14 @@ export class SubjectsPageComponent implements OnInit {
     this.cancelEvent(event);
   }
 
-  public changeEditState(event: Event, subject: any, id: string): void {
-    subject.disabled = !subject.disabled;
-    if (subject.disabled) {
-      this.subjectsService.changeSubjectName(id, subject.value);
+  public changeEditState(event: Event, inputElement: HTMLInputElement, subject: ISubjectInfo): void {
+    inputElement.disabled = !inputElement.disabled;
+    if (inputElement.disabled) {
+      if (subject.subjectName !== inputElement.value) {
+        this.subjectsService.changeSubjectName(subject._id, subject.subjectName, inputElement.value);
+      }
+    } else {
+      inputElement.focus();
     }
     this.cancelEvent(event);
   }

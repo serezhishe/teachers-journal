@@ -26,7 +26,7 @@ export class SubjectTableComponent implements OnInit {
   public tableData$: Observable<IStudentMarks[]>;
   public datesHeaders: string[];
   public teacher: string;
-  public form: any;
+  public form: any; // not FormGroup because of *ngIf="form.controls.dates.controls[i].errors" which gives error at compilation phase
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -59,11 +59,11 @@ export class SubjectTableComponent implements OnInit {
     this.error$ = this.subjectsService.error$;
     this.subjectName = this.route.snapshot.params.subject;
     this.tableData$ = this.subjectsService.getSubject(this.subjectName).pipe(
-      map((subjectPage: ISubjectPage & {error: string}) => {
+      map((subjectPage: ISubjectPage & { error: string }) => {
         this.teacher = subjectPage.teacher;
         this.datesHeaders = subjectPage.dates.map(date => moment(date).format(dateInputFormat));
         this.displayedColumns = [subjectTableColumns.name, subjectTableColumns.lastName, subjectTableColumns.averageMark];
-        const sortedDateHeaders = this.datesHeaders.concat().sort();
+        const sortedDateHeaders = subjectPage.dates.sort().map(date => moment(date).format(dateInputFormat));
         this.displayedColumns.push(...sortedDateHeaders);
         const dataSource = this.subjectsService.getDataSource();
         this.form = this.createFormGroup(subjectPage, dataSource);

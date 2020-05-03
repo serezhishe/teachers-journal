@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class TranslateMockPipe implements PipeTransform {
   public name: string = 'translate';
 
-  public transform(query: string, ...args: any[]): any {
+  public transform(query: string): string {
     return query;
   }
 }

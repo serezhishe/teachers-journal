@@ -1,12 +1,4 @@
-import {
-  Component,
-  ComponentFactory,
-  ComponentFactoryResolver,
-  HostListener,
-  OnInit,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import { Component, ComponentFactory, ComponentFactoryResolver, HostListener, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { combineLatest } from 'rxjs';
@@ -56,35 +48,16 @@ export class AppComponent implements OnInit {
     event.preventDefault();
   }
 
-  public createErrorComponent(errorMessage: string): void {
-    const errorComponentRef = this.popUpEntry.createComponent(this.popUpFactory);
-    errorComponentRef.instance.type = popUpTypes.error;
-    errorComponentRef.instance.message = errorMessage;
-    errorComponentRef.instance.closeEvent.subscribe(() => {
+  public createPopUpComponent(type: popUpTypes, message: string): void {
+    const popUpComponentRef = this.popUpEntry.createComponent(this.popUpFactory);
+    popUpComponentRef.instance.type = type;
+    popUpComponentRef.instance.message = message;
+    popUpComponentRef.instance.closeEvent.subscribe(() => {
       this.popUpEntry.clear();
     });
   }
 
-  public createSuccessComponent(successMessage: string): void {
-    const successComponentRef = this.popUpEntry.createComponent(this.popUpFactory);
-    successComponentRef.instance.type = popUpTypes.success;
-    successComponentRef.instance.message = successMessage;
-    successComponentRef.instance.closeEvent.subscribe(() => {
-      this.popUpEntry.clear();
-    });
-  }
-
-  public createConfirmComponent(confirmMessage: string): void {
-    const successComponentRef = this.popUpEntry.createComponent(this.popUpFactory);
-    successComponentRef.instance.type = popUpTypes.confirm;
-    successComponentRef.instance.message = confirmMessage;
-    successComponentRef.instance.closeEvent.subscribe(() => {
-      this.popUpEntry.clear();
-    });
-  }
-
-  public ngOnInit(): void {
-    this.isLoading = true;
+  public initLanguage(): void {
     this.langs = [supportedLangs.ru, supportedLangs.en];
     this.translate.addLangs(this.langs);
     const defaultLang = this.translate.getBrowserLang();
@@ -115,20 +88,25 @@ export class AppComponent implements OnInit {
         }),
       )
       .subscribe((lang: supportedLangs) => this.translate.setDefaultLang(lang));
+  }
+
+  public ngOnInit(): void {
+    this.isLoading = true;
+    this.initLanguage();
     combineLatest([this.subjectsService.getSubjectList(), this.studentsService.getStudents()])
       .pipe(first())
       .subscribe(() => (this.isLoading = false));
 
     this.popUpService.getErrorsStream().subscribe((message: string) => {
-      this.createErrorComponent(message);
+      this.createPopUpComponent(popUpTypes.error, message);
     });
 
     this.popUpService.getSuccessActionsStream().subscribe((message: string) => {
-      this.createSuccessComponent(message);
+      this.createPopUpComponent(popUpTypes.success, message);
     });
 
     this.popUpService.getConfirmActionsStream().subscribe((message: string) => {
-      this.createConfirmComponent(message);
+      this.createPopUpComponent(popUpTypes.confirm, message);
     });
   }
 }
