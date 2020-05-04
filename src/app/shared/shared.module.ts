@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -41,6 +42,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     MatIconModule,
     MatInputModule,
     ReactiveFormsModule,
+    MatTooltipModule,
     MatProgressSpinnerModule,
     TranslateModule.forChild({
       loader: {
@@ -69,6 +71,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     RouterModule,
     FormsModule,
     TranslateModule,
+    MatTooltipModule,
   ],
 })
 export class SharedModule {}

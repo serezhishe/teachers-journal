@@ -62,7 +62,12 @@ export class SubjectTableComponent implements OnInit {
       map((subjectPage: ISubjectPage & { error: string }) => {
         this.teacher = subjectPage.teacher;
         this.datesHeaders = subjectPage.dates.map(date => moment(date).format(dateInputFormat));
-        this.displayedColumns = [subjectTableColumns.name, subjectTableColumns.lastName, subjectTableColumns.averageMark];
+        this.displayedColumns = [
+          subjectTableColumns.delete,
+          subjectTableColumns.name,
+          subjectTableColumns.lastName,
+          subjectTableColumns.averageMark,
+        ];
         const sortedDateHeaders = subjectPage.dates.sort().map(date => moment(date).format(dateInputFormat));
         this.displayedColumns.push(...sortedDateHeaders);
         const dataSource = this.subjectsService.getDataSource();

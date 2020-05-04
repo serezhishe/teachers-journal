@@ -81,13 +81,18 @@ mat-error {
   font-size: smaller;
 }
 
-app-button[type='delete'] {
-  display: none;
-  width: 30%;
+.date {
+  app-button[type='delete'] {
+    display: none;
+    width: 30%;
+  }
+  .shown app-button[type='delete'] {
+    display: inline;
+    position: absolute;
+    right: 20%;
+  }
 }
 
-.shown app-button[type='delete'] {
-  display: inline;
-  position: absolute;
-  right: 20%;
+.delete-column {
+  min-width: 70px;
 }

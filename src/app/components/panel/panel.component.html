@@ -1,5 +1,5 @@
 <mat-toolbar class="toolbar">
-  <a href="../">
+  <a routerLink="../" queryParamsHandling="preserve">
     {{ 'app.title' | translate }}
   </a>
   <mat-button-toggle-group class="languages" [value]="currentLang$ | async">
