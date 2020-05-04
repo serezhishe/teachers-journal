@@ -2,9 +2,9 @@
   <label for="searchSubjects">
     <mat-icon>search</mat-icon>
   </label>
-  <input id="searchSubjects" type="search" [formControl]="searchSubjects" />
+  <input id="searchSubjects" type="search" [formControl]="searchSubjects"  [matTooltip]="'app.subjects.search' | translate"/>
 </div>
-<app-button type="add" routerLink="./form"></app-button>
+<app-button type="add" routerLink="./form" [matTooltip]="'app.subjects.addSubject' | translate"></app-button>
 <div *ngIf="subjects$ | async as subjects; else notLoaded" class="container">
   <a
     mat-raised-button
