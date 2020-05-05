@@ -8,7 +8,7 @@
   background-color: var(--background-color);
   .subject {
     width: 100%;
-    height: 100px;
+    height: 125px;
     display: flex;
     justify-content: center;
     align-items: baseline;
@@ -26,6 +26,10 @@
       &:focus {
         outline: none;
       }
+    }
+    mat-error {
+      display: block;
+      font-size: 1rem;
     }
     .subject-buttons {
       display: block;

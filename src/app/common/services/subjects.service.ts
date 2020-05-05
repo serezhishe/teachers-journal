@@ -203,20 +203,12 @@ export class SubjectsService {
     });
   }
 
-  public changeSubjectName(subjectId: string, oldName: string, newName: string): void {
+  public updateSubjectNameRecord(subjectId: string, oldName: string, newName: string): void {
     this.subjectIdList.set(newName, subjectId);
     this.subjectIdList.delete(oldName);
-    const newSubjects = this.subjectsList$.value.map(subject => {
-      if (subject._id === subjectId) {
-        return {
-          ...subject,
-          subjectName: newName,
-        };
-      }
+  }
 
-      return subject;
-    });
-    this.subjectsList$.next(newSubjects);
+  public changeSubjectName(subjectId: string, newName: string): void {
     this.http
       .patch<ISubjectPage>(`${BASE_URL}/subjects/${subjectId}`, { subjectName: newName }, { observe: 'response' })
       .pipe(take(1))

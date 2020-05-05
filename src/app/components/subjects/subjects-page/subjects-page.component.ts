@@ -45,13 +45,20 @@ export class SubjectsPageComponent implements OnInit {
     this.cancelEvent(event);
   }
 
-  public changeEditState(event: Event, inputElement: HTMLInputElement, subject: ISubjectInfo): void {
+  public updateSubjectsIdList(newValue: string, subject: ISubjectInfo): void {
+    if (subject.subjectName !== newValue) {
+      this.subjectsService.updateSubjectNameRecord(subject._id, subject.subjectName, newValue);
+      subject.subjectName = newValue;
+    }
+  }
+
+  public updateSubjectName(newValue: string, subject: ISubjectInfo): void {
+    this.subjectsService.changeSubjectName(subject._id, newValue);
+  }
+
+  public changeEditState(event: Event, inputElement: HTMLInputElement): void {
     inputElement.disabled = !inputElement.disabled;
-    if (inputElement.disabled) {
-      if (subject.subjectName !== inputElement.value) {
-        this.subjectsService.changeSubjectName(subject._id, subject.subjectName, inputElement.value);
-      }
-    } else {
+    if (!inputElement.disabled) {
       inputElement.focus();
     }
     this.cancelEvent(event);

@@ -2,7 +2,7 @@
   <label for="searchSubjects">
     <mat-icon>search</mat-icon>
   </label>
-  <input id="searchSubjects" type="search" [formControl]="searchSubjects"  [matTooltip]="'app.subjects.search' | translate"/>
+  <input id="searchSubjects" type="search" [formControl]="searchSubjects" [matTooltip]="'app.subjects.search' | translate" />
 </div>
 <app-button type="add" routerLink="./form" [matTooltip]="'app.subjects.addSubject' | translate"></app-button>
 <div *ngIf="subjects$ | async as subjects; else notLoaded" class="container">
@@ -13,18 +13,31 @@
     appHover
     [routerLink]="['subject', subject.subjectName]"
     queryParamsHandling="preserve"
+    #subjLink
   >
     <input
       type="text"
       disabled
       value="{{ subject.subjectName | titlecase }}"
       #subjInput
+      (input)='updateSubjectsIdList(subjInput.value, subject)'
       (click)="cancelEvent($event)"
-      (blur)="changeEditState($event, subjInput, subject)"
+      (blur)="updateSubjectName(subjInput.value, subject)"
     />
+    <mat-error *ngIf="!subjInput.value">{{'app.form.subjectName' | translate}} {{'app.form.required' | translate}}</mat-error>
     <div class="subject-buttons">
-      <app-button type="delete" class="delete" (click)="deleteSubject($event, subject._id)"></app-button>
-      <app-button type="edit" class="edit" (click)="changeEditState($event, subjInput, subject)"></app-button>
+      <app-button
+        type="delete"
+        class="delete"
+        (click)="deleteSubject($event, subject._id)"
+        [matTooltip]="'app.delete' | translate"
+      ></app-button>
+      <app-button
+        type="edit"
+        class="edit"
+        (click)="changeEditState($event, subjInput)"
+        [matTooltip]="'app.edit' | translate"
+      ></app-button>
     </div>
   </a>
 </div>
