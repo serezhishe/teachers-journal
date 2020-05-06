@@ -4,7 +4,8 @@ import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
 import { combineLatest } from 'rxjs';
 import { distinctUntilChanged, filter, startWith } from 'rxjs/operators';
 
-import { BreadcrumbsService } from './../../common/services/breadcrumbs.service';
+import { BreadcrumbsService } from '../../common/services/breadcrumbs.service';
+
 import { IBreadCrumb } from './breadcrumb.interface';
 
 @Component({

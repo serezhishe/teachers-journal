@@ -32,9 +32,7 @@ fdescribe('StudentsService', () => {
     const spy = jasmine.createSpyObj('TranslateService', ['get']);
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [
-        { provide: TranslateService, useValue: spy },
-      ],
+      providers: [{ provide: TranslateService, useValue: spy }],
     });
     service = TestBed.inject(StudentsService);
     translateSpy = TestBed.inject(TranslateService) as jasmine.SpyObj<TranslateService>;
@@ -51,6 +49,7 @@ fdescribe('StudentsService', () => {
       expect(students$).toBeInstanceOf(Observable);
       students$.subscribe(students => {
         expect(students).toBeTruthy();
+        // tslint:disable-next-line: no-magic-numbers
         expect(students.length).toEqual(2);
         expect(students.find(student => mockStudents[0]._id === student._id)).toBeTruthy();
         expect(students.find(student => mockStudents[1]._id === student._id)).toBeTruthy();

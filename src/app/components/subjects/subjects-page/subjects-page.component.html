@@ -20,11 +20,11 @@
       disabled
       value="{{ subject.subjectName | titlecase }}"
       #subjInput
-      (input)='updateSubjectsIdList(subjInput.value, subject)'
+      (input)="updateSubjectsIdList(subjInput.value, subject)"
       (click)="cancelEvent($event)"
       (blur)="updateSubjectName(subjInput.value, subject)"
     />
-    <mat-error *ngIf="!subjInput.value">{{'app.form.subjectName' | translate}} {{'app.form.required' | translate}}</mat-error>
+    <mat-error *ngIf="!subjInput.value">{{ 'app.form.subjectName' | translate }} {{ 'app.form.required' | translate }}</mat-error>
     <div class="subject-buttons">
       <app-button
         type="delete"
@@ -32,12 +32,7 @@
         (click)="deleteSubject($event, subject._id)"
         [matTooltip]="'app.delete' | translate"
       ></app-button>
-      <app-button
-        type="edit"
-        class="edit"
-        (click)="changeEditState($event, subjInput)"
-        [matTooltip]="'app.edit' | translate"
-      ></app-button>
+      <app-button type="edit" class="edit" (click)="changeEditState($event, subjInput)" [matTooltip]="'app.edit' | translate"></app-button>
     </div>
   </a>
 </div>

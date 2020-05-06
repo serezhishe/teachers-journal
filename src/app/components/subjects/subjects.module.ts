@@ -23,17 +23,12 @@ import { SubjectsRoutingModule } from './subjects-routing.module';
     SubjectRootComponent,
     MarkInputComponent,
   ],
-  imports: [
-    SharedModule,
-    SubjectsRoutingModule,
-  ],
+  imports: [SharedModule, SubjectsRoutingModule],
   providers: [
     MatDatepickerModule,
     { provide: DateAdapter, useClass: MomentDateAdapter },
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
   ],
-  exports: [
-    HighlightDirective,
-  ],
+  exports: [HighlightDirective],
 })
-export class SubjectsModule { }
+export class SubjectsModule {}

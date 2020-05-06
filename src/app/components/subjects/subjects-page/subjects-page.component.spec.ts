@@ -36,7 +36,7 @@ fdescribe('SubjectsPageComponent', () => {
     const spy = jasmine.createSpyObj('SubjectsService', ['getSubjectList']);
     TestBed.configureTestingModule({
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      declarations: [ SubjectsPageComponent, TranslateMockPipe ],
+      declarations: [SubjectsPageComponent, TranslateMockPipe],
       imports: [
         HttpClientModule,
         TranslateModule.forRoot({
@@ -47,11 +47,8 @@ fdescribe('SubjectsPageComponent', () => {
           },
         }),
       ],
-      providers: [
-        { provide: SubjectsService, useValue: spy },
-      ],
-    })
-    .compileComponents();
+      providers: [{ provide: SubjectsService, useValue: spy }],
+    }).compileComponents();
     subjectsServiceSpy = TestBed.inject(SubjectsService) as jasmine.SpyObj<SubjectsService>;
   }));
 

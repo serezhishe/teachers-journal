@@ -105,6 +105,7 @@ fdescribe('SubjectTableComponent', () => {
     const teacher = fixture.nativeElement.querySelector('.teacher input');
     expect(teacher.placeholder).toEqual('app.subjects.teacherPlaceholder');
     expect(teacher.value).toEqual('Elena');
+    // tslint:disable-next-line: no-magic-numbers
     expect(fixture.nativeElement.querySelectorAll('.buttons app-button').length).toEqual(3);
   });
 });

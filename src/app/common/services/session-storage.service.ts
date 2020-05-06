@@ -26,7 +26,7 @@ export class SessionStorageService {
     this.storage.setItem(key, JSON.stringify(value));
   }
 
-  public deleteItem<T extends {_id: string}>(array: string, id: string): void {
+  public deleteItem<T extends { _id: string }>(array: string, id: string): void {
     this.storage.removeItem(`${array}/${id}`);
     const tmp: T[] = JSON.parse(this.storage.getItem(array));
     this.storage.setItem(array, JSON.stringify(tmp.filter((element: T) => element._id !== id)));

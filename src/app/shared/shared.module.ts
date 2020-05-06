@@ -27,14 +27,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
 }
 
 @NgModule({
-  declarations: [
-    PageNotFoundComponent,
-    FormComponent,
-    SeparateWordsPipe,
-    HoverDirective,
-    ButtonComponent,
-    LoadingComponent,
-  ],
+  declarations: [PageNotFoundComponent, FormComponent, SeparateWordsPipe, HoverDirective, ButtonComponent, LoadingComponent],
   imports: [
     CommonModule,
     MatButtonModule,

@@ -38,7 +38,7 @@ export class BreadcrumbsService {
           }
         });
       }
-
+      // tslint:disable-next-line: no-parameter-reassignment
       route = route.firstChild;
     }
 

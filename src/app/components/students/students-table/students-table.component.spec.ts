@@ -58,17 +58,17 @@ fdescribe('StudentsTableComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create', (done) => {
+  it('should create', done => {
     studentsServiceSpy.getStudents.and.returnValue(of(mockStudents));
     fixture.detectChanges();
     fixture.whenStable().then(() => {
       fixture.detectChanges();
       expect(component).toBeTruthy();
+      // tslint:disable-next-line: no-magic-numbers
       expect(component.displayedColumns.length).toEqual(5);
       component.displayedColumns.forEach((column, index) => {
         expect(column).toEqual(mockDisplayedColumns[index]);
       });
-      console.log(fixture.nativeElement.querySelector('table'));
       done();
     });
   });

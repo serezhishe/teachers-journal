@@ -1,6 +1,6 @@
 import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
 
-import { niceBlue, niceGreen } from '../constants/';
+import { colors } from '../constants/';
 
 const mediumMark = 5;
 
@@ -14,8 +14,8 @@ export class HighlightDirective {
   public mark: number;
 
   constructor(private readonly el: ElementRef, private readonly renderer: Renderer2) {
-    this.badMarkColor = niceBlue;
-    this.goodMarkColor = niceGreen;
+    this.badMarkColor = colors.niceBlue;
+    this.goodMarkColor = colors.niceGreen;
   }
 
   @HostListener('mouseenter')

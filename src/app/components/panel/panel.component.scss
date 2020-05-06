@@ -22,15 +22,16 @@
   background-color: var(--header-color);
   font-size: 2rem;
   font-family: var(--primary-font), var(--secondary-font);
-  a, a:visited {
+  a,
+  a:visited {
     color: white;
     text-decoration: none;
   }
   a:hover {
-      text-decoration: underline;
+    text-decoration: underline;
   }
   a:active {
-      color: var(--breadcrumb-color);
+    color: var(--breadcrumb-color);
   }
 }
 

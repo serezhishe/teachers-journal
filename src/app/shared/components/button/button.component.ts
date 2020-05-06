@@ -5,7 +5,7 @@ const enum types {
   add = 'add',
   goBack = 'goBack',
   cancel = 'cancel',
-  save  = 'save',
+  save = 'save',
   close = 'close',
   edit = 'edit',
 }

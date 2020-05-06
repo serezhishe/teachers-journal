@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
 import { PopUpService } from '../services/pop-up.service';
+const RETRY_ATTEMPTS = 2;
 
 @Injectable()
 export class PopUpInterceptor implements HttpInterceptor {
@@ -11,7 +12,7 @@ export class PopUpInterceptor implements HttpInterceptor {
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return req instanceof HttpRequest
       ? next.handle(req).pipe(
-          retry(2),
+          retry(RETRY_ATTEMPTS),
           catchError((error: HttpErrorResponse) => {
             this.popUpService.errorMessage(error.message);
 
