@@ -46,12 +46,12 @@ exports.updateSubject = async function ({ id, subjectName, marks, dates, teacher
     return result;
   }, {});
 
-  await Subject.updateOne({ _id: id }, subjectOmited);
   await SubjectPage.updateOne({ subjectId: id }, pageOmited);
+  await Subject.updateOne({ _id: id }, subjectOmited);
 
   return {
-    ...JSON.parse(JSON.stringify(await Subject.findOne({ _id: id }))),
     ...JSON.parse(JSON.stringify(await SubjectPage.findOne({ subjectId: id }))),
+    ...JSON.parse(JSON.stringify(await Subject.findOne({ _id: id }))),
   }
 }
 

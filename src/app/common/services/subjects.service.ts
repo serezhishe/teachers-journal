@@ -1,9 +1,9 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import * as moment from 'moment';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { catchError, filter, take } from 'rxjs/operators';
 
 import { BASE_URL } from '../constants';
 import { IStudent, IStudentMarks, ISubjectInfo, ISubjectPage } from '../models';
@@ -18,6 +18,7 @@ export class SubjectsService {
   private readonly currentSubject$: BehaviorSubject<ISubjectPage>;
   private readonly subjectsList$: BehaviorSubject<ISubjectInfo[]>;
   private readonly subjectIdList: Map<string, string>;
+  public error$: BehaviorSubject<string>;
 
   constructor(
     private readonly studentsService: StudentsService,
@@ -28,6 +29,7 @@ export class SubjectsService {
     this.currentSubject$ = new BehaviorSubject({} as ISubjectPage);
     this.subjectsList$ = new BehaviorSubject(null);
     this.subjectIdList = new Map();
+    this.error$ = new BehaviorSubject(null);
   }
 
   private getAverageMark(marks: number[]): number {
@@ -46,10 +48,18 @@ export class SubjectsService {
   }
 
   public loadSubject(subjectName: string): void {
+    this.error$.next(null);
     const id = this.subjectIdList.get(subjectName);
     this.http
       .get<ISubjectPage>(`${BASE_URL}/subjects/${id}`)
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        catchError((error: HttpErrorResponse) => {
+          this.error$.next(error.statusText);
+
+          return of(error);
+        }),
+      )
       .subscribe((response: ISubjectPage) => {
         this.currentSubject$.next(response);
       });
@@ -114,8 +124,20 @@ export class SubjectsService {
   public getSubjectList(): Observable<ISubjectInfo[]> {
     this.http
       .get<ISubjectInfo[]>(`${BASE_URL}/subjects`)
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        catchError((error: HttpErrorResponse) => {
+          this.error$.next(error.statusText);
+
+          return of(null);
+        }),
+      )
       .subscribe((response: ISubjectInfo[]) => {
+        if (!response) {
+          this.subjectsList$.next([]);
+
+          return;
+        }
         response.forEach((subjectInfo: ISubjectInfo) => this.subjectIdList.set(subjectInfo.subjectName, subjectInfo._id));
         this.subjectsList$.next(response);
       });
@@ -179,5 +201,17 @@ export class SubjectsService {
       ...this.currentSubject$.value,
       students: this.currentSubject$.value.students.filter((studentId: string) => studentId !== id),
     });
+  }
+
+  public updateSubjectNameRecord(subjectId: string, oldName: string, newName: string): void {
+    this.subjectIdList.set(newName, subjectId);
+    this.subjectIdList.delete(oldName);
+  }
+
+  public changeSubjectName(subjectId: string, newName: string): void {
+    this.http
+      .patch<ISubjectPage>(`${BASE_URL}/subjects/${subjectId}`, { subjectName: newName }, { observe: 'response' })
+      .pipe(take(1))
+      .subscribe();
   }
 }

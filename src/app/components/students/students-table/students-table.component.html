@@ -1,54 +1,63 @@
-<table
-  mat-table
-  matSort
-  *ngIf="tableData$ | async as dataSource; else loading"
-  [dataSource]="dataSource"
-  (matSortChange)="sortData($event, dataSource)"
->
-  <ng-container matColumnDef="index">
-    <th mat-header-cell mat-sort-header="index" *matHeaderCellDef>id</th>
-    <td mat-cell *matCellDef="let element" appHover>
-      {{ element.index + 1 }}
-      <app-button type="delete" (click)="delete(element)"></app-button>
-    </td>
-  </ng-container>
+<section class="container">
+  <div class="table-container">
+    <table
+      mat-table
+      matSort
+      *ngIf="tableData$ | async as dataSource; else loading"
+      [dataSource]="dataSource"
+      (matSortChange)="sortData($event, dataSource)"
+    >
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef class="delete">{{ 'app.delete' | translate }}</th>
+        <td mat-cell *matCellDef="let element" class="delete">
+          <app-button type="delete" (click)="delete(element)"></app-button>
+        </td>
+      </ng-container>
 
-  <ng-container matColumnDef="name">
-    <th mat-header-cell mat-sort-header="name" *matHeaderCellDef appHover>
-      <div class="name">
-        {{ 'app.students.name' | translate }}
-        <input matInput type="search" [formControl]="searchName" class="search" (click)="cancelEvent($event)" />
-      </div>
-    </th>
-    <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-  </ng-container>
+      <ng-container matColumnDef="index">
+        <th mat-header-cell mat-sort-header="index" *matHeaderCellDef class="index">id</th>
+        <td mat-cell *matCellDef="let element" class="index">
+          {{ element.index + 1 }}
+        </td>
+      </ng-container>
 
-  <ng-container matColumnDef="lastName">
-    <th mat-header-cell mat-sort-header="lastName" *matHeaderCellDef appHover>
-      <div class="lastName">
-        {{ 'app.students.lastName' | translate }}
-        <input matInput type="search" [formControl]="searchLastName" class="search" (click)="cancelEvent($event)" />
-      </div>
-    </th>
-    <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
-  </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell mat-sort-header="name" *matHeaderCellDef>
+          <div class="name">
+            {{ 'app.students.name' | translate }}
+            <input matInput type="search" [formControl]="searchName" class="search" (click)="cancelEvent($event)" />
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+      </ng-container>
 
-  <ng-container matColumnDef="address">
-    <th mat-header-cell mat-sort-header="address" *matHeaderCellDef>{{ 'app.students.address' | translate }}</th>
-    <td mat-cell *matCellDef="let element">{{ element.address }}</td>
-  </ng-container>
+      <ng-container matColumnDef="lastName">
+        <th mat-header-cell mat-sort-header="lastName" *matHeaderCellDef>
+          <div class="lastName">
+            {{ 'app.students.lastName' | translate }}
+            <input matInput type="search" [formControl]="searchLastName" class="search" (click)="cancelEvent($event)" />
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.lastName }}</td>
+      </ng-container>
 
-  <ng-container matColumnDef="description">
-    <th mat-header-cell *matHeaderCellDef>{{ 'app.students.description' | translate }}</th>
-    <td mat-cell *matCellDef="let element">{{ element.description }}</td>
-  </ng-container>
+      <ng-container matColumnDef="address">
+        <th mat-header-cell mat-sort-header="address" *matHeaderCellDef>{{ 'app.students.address' | translate }}</th>
+        <td mat-cell *matCellDef="let element">{{ element.address }}</td>
+      </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
-<ng-template #loading>
-  <mat-spinner></mat-spinner>
-  {{ 'app.loading' | translate }}
-</ng-template>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef>{{ 'app.students.description' | translate }}</th>
+        <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+      </ng-container>
 
-<app-button type="add"></app-button>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </div>
+  <ng-template #loading>
+    <app-loading></app-loading>
+  </ng-template>
+
+  <app-button type="add" routerLink="./form" [matTooltip]="'app.students.addStudent' | translate"></app-button>
+</section>

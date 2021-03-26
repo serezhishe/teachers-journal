@@ -1,7 +1,8 @@
 export enum studentTableColumns {
-    'index' = 'index',
-    'name' = 'name',
-    'lastName' = 'lastName',
-    'address' = 'address',
-    'description' = 'description',
+  delete = 'delete',
+  index = 'index',
+  name = 'name',
+  lastName = 'lastName',
+  address = 'address',
+  description = 'description',
 }

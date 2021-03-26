@@ -1,11 +1,101 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-app-button[type="add"] {
-    display: block;
-    margin-right: auto;
-    margin-left: auto;
-    width: max-content;
-    margin-top: 10vh;
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('./assets/fonts/SourceSansPro-Regular.otf');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('./assets/fonts/SourceSansPro-Bold.otf');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('./assets/fonts/SourceSansPro-Light.otf');
+  font-weight: 200;
+}
+
+@font-face {
+  font-family: 'Source Sans Pro';
+  src: url('./assets/fonts/SourceSansPro-It.otf');
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'Hiragino Sans GB';
+  src: url('./assets/fonts/HiraginoSansGB.ttf');
+}
+
+@font-face {
+  font-family: 'Microsoft JhengHei';
+  src: url('./assets/fonts/msjh_0.ttf');
+}
+
+:root {
+  --primary-font: Source Sans Pro;
+  --secondary-font: Hiragino Sans GB;
+  --tertiary-font: Microsoft JhengHei;
+  --primary-color: #39c2d7;
+  --secondary-color: #a3c644;
+  --ternary-color: #8e244d;
+  --background-color: #F5F5F5;
+  --header-color: #231F20;
+  --border-color: #464547;
+  --table-background-color: #F5F5F5;
+  --font-primary-color: #FFFFFF;
+  --breadcrumb-color: #b22746;
+  // #b22746 #8e244d #231F20 #263852
+}
+
+html {
+  height: 100%;
+  font-size: 16px;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  font-family: var(--primary-font), var(--secondary-font) !important;
+}
+
+app-button[type='add'] {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  width: max-content;
+}
+
+.loading {
+  position: relative;
+  margin: auto;
+  width: 20vw;
+  top: 20vh;
+  font-size: 1rem !important;
+}
+
+.loading-error {
+  font-size: 3rem !important;
+  display: block;
+  width: max-content;
+  margin: auto;
+  position: relative;
+  top: 30%;
+}
+
+@media screen and (max-width: 640px) {
+  html {
+    font-size: 13px;
   }
+}
+
+@media screen and (max-width: 400px) {
+  html {
+    font-size: 10px;
+  }
+  * {
+    padding: 0 !important;
+  }
+}

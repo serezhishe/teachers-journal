@@ -4,8 +4,13 @@
     "title": "Teacher's Journal",
     "cancel": "Cancel",
     "delete": "Delete",
+    "edit": "Edit",
     "save": "Save",
+    "error": "Error",
+    "success": "Success",
+    "confirm": "Confirm",
     "languages": {
+      "notSupported": "Sorry, {{lang}} language is not supported",
       "ru": "rus",
       "en": "eng"
     },
@@ -36,6 +41,7 @@
       "navigation": "Go back at students page"
     },
     "students": {
+      "addStudent": "Add student",
       "breadcrumb": "Students",
       "name": "Name",
       "lastName": "Last Name",
@@ -48,7 +54,8 @@
       "breadcrumb": "Subjects",
       "markRangeError": "Mark must be between 0 and 10",
       "averageMark": "Average mark",
-      "addDate": "Add date",
+      "addColumn": "Add column",
+      "addSubject": "Add subject",
       "date": "Date",
       "duplicateSubjects": "Subject {{subjectName}} already exists",
       "subjectDeleted": "Subject {{subjectName}} was deleted",
@@ -58,7 +65,8 @@
       "teacher": "Teacher",
       "teacherPlaceholder": "Enter teacher's name",
       "teacherRequiredError": "Teacher's name is required",
-      "teacherPatternError": "Teacher's field cannot contain numbers and special symbols"
+      "teacherPatternError": "Teacher's field cannot contain numbers and special symbols",
+      "search": "Search subject by name"
     }
   }
 }

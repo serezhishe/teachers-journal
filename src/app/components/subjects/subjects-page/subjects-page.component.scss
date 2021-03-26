@@ -1,33 +1,72 @@
 .container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 30px 10vw;
-    width: 70%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.subject {
+  display: grid;
+  grid-template-columns: repeat(3, 25%);
+  grid-gap: 50px 10vw;
+  width: 80%;
+  padding: 10%;
+  height: max-content;
+  background-color: var(--background-color);
+  .subject {
     width: 100%;
+    height: 125px;
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    background-color: var(--primary-color);
+    color: var(--font-primary-color);
+    font-size: 2rem;
+    font-family: var(--primary-font), var(--secondary-font) !important;
+    input {
+      background-color: inherit;
+      border: none;
+      text-align: center;
+      font-size: 1.5rem;
+      color: inherit;
+      font-family: inherit;
+      &:focus {
+        outline: none;
+      }
+    }
+    mat-error {
+      display: block;
+      font-size: 1rem;
+    }
+    .subject-buttons {
+      display: block;
+    }
+    &:active {
+      background-color: var(--secondary-color);
+    }
+  }
 }
 
-app-button[type="delete"] {
-    display: none;
+.delete,
+.edit {
+  display: none;
+  width: 70px;
 }
-.shown app-button[type="delete"] {
-   display: inline-block;  
+.shown .delete,
+.shown .edit {
+  display: inline-block;
 }
 
 .search {
-    margin: 0 auto 10vh auto;
-    width: max-content;
-    label {
-        display: block;
-        font-weight: 500;
-        font-size: 1.5em;
-        font-family: "Helvetica Neue", sans-serif;
+  margin: 0 auto 5vh auto;
+  width: max-content;
+  display: flex;
+  label {
+    display: inline-block;
+    font-weight: 500;
+    font-family: var(--primary-font), var(--secondary-font) !important;
+    margin-right: 10px;
+    .mat-icon {
+      font-size: 2rem;
     }
-    input {
-        width: 100%;
-    }
+  }
+  input {
+    font-family: var(--primary-font), var(--secondary-font) !important;
+    font-size: 1.2rem !important;
+    background-color: #eeeeee;
+    border: var(--border-color) 2px solid;
+  }
 }

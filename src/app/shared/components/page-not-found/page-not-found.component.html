@@ -1,5 +1,5 @@
 <div class="container">
   <h2>404</h2>
   <h3>{{ 'app.pageNotFound.message' | translate }}</h3>
-  <a mat-button [routerLink]="['/students']">{{ 'app.pageNotFound.navigation' | translate }}</a>
+  <a mat-button [routerLink]="['/students']" queryParamsHandling="preserve">{{ 'app.pageNotFound.navigation' | translate }}</a>
 </div>

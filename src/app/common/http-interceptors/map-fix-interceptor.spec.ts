@@ -6,6 +6,7 @@ import { BASE_URL } from '../constants/base-url';
 
 import { MapFixInterceptor } from './map-fix-interceptor';
 
+// tslint:disable: no-magic-numbers
 const marksArray: Array<[string, number[]]> = [
   ['id1', [1, 2, 3]],
   ['id2', [2, 3, 4]],

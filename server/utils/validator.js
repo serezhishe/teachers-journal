@@ -1,6 +1,6 @@
-module.exports = {validateParam};
+module.exports = { validateParam };
 
-function validateParam (param) {
+function validateParam(param) {
   return function (req, res, next) {
     const value = req.params[param];
 

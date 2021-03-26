@@ -1,16 +1,7 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSortModule } from '@angular/material/sort';
-import { MatTableModule } from '@angular/material/table';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterModule } from '@angular/router';
 
 import { DATE_FORMATS } from '../../common/constants';
 import { HighlightDirective } from '../../common/directives/highlight.directive';
@@ -32,31 +23,12 @@ import { SubjectsRoutingModule } from './subjects-routing.module';
     SubjectRootComponent,
     MarkInputComponent,
   ],
-  imports: [
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatTableModule,
-    MatToolbarModule,
-    CommonModule,
-    MatSortModule,
-    RouterModule,
-    SharedModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatDatepickerModule,
-    MatProgressSpinnerModule,
-    FormsModule,
-    SubjectsRoutingModule,
-  ],
+  imports: [SharedModule, SubjectsRoutingModule],
   providers: [
     MatDatepickerModule,
     { provide: DateAdapter, useClass: MomentDateAdapter },
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
   ],
-  exports: [
-    HighlightDirective,
-  ],
+  exports: [HighlightDirective],
 })
-export class SubjectsModule { }
+export class SubjectsModule {}

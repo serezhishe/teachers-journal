@@ -1,71 +1,97 @@
-<mat-toolbar>{{ subjectName | titlecase }}</mat-toolbar>
-<form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" *ngIf="tableData$ | async as dataSource; else loading">
-  <button mat-stroked-button type="button" (click)="addDate()">{{ 'app.subjects.addDate' | translate }}</button>
-  <div class="container">
-    <table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event, dataSource)">
-      <ng-container matColumnDef="name" sticky>
-        <th mat-header-cell mat-sort-header="name" *matHeaderCellDef class="sticky">{{ 'app.students.name' | translate }}</th>
-        <td mat-cell *matCellDef="let element" class="sticky" appHover>
-          {{ element.student.name }}
-          <app-button type="delete" (click)="deleteStudent(element.student._id)"></app-button>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="lastName" sticky>
-        <th mat-header-cell mat-sort-header="lastName" *matHeaderCellDef class="sticky">{{ 'app.students.lastName' | translate }}</th>
-        <td mat-cell *matCellDef="let element" class="sticky">{{ element.student.lastName }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="averageMark" sticky>
-        <th mat-header-cell mat-sort-header="averageMark" *matHeaderCellDef class="sticky">{{ 'app.subjects.averageMark' | translate }}</th>
-        <td mat-cell *matCellDef="let element" class="sticky">{{ element.averageMark ? element.averageMark : undefined }}</td>
-      </ng-container>
-
-      <ng-container *ngFor="let dateHeader of datesHeaders; index as i" [matColumnDef]="dateHeader">
-        <th mat-header-cell *matHeaderCellDef formArrayName="dates" mat-sort-header="{{ dateHeader }}">
-          <mat-form-field appHover (click)="cancelEvent($event)">
-            <mat-label>{{ 'app.subjects.date' | translate }}</mat-label>
-            <input matInput [matDatepicker]="dp" [formControlName]="i" readonly />
-            <app-button type="delete" (click)="deleteDate(i)"></app-button>
-            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
-            <mat-datepicker #dp></mat-datepicker>
-          </mat-form-field>
-          <mat-error *ngIf="form.controls.dates.controls[i].errors">
-            {{ 'app.subjects.duplicateDates' | translate }}
+<section class="container">
+  <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" *ngIf="tableData$ | async as dataSource; else notLoaded">
+    <mat-toolbar class="teacher">
+      {{ 'app.subjects.teacher' | translate }}:
+      <input
+        value="{{ teacher | titlecase }}"
+        placeholder="{{ 'app.subjects.teacherPlaceholder' | translate }}"
+        formControlName="teacher"
+      />
+      <ng-container *ngIf="form.controls.teacher.errors">
+        <ng-container *ngIf="form.controls.teacher.errors.required; else patternError">
+          <mat-error *ngIf="form.controls.teacher.errors">
+            {{ 'app.subjects.teacherRequiredError' | translate }}
           </mat-error>
-        </th>
-        <form-field formGroupName="marks">
-          <td mat-cell *matCellDef="let element" [formArrayName]="element.student._id">
-            <app-mark-input [value]="element.marks[i]" [formControlName]="i"></app-mark-input>
+        </ng-container>
+        <ng-template #patternError>
+          <mat-error *ngIf="form.controls.teacher.errors">
+            {{ 'app.subjects.teacherPatternError' | translate }}
+          </mat-error>
+        </ng-template>
+      </ng-container>
+    </mat-toolbar>
+    <div class="buttons">
+      <app-button type="save" [matTooltip]="'app.save' | translate"></app-button>
+      <app-button type="cancel" (click)="cancelChanges()" [matTooltip]="'app.cancel' | translate"></app-button>
+    </div>
+
+    <div class="table-container">
+      <table mat-table matSort [dataSource]="dataSource" (matSortChange)="sortData($event, dataSource)">
+        <ng-container matColumnDef="delete" sticky>
+          <th mat-header-cell *matHeaderCellDef class="sticky delete-column">{{ 'app.delete' | translate }}</th>
+          <td mat-cell *matCellDef="let element" class="sticky shown delete-column">
+            <app-button type="delete" (click)="deleteStudent(element.student._id)" [matTooltip]="'app.delete' | translate"></app-button>
           </td>
-        </form-field>
-      </ng-container>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr mat-row appHighlight *matRowDef="let row; columns: displayedColumns" [mark]="row.averageMark"></tr>
-    </table>
-  </div>
-  <mat-toolbar>
-    {{ 'app.subjects.teacher' | translate }}:
-    <input value="{{ teacher | titlecase }}" placeholder="{{ 'app.subjects.teacherPlaceholder' | translate }}" formControlName="teacher" />
-    <ng-container *ngIf="form.controls.teacher.errors">
-      <ng-container *ngIf="form.controls.teacher.errors.required else patternError">
-        <mat-error *ngIf="form.controls.teacher.errors">
-          {{ 'app.subjects.teacherRequiredError' | translate }}
-        </mat-error>
-      </ng-container>
-      <ng-template #patternError>
-        <mat-error *ngIf="form.controls.teacher.errors">
-          {{ 'app.subjects.teacherPatternError' | translate }}
-        </mat-error>
-      </ng-template>
+        <ng-container matColumnDef="name" sticky>
+          <th mat-header-cell mat-sort-header="name" *matHeaderCellDef class="sticky">{{ 'app.students.name' | translate }}</th>
+          <td mat-cell *matCellDef="let element" class="sticky">
+            {{ element.student.name }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastName" sticky>
+          <th mat-header-cell mat-sort-header="lastName" *matHeaderCellDef class="sticky">{{ 'app.students.lastName' | translate }}</th>
+          <td mat-cell *matCellDef="let element" class="sticky">{{ element.student.lastName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="averageMark" sticky>
+          <th mat-header-cell mat-sort-header="averageMark" *matHeaderCellDef class="sticky">
+            {{ 'app.subjects.averageMark' | translate }}
+          </th>
+          <td mat-cell *matCellDef="let element" class="sticky">{{ element.averageMark ? element.averageMark : undefined }}</td>
+        </ng-container>
+
+        <ng-container *ngFor="let dateHeader of datesHeaders; index as i" [matColumnDef]="dateHeader">
+          <th mat-header-cell appHover *matHeaderCellDef formArrayName="dates" mat-sort-header="{{ dateHeader }}" class="date">
+            <mat-form-field (click)="cancelEvent($event)">
+              <mat-label>{{ 'app.subjects.date' | translate }}</mat-label>
+              <input matInput [matDatepicker]="dp" [formControlName]="i" readonly />
+              <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+              <mat-datepicker #dp></mat-datepicker>
+            </mat-form-field>
+            <app-button type="delete" (click)="deleteDate(i)" [matTooltip]="'app.delete' | translate"></app-button>
+            <div class="date-error">
+              <mat-error *ngIf="form.controls.dates.controls[i].errors">
+                {{ 'app.subjects.duplicateDates' | translate }}
+              </mat-error>
+            </div>
+          </th>
+          <form-field formGroupName="marks">
+            <td mat-cell *matCellDef="let element" [formArrayName]="element.student._id">
+              <app-mark-input [value]="element.marks[i]" [formControlName]="i"></app-mark-input>
+            </td>
+          </form-field>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row appHighlight *matRowDef="let row; columns: displayedColumns" [mark]="row.averageMark"></tr>
+      </table>
+    </div>
+    <app-button type="add" (click)="addDate()" class="add-date" [matTooltip]="'app.subjects.addColumn' | translate"></app-button>
+  </form>
+
+  <ng-template #notLoaded>
+    <ng-container *ngIf="error$ | async as error; else loadingTemplate">
+      <mat-error class="loading-error">
+        {{ error }}
+      </mat-error>
+      <app-page-not-found></app-page-not-found>
     </ng-container>
-  </mat-toolbar>
-  <app-button type="save"></app-button>
-  <app-button type="cancel" (click)="cancelChanges()"></app-button>
-</form>
 
-<ng-template #loading>
-  <mat-spinner></mat-spinner>
-  {{ 'app.loading' | translate }}
-</ng-template>
+    <ng-template #loadingTemplate>
+      <app-loading></app-loading>
+    </ng-template>
+  </ng-template>
+</section>

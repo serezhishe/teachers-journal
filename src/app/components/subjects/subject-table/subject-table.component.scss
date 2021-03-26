@@ -1,5 +1,63 @@
 .container {
-  overflow: auto;
+  height: 100%;
+  overflow: hidden;
+}
+
+form {
+  height: 100%;
+  display: grid;
+  width: 90%;
+  margin: auto;
+  grid-template-rows: 15% 80%;
+  grid-template-columns: 90% 10%;
+  .teacher {
+    grid-column: 1 / 2;
+    grid-row: 1;
+    background-color: var(--background-color);
+    height: 100%;
+    font-family: var(--primary-font), var(--secondary-font);
+    font-size: 1.5rem;
+    input {
+      width: 20rem;
+      padding-left: 10px;
+      border: var(--border-color) 1px solid;
+      border-radius: 20px;
+    }
+  }
+  .buttons {
+    grid-column: 2;
+    grid-row: 1;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+  .table-container {
+    grid-column: 1;
+    grid-row: 2;
+    display: inline-block;
+    overflow: auto;
+    border: var(--border-color) 2px solid;
+    background-color: var(--table-background-color);
+    table {
+      background-color: var(--table-background-color);
+    }
+  }
+  .add-date {
+    grid-column: 2;
+    grid-row: 2;
+    margin: 0;
+  }
+}
+
+.date-error {
+  position: absolute;
+  top: 35px;
+}
+
+td,
+th {
+  border-right: 1px rgba(0, 0, 0, 0.12) solid;
+  text-align: center;
+  font-family: var(--primary-font), var(--secondary-font);
 }
 
 input {
@@ -7,8 +65,6 @@ input {
   font: inherit;
   border: none;
   margin-left: 10px;
-  width: 50%;
-  display: inline-block;
 }
 
 input:focus {
@@ -16,19 +72,27 @@ input:focus {
 }
 
 .sticky {
-  min-width: 100px;
+  min-width: 150px;
+  text-align: left;
+  font-size: 1rem;
 }
 
 mat-error {
   font-size: smaller;
 }
 
-app-button[type='delete'] {
-  color: red;
-  display: none;
-  width: 30%;
+.date {
+  app-button[type='delete'] {
+    display: none;
+    width: 30%;
+  }
+  .shown app-button[type='delete'] {
+    display: inline;
+    position: absolute;
+    right: 20%;
+  }
 }
 
-.shown app-button[type='delete'] {
-  display: inline-block;
+.delete-column {
+  min-width: 70px;
 }

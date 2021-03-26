@@ -1,5 +1,15 @@
 import { Component, Input } from '@angular/core';
 
+const enum types {
+  delete = 'delete',
+  add = 'add',
+  goBack = 'goBack',
+  cancel = 'cancel',
+  save = 'save',
+  close = 'close',
+  edit = 'edit',
+}
+
 @Component({
   selector: 'app-button',
   templateUrl: './button.component.html',
@@ -7,5 +17,5 @@ import { Component, Input } from '@angular/core';
 })
 export class ButtonComponent {
   @Input()
-  public type: string;
+  public type: types;
 }

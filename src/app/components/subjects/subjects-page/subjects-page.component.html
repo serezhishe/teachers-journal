@@ -1,17 +1,49 @@
 <div class="search">
-  <label for="searchSubjects">Search for subject by name</label>
-  <input id="searchSubjects" type="search" [formControl]="searchSubjects" />
+  <label for="searchSubjects">
+    <mat-icon>search</mat-icon>
+  </label>
+  <input id="searchSubjects" type="search" [formControl]="searchSubjects" [matTooltip]="'app.subjects.search' | translate" />
 </div>
-<div *ngIf="subjects$ | async as subjects; else loadingTemplate" class="container">
-  <div *ngFor="let subject of subjects" appHover class="subject">
-    <a mat-raised-button [routerLink]="['subject', subject.subjectName]">
-      {{ subject.subjectName | titlecase }}
-    </a>
-    <app-button type="delete" class="delete" (click)="delete(subject._id)"></app-button>
-  </div>
+<app-button type="add" routerLink="./form" [matTooltip]="'app.subjects.addSubject' | translate"></app-button>
+<div *ngIf="subjects$ | async as subjects; else notLoaded" class="container">
+  <a
+    mat-raised-button
+    *ngFor="let subject of subjects"
+    class="subject"
+    appHover
+    [routerLink]="['subject', subject.subjectName]"
+    queryParamsHandling="preserve"
+    #subjLink
+  >
+    <input
+      type="text"
+      disabled
+      value="{{ subject.subjectName | titlecase }}"
+      #subjInput
+      (input)="updateSubjectsIdList(subjInput.value, subject)"
+      (click)="cancelEvent($event)"
+      (blur)="updateSubjectName(subjInput.value, subject)"
+    />
+    <mat-error *ngIf="!subjInput.value">{{ 'app.form.subjectName' | translate }} {{ 'app.form.required' | translate }}</mat-error>
+    <div class="subject-buttons">
+      <app-button
+        type="delete"
+        class="delete"
+        (click)="deleteSubject($event, subject._id)"
+        [matTooltip]="'app.delete' | translate"
+      ></app-button>
+      <app-button type="edit" class="edit" (click)="changeEditState($event, subjInput)" [matTooltip]="'app.edit' | translate"></app-button>
+    </div>
+  </a>
 </div>
-<app-button type="add"></app-button>
-<ng-template #loadingTemplate>
-  <mat-spinner></mat-spinner>
-  {{ 'app.loading' | translate }}
+<ng-template #notLoaded>
+  <ng-container *ngIf="error$ | async as error; else loadingTemplate">
+    <mat-error class="loading-error">
+      {{ error }}
+    </mat-error>
+  </ng-container>
+
+  <ng-template #loadingTemplate>
+    <app-loading></app-loading>
+  </ng-template>
 </ng-template>

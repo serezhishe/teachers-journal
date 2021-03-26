@@ -1,17 +1,54 @@
 .tabs {
-    margin-bottom: 5vh;
-    width: max-content;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
+  width: max-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  height: 40%;
+  border: none;
+  .mat-button-toggle {
+    font-family: var(--primary-font), var(--secondary-font);
+    font-size: 1.5rem;
+    background-color: var(--primary-color);
+    color: white;
+  }
+  .mat-button-toggle-checked {
+    background-color: var(--secondary-color);
+  }
 }
+
+.toolbar {
+  height: 60%;
+  background-color: var(--header-color);
+  font-size: 2rem;
+  font-family: var(--primary-font), var(--secondary-font);
+  a,
+  a:visited {
+    color: white;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  a:active {
+    color: var(--breadcrumb-color);
+  }
+}
+
 .languages {
-    width: max-content;
-    position: absolute;
-    right: 0;
-    display: flex;
-    mat-button-toggle {
-        width: 5vw;
-        height: 5vh;
-    }
+  width: max-content;
+  position: absolute;
+  right: 0;
+  display: flex;
+  font-size: 1.5rem;
+  .mat-button-toggle {
+    background-color: var(--primary-color);
+    color: white;
+    font-family: var(--primary-font), var(--secondary-font) !important;
+    width: 5rem;
+    height: 3.5rem;
+  }
+  .mat-button-toggle-checked {
+    background-color: var(--secondary-color);
+  }
 }

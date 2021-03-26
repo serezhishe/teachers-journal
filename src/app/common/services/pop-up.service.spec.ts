@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 
 import { PopUpService } from './pop-up.service';
 
+// tslint:disable: no-magic-numbers
 fdescribe('PopUpService', () => {
   let service: PopUpService;
 

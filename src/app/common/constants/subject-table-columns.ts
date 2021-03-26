@@ -1,5 +1,6 @@
 export enum subjectTableColumns {
-  'name' = 'name',
-  'lastName' = 'lastName',
-  'averageMark' = 'averageMark',
+  delete = 'delete',
+  name = 'name',
+  lastName = 'lastName',
+  averageMark = 'averageMark',
 }

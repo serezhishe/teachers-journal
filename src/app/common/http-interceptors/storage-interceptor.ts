@@ -4,6 +4,8 @@ import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { parseURL } from '../helpers/http.helper';
+import { ISubjectInfo } from '../models';
+import { ISubjectPage } from '../models/subject-page.model';
 import { SessionStorageService } from '../services/session-storage.service';
 
 const subjectPageKeys = ['subjectId', 'dates', 'marks', 'students'];
@@ -12,13 +14,29 @@ const subjectPageKeys = ['subjectId', 'dates', 'marks', 'students'];
 export class StorageInterceptor implements HttpInterceptor {
   constructor(private readonly sessionStorageService: SessionStorageService) {}
 
-  private handlePatchRequest(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  private handlePatchRequest(request: HttpRequest<ISubjectPage>, next: HttpHandler): Observable<HttpEvent<ISubjectPage>> {
     const { path, id }: { path: string; id: string } = parseURL(request.url);
 
     return next.handle(request).pipe(
-      tap(event => {
+      tap((event: HttpEvent<ISubjectPage>) => {
         if (event instanceof HttpResponse && event.ok) {
-          this.sessionStorageService.setItem(`${path}/${id}`, event.body);
+          const prevValue = this.sessionStorageService.getItem<ISubjectPage>(`${path}/${id}`);
+          this.sessionStorageService.setItem(`${path}/${id}`, {
+            ...prevValue,
+            ...event.body,
+          });
+
+          const newSubjects = this.sessionStorageService.getItem<ISubjectInfo[]>(path).map(subject => {
+            if (subject._id === id) {
+              return {
+                ...prevValue,
+                ...event.body,
+              };
+            }
+
+            return subject;
+          });
+          this.sessionStorageService.setItem(path, newSubjects);
         }
       }),
     );

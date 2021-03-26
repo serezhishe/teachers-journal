@@ -1,5 +1,18 @@
 .container {
-    margin-left: auto;
-    margin-right: auto;
-    width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+  width: max-content;
+  h2,
+  h3,
+  a {
+    font-size: 1.5rem;
+    font-family: var(--primary-font), var(--secondary-font) !important;
+  }
+  a {
+    background-color: var(--primary-color);
+    color: var(--font-primary-color);
+    &:active {
+      background-color: var(--secondary-color);
+    }
+  }
 }
